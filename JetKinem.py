@@ -15,6 +15,7 @@ Jets = events.Jet[events.Jet.pt > 25]
 Tag = hist.Hist.new.Reg(20,-1,1).Double().fill(ak.flatten(Jets.btagCSVV2))
 Tag.plot()
 plt.savefig("Tag.png", dpi= 320)
+plt.clf()
 btag_WP_medium = 0.3040
 ak4_BJets_med = Jets[ Jets.btagDeepFlavB > btag_WP_medium ]
 JetHist= hist.Hist.new.StrCat(["Untagged","btagDeepFlavB"], name="Type").Reg(100,0.,400., name="pt", label="$p_t$ (GeV)").Double()
