@@ -103,7 +103,7 @@ hep.histplot(DiJetHist["btagDeepFlavB",:],
              label=r"btagDeepFlavB",
              ax=ax
             )
-ax.set_title("DiJet Invariant Mass", y=1.0, pad = -35 , fontsize=25, color="#053B50" )
+ax.set_title("DiJet Invariant Mass", y=1.0, pad = 35 , fontsize=25, color="#053B50" )
 ax.set_xlabel("Mass (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
