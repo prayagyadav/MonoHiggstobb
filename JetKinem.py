@@ -56,7 +56,7 @@ hep.histplot(JetHist["btagDeepFlavB",:],
              label=r"btagDeepFlavB",
              ax=ax
             )
-ax.set_title("Jet $p_t$", y=1.0, pad = -30 , fontsize=25, color="#053B50")
+ax.set_title("Jet $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50")
 ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
@@ -65,6 +65,51 @@ hep.cms.label("Preliminary",data=False, rlabel="unknown $fb^{-1}$")
 
 ax.legend()
 fig.savefig("JetsBetter.png", dpi= 300)
+plt.clf()
 
+# Create DiJets 
+def ObtainDiJets(Jets, ak4_BJets_med):
+    Jets = Jets[ak.num(Jets)>1]
+    DiJets = Jets[:,0]+Jets[:,1]
+    ak4_BJets_med = ak4_BJets_med[ak.num(ak4_BJets_med)>2]
+    DiJets_bb = ak4_BJets_med[:,0]+ak4_BJets_med[:1]
+    return DiJets , DiJets_bb
+DiJets , DiJets_bb = ObtainDiJets(Jets, ak4_BJets_med)
 
+DiJetHist= hist.Hist.new.StrCat(["Untagged","btagDeepFlavB"], name="Type").Reg(100,0.,400., name="mass", label="Mass (GeV)").Double()
+DiJetHist.fill(Type="Untagged", mass = ak.flatten(DiJets.mass))
+DiJetHist.fill(Type="btagDeepFlavB", pt = ak.flatten(DiJets_bb.mass))
+
+x_min = 0.
+x_max = 400.
+bin_size = 4
+n_bins=int((x_max - x_min)/bin_size)
+fig , ax= plt.subplots()
+hep.histplot(DiJetHist["Untagged",:], 
+             #bins=bins ,
+             histtype="fill",
+             color="b",
+             alpha=0.7,
+             edgecolor="black",
+             label=r"Untagged",
+             ax=ax
+            )
+hep.histplot(DiJetHist["btagDeepFlavB",:], 
+             #bins=bins ,
+             histtype="fill",
+             color="r",
+             alpha=0.7,
+             edgecolor="black",
+             label=r"btagDeepFlavB",
+             ax=ax
+            )
+ax.set_title("DiJet Invariant Mass", y=1.0, pad = -35 , fontsize=25, color="#053B50" )
+ax.set_xlabel("Mass (GeV)", fontsize=20)
+ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
+ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
+hep.cms.label("Preliminary",data=False, rlabel="unknown $fb^{-1}$")
+
+ax.legend()
+fig.savefig("DiJets.png", dpi= 300)
+plt.clf()
 
