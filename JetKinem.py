@@ -26,7 +26,7 @@ JetHist.plot()
 plt.ylabel("Events/4 GeV")
 hep.cms.label("Preliminary", data=True)
 plt.legend()
-plt.savefig("JetsBetter.png", dpi= 300)
+plt.savefig("Jets.png", dpi= 300)
 plt.clf()
 
 
