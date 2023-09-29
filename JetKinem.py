@@ -78,7 +78,7 @@ DiJets , DiJets_bb = ObtainDiJets(Jets, ak4_BJets_med)
 
 DiJetHist= hist.Hist.new.StrCat(["Untagged","btagDeepFlavB"], name="Type").Reg(100,0.,400., name="mass", label="Mass (GeV)").Double()
 DiJetHist.fill(Type="Untagged", mass = DiJets.mass)
-DiJetHist.fill(Type="btagDeepFlavB", pt = DiJets_bb.mass)
+DiJetHist.fill(Type="btagDeepFlavB", mass = DiJets_bb.mass)
 
 x_min = 0.
 x_max = 400.
