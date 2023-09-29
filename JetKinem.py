@@ -56,7 +56,7 @@ hep.histplot(JetHist["btagDeepFlavB",:],
              label=r"btagDeepFlavB",
              ax=ax
             )
-ax.set_title("Jet $p_t$", fontsize=25, color="#053B50")
+ax.set_title("Jet $p_t$", y=1.0, pad = -30 , fontsize=25, color="#053B50")
 ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
