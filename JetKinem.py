@@ -68,12 +68,12 @@ fig.savefig("JetsBetter.png", dpi= 300)
 plt.clf()
 
 # Create DiJets 
-def ObtainDiJets(Jets, ak4_BJets_med):
-    Jets = Jets[ak.num(Jets)>1]
-    DiJets = Jets[:,0]+Jets[:,1]
-    ak4_BJets_med = ak4_BJets_med[ak.num(ak4_BJets_med)>2]
-    DiJets_bb = ak4_BJets_med[:,0]+ak4_BJets_med[:1]
-    return DiJets , DiJets_bb
+def ObtainDiJets(jet, bjet):
+    jet = jet[ak.num(jet)>1]
+    bjet = bjet[ak.num(bjet)>1]
+    Dijet = jet[:,0]+jet[:,1]
+    Dibjet = bjet[:,0]+bjet[:,1]
+    return Dijet , Dibjet
 DiJets , DiJets_bb = ObtainDiJets(Jets, ak4_BJets_med)
 
 DiJetHist= hist.Hist.new.StrCat(["Untagged","btagDeepFlavB"], name="Type").Reg(100,0.,400., name="mass", label="Mass (GeV)").Double()
