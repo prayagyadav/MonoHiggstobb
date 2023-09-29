@@ -34,7 +34,8 @@ x_max = 400.
 bin_size = 4
 n_bins=int((x_max - x_min)/bin_size)
 #h = hist.Hist.new.Reg(n_bins,x_min,x_max).Double().fill(ak.flatten(Jets.pt))
-fig , ax= plt.subplots(figsize=(10,10))
+#fig , ax= plt.subplots(figsize=(10,10))
+fig , ax= plt.subplots()
 hep.histplot(JetHist["Untagged",:], 
              #bins=bins ,
              histtype="fill",
@@ -56,12 +57,12 @@ hep.histplot(JetHist["btagDeepFlavB",:],
 ax.set_title("Jet $p_t$", fontsize=25, color="#053B50")
 ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
-ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size))
+ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
 hep.cms.label("Preliminary",data=False, rlabel="unknown $fb^{-1}$")
 
 
 ax.legend()
-fig.savefig("Jets.png", dpi= 300)
+fig.savefig("JetsBetter.png", dpi= 300)
 
 
 
