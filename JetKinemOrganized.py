@@ -1,5 +1,5 @@
 """
-This file obtains data and mc samples and plots a few kinematics.
+This file obtains mc samples and plots a few kinematics.
 Author: Prayag Yadav
 Created: 30 Sept 2023
 """
@@ -26,21 +26,23 @@ plt.style.use(hep.style.CMS)
 class JetKinem(processor.ProcessorABC):
     def __init__(self):
         # Initialize the cutflow array
-        self.cutflow = []
+        self.cutflow = {}
         pass
     def process(self, events):
+        self.cutflow["Total_Events"] = len(events) #Total Number of events
         #Apply the basic cuts like pt and eta
         BasicCuts = PackedSelection()
         BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
         BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
         events = events[BasicCuts.all("pt_cut")]
         Jets = events.Jet
+        self.cutflow["JetCut_Events"] = ak.sum(ak.num(Jets)) #No of jets passing the BasicCuts
 
         #Apply the btag 
-        
         btag_WP_medium = 0.3040 # Medium Weight Parameter
         GoodJetCut = Jets.btagDeepFlavB > btag_WP_medium 
         ak4_BJets_med = Jets[GoodJetCut]
+        self.cutflow["ak4bJetsMedium"] = ak.sum(ak.num(ak4_BJets_med)) #No of ak4 medium bjets
 
         #Create Dijets
         def ObtainDiJets(jet, bjet):
@@ -50,6 +52,8 @@ class JetKinem(processor.ProcessorABC):
             Dibjet = bjet[:,0]+bjet[:,1]
             return Dijet , Dibjet
         DiJets , DiJets_bb = ObtainDiJets(Jets, ak4_BJets_med)
+        self.cutflow["DiJets"] = ak.sum(ak.num(DiJets)) #No of Dijets
+        self.cutflow["bbDiJets"] = ak.sum(ak.num(DiJets_bb)) #No of bb Dijets
 
         #Create the histograms
         #1. bTag score histogram
