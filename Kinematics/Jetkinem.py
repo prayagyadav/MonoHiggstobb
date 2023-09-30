@@ -1,5 +1,5 @@
 """
-This file obtains mc samples and plots a few kinematics.
+This file obtains Data and MC samples and plots a few kinematics.
 Author: Prayag Yadav
 Created: 30 Sept 2023
 """
