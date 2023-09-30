@@ -107,7 +107,7 @@ futures_run = processor.Runner(
     schema=NanoAODSchema,
     maxchunks=4,
 )
-Mode = "Data"
+Mode = "MC"
 Output = futures_run(
     files[Mode],
     "Events",
