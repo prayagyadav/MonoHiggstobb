@@ -11,7 +11,7 @@ Created: 30 Sept 2023
 import argparse
 import awkward as ak
 from coffea.analysis_tools import PackedSelection
-from coffea.nanoevents import NanoEventsFactory , NanoAODSchema
+from coffea.nanoevents import NanoAODSchema #,NanoAODSchema 
 from coffea import processor
 import hist
 import json
