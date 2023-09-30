@@ -82,6 +82,8 @@ class JetKinem(processor.ProcessorABC):
             }
         }
         return output
+    def postprocess(self, accumulator):
+        pass
 
 ###################
 # Load the events #
@@ -98,7 +100,7 @@ events = NanoEventsFactory.from_root(
 # Run the processor #
 #################################
 
-Output = JetKinem(events)
+Output = JetKinem.process(events)
 
 #######################
 # Plot the histograms #
