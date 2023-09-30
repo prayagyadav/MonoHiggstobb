@@ -58,7 +58,7 @@ class JetKinem(processor.ProcessorABC):
 
         #Create the histograms
         #1. bTag score histogram
-        TagHist = hist.Hist.new.Reg(20,-1,1).Double().fill(ak.flatten(Jets.btagDeepFlavB))
+        TagHist = hist.Hist.new.Reg(20,0,1).Double().fill(ak.flatten(Jets.btagDeepFlavB))
 
         #2. Jets pt : Untagged and Tagged 
         JetHist= (
@@ -95,30 +95,24 @@ class JetKinem(processor.ProcessorABC):
 # Load the events #
 ###################
 
-# redirector = "root://cmsxrootd.fnal.gov//"
-# events = NanoEventsFactory.from_root(
-#     redirector+"/store/mc/RunIIAutumn18NanoAODv7/MonoHTobb_ZpBaryonic_TuneCP2_13TeV_madgraph-pythia8/NANOAODSIM/Nano02Apr2020_rp_102X_upgrade2018_realistic_v21-v1/10000/0EE0D641-EDAE-D547-ABAD-56D54B768C5B.root",
-#     schemaclass= NanoAODSchema.v7,
-#     metadata= {"Dataset":"Single Electrons"}
-# ).events()
 with open("fileset.json") as f:
     files = json.load(f)
 
 #################################
 # Run the processor #
 #################################
+
 futures_run = processor.Runner(
     executor = processor.FuturesExecutor(compression=None, workers=2),
     schema=NanoAODSchema,
     maxchunks=4,
 )
+Mode = "MC"
 Output = futures_run(
-    files["Data"],
+    files[Mode],
     "Events",
     processor_instance=JetKinem()
 )
-# Kinematics = JetKinem()
-# Output = Kinematics.process(events)
 
 #######################
 # Plot the histograms #
@@ -132,13 +126,13 @@ DiJetMass_Hist = Output["Histograms"]["DiJetMass"]
 
 #1. bTag score histogram
 Tag_Hist.plot()
-plt.savefig("Tag.png", dpi= 320)
+plt.savefig(f"Tag{Mode}.png", dpi= 320)
 plt.clf()
 
 #2. Jets pt : Untagged and Tagged 
 x_min = 0.
-x_max = 400.
-bin_size = 4
+x_max = 500.
+bin_size = 10
 n_bins=int((x_max - x_min)/bin_size)
 #fig , ax= plt.subplots(figsize=(10,10))
 fig , ax= plt.subplots()
@@ -164,15 +158,15 @@ ax.set_title("Jet $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50")
 ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
-hep.cms.label("Preliminary",data=False, rlabel="unknown $fb^{-1}$")
+hep.cms.label("Preliminary",data = Mode == "Data", rlabel="unknown $fb^{-1}$")
 ax.legend()
-fig.savefig("Jets.png", dpi= 300)
+fig.savefig(f"Jets{Mode}.png", dpi= 300)
 plt.clf()
 
 #3. DiJets Mass : Untagged and Tagged
 x_min = 0.
-x_max = 400.
-bin_size = 4
+x_max = 500.
+bin_size = 10
 n_bins=int((x_max - x_min)/bin_size)
 fig , ax= plt.subplots()
 hep.histplot(DiJetMass_Hist["Untagged",:], 
@@ -197,7 +191,7 @@ ax.set_title("DiJet Invariant Mass", y=1.0, pad = 35 , fontsize=25, color="#053B
 ax.set_xlabel("Mass (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
-hep.cms.label("Preliminary",data=False, rlabel="unknown $fb^{-1}$")
+hep.cms.label("Preliminary",data = Mode == "Data", rlabel="unknown $fb^{-1}$")
 ax.legend()
-fig.savefig("DiJets.png", dpi= 300)
+fig.savefig(f"DiJets{Mode}.png", dpi= 300)
 plt.clf()
