@@ -31,9 +31,10 @@ class JetKinem(processor.ProcessorABC):
     def process(self, events):
         #Apply the basic cuts like pt and eta
         BasicCuts = PackedSelection()
-        BasicCuts.add("pt_cut", events.Jet.pt > 25.0 )
-        BasicCuts.add("eta_cut", abs( events.Jet.eta ) < 2.5 )
-        Jets = events.Jet[BasicCuts.all("pt_cut")]
+        BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
+        BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
+        events = events[BasicCuts.all("pt_cut")]
+        Jets = events.Jet
 
         #Apply the btag 
         GoodJetCut = PackedSelection()
