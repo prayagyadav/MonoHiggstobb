@@ -113,7 +113,7 @@ futures_run = processor.Runner(
     maxchunks=4,
 )
 Output = futures_run(
-    files["MC"],
+    files["Data"],
     "Events",
     processor_instance=JetKinem()
 )
