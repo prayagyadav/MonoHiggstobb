@@ -128,7 +128,7 @@ with open("fileset.json") as f:
 #################################
 
 futures_run = processor.Runner(
-    executor = processor.FuturesExecutor(compression=None, workers=2),
+    executor = processor.FuturesExecutor(compression=None, workers=4),
     schema=NanoAODSchema,
     chunksize= inputs.chunk_size ,
     maxchunks= inputs.max_chunks,
