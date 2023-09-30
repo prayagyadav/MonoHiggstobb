@@ -27,6 +27,8 @@ plt.style.use(hep.style.CMS)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("Mode", help="Enter MC to run Monte Carlo Samples or enter Data to run Data samples")
+parser.add_argument("-c","--chunk_size", help="Enter the chunksize; by default 100k", default=100000)
+parser.add_argument("-m","--max_chunks", help="Enter the number of chunks to be processed; by default None ie full dataset")
 inputs = parser.parse_args()
 
 ########################
@@ -114,7 +116,8 @@ with open("fileset.json") as f:
 futures_run = processor.Runner(
     executor = processor.FuturesExecutor(compression=None, workers=2),
     schema=NanoAODSchema,
-    maxchunks=4,
+    chunksize= inputs.chunck_size ,
+    maxchunks= inputs.max_chunks,
 )
 Mode = inputs.Mode
 Output = futures_run(
