@@ -26,9 +26,23 @@ plt.style.use(hep.style.CMS)
 ##############################
 
 parser = argparse.ArgumentParser()
-parser.add_argument("Mode", help="Enter MC to run Monte Carlo Samples or enter Data to run Data samples")
-parser.add_argument("-c","--chunk_size", help="Enter the chunksize; by default 100k", default=100000)
-parser.add_argument("-m","--max_chunks", help="Enter the number of chunks to be processed; by default None ie full dataset")
+parser.add_argument(
+    "Mode",
+    help="Enter MC to run Monte Carlo Samples or enter Data to run Data samples"
+    )
+parser.add_argument(
+    "-c",
+    "--chunk_size",
+    help="Enter the chunksize; by default 100k",
+    type=int ,
+    default=100000
+    )
+parser.add_argument(
+    "-m",
+    "--max_chunks",
+    help="Enter the number of chunks to be processed; by default None ie full dataset",
+    type=int
+    )
 inputs = parser.parse_args()
 
 ########################
