@@ -8,7 +8,7 @@ Created: 30 Sept 2023
 # Import the necessary packages #
 #################################
 
-#import uproot
+import argparse
 import awkward as ak
 from coffea.analysis_tools import PackedSelection
 from coffea.nanoevents import NanoEventsFactory , NanoAODSchema
@@ -18,7 +18,16 @@ import json
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
+#import uproot
 plt.style.use(hep.style.CMS)
+
+##############################
+# Define the terminal inputs #
+##############################
+
+parser = argparse.ArgumentParser()
+parser.add_argument("Mode", help="Enter MC to run Monte Carlo Samples or enter Data to run Data samples")
+inputs = parser.parse_args()
 
 ########################
 # Define the processor #
@@ -107,7 +116,7 @@ futures_run = processor.Runner(
     schema=NanoAODSchema,
     maxchunks=4,
 )
-Mode = "MC"
+Mode = inputs.Mode
 Output = futures_run(
     files[Mode],
     "Events",
