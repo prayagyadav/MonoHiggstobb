@@ -14,6 +14,7 @@ from coffea.analysis_tools import PackedSelection
 from coffea.nanoevents import NanoEventsFactory , NanoAODSchema
 from coffea import processor
 import hist
+import json
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
@@ -36,7 +37,7 @@ class JetKinem(processor.ProcessorABC):
         BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
         events = events[BasicCuts.all("pt_cut")]
         Jets = events.Jet
-        self.cutflow["JetCut_Events"] = ak.sum(ak.num(Jets)) #No of jets passing the BasicCuts
+        self.cutflow["JetCut"] = ak.sum(ak.num(Jets)) #No of jets passing the BasicCuts
 
         #Apply the btag 
         btag_WP_medium = 0.3040 # Medium Weight Parameter
@@ -94,19 +95,30 @@ class JetKinem(processor.ProcessorABC):
 # Load the events #
 ###################
 
-redirector = "root://cmsxrootd.fnal.gov//"
-events = NanoEventsFactory.from_root(
-    redirector+"/store/mc/RunIIAutumn18NanoAODv7/MonoHTobb_ZpBaryonic_TuneCP2_13TeV_madgraph-pythia8/NANOAODSIM/Nano02Apr2020_rp_102X_upgrade2018_realistic_v21-v1/10000/0EE0D641-EDAE-D547-ABAD-56D54B768C5B.root",
-    schemaclass= NanoAODSchema.v7,
-    metadata= {"Dataset":"Single Electrons"}
-).events()
+# redirector = "root://cmsxrootd.fnal.gov//"
+# events = NanoEventsFactory.from_root(
+#     redirector+"/store/mc/RunIIAutumn18NanoAODv7/MonoHTobb_ZpBaryonic_TuneCP2_13TeV_madgraph-pythia8/NANOAODSIM/Nano02Apr2020_rp_102X_upgrade2018_realistic_v21-v1/10000/0EE0D641-EDAE-D547-ABAD-56D54B768C5B.root",
+#     schemaclass= NanoAODSchema.v7,
+#     metadata= {"Dataset":"Single Electrons"}
+# ).events()
+with open("fileset.json") as f:
+    files = json.load(f)
 
 #################################
 # Run the processor #
 #################################
-
-Kinematics = JetKinem()
-Output = Kinematics.process(events)
+futures_run = processor.Runner(
+    executor = processor.FuturesExecutor(compression=None, workers=2),
+    schema=NanoAODSchema,
+    maxchunks=4,
+)
+Output = futures_run(
+    files["MC"],
+    "Events",
+    processor_instance=JetKinem()
+)
+# Kinematics = JetKinem()
+# Output = Kinematics.process(events)
 
 #######################
 # Plot the histograms #
@@ -189,4 +201,3 @@ hep.cms.label("Preliminary",data=False, rlabel="unknown $fb^{-1}$")
 ax.legend()
 fig.savefig("DiJets.png", dpi= 300)
 plt.clf()
-
