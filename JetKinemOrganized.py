@@ -37,10 +37,10 @@ class JetKinem(processor.ProcessorABC):
         Jets = events.Jet
 
         #Apply the btag 
-        GoodJetCut = PackedSelection()
+        
         btag_WP_medium = 0.3040 # Medium Weight Parameter
-        GoodJetCut.add("btag", Jets.btagDeepFlavB > btag_WP_medium )
-        ak4_BJets_med = Jets[GoodJetCut.all("btag")]
+        GoodJetCut = Jets.btagDeepFlavB > btag_WP_medium 
+        ak4_BJets_med = Jets[GoodJetCut]
 
         #Create Dijets
         def ObtainDiJets(jet, bjet):
