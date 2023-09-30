@@ -52,8 +52,8 @@ class JetKinem(processor.ProcessorABC):
             Dibjet = bjet[:,0]+bjet[:,1]
             return Dijet , Dibjet
         DiJets , DiJets_bb = ObtainDiJets(Jets, ak4_BJets_med)
-        self.cutflow["DiJets"] = ak.sum(ak.num(DiJets)) #No of Dijets
-        self.cutflow["bbDiJets"] = ak.sum(ak.num(DiJets_bb)) #No of bb Dijets
+        self.cutflow["DiJets"] = len(DiJets) #No of Dijets
+        self.cutflow["bbDiJets"] = len(DiJets_bb) #No of bb Dijets
 
         #Create the histograms
         #1. bTag score histogram
