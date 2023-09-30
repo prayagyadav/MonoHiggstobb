@@ -100,7 +100,8 @@ events = NanoEventsFactory.from_root(
 # Run the processor #
 #################################
 
-Output = JetKinem.process(events)
+Kinematics = JetKinem()
+Output = Kinematics.process(events)
 
 #######################
 # Plot the histograms #
