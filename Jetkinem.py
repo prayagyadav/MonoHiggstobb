@@ -63,7 +63,7 @@ class JetKinem(processor.ProcessorABC):
         #2. Jets pt : Untagged and Tagged 
         JetHist= (
             hist.Hist.new.StrCat(["Untagged","btagDeepFlavB"], name="Type")
-            .Reg(100,0.,400., name="pt", label="$p_t$ (GeV)")
+            .Reg(50,0.,500., name="pt", label="$p_t$ (GeV)")
             .Double()
             )
         JetHist.fill(Type="Untagged", pt = ak.flatten(Jets.pt))
@@ -72,7 +72,7 @@ class JetKinem(processor.ProcessorABC):
         #3. DiJets Mass : Untagged and Tagged
         DiJetHist= (
             hist.Hist.new.StrCat(["Untagged","btagDeepFlavB"], name="Type")
-            .Reg(100,0.,400., name="mass", label="Mass (GeV)")
+            .Reg(50,0.,500., name="mass", label="Mass (GeV)")
             .Double()
             )
         DiJetHist.fill(Type="Untagged", mass = DiJets.mass)
