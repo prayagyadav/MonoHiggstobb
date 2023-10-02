@@ -165,7 +165,11 @@ if inputs.executor == "local" :
 elif inputs.executor == "condor" :
     #sys.exit("Condor feature not available yet!")
     print("Preparing to run at condor\n")
-    executor = condor.runCondor()
+    executor , client = condor.runCondor()
+    client.upload("fileset.json")
+    with open("fileset.json") as f:
+        files = json.load(f)
+        
     runner = processor.Runner(
         executor=executor,
         schema=NanoAODSchema,
