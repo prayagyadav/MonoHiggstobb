@@ -8,19 +8,22 @@ Created: 30 Sept 2023
 # Import the necessary packages #
 #################################
 
-import argparse
 import awkward as ak
+import argparse
 from coffea.analysis_tools import PackedSelection
 from coffea.nanoevents import NanoAODSchema #,NanoAODSchema 
 from coffea import processor
+import condor
 import hist
 import json
+import logging
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
-#import uproot
+import os
 plt.style.use(hep.style.CMS)
 import sys
+#import uproot
 
 ##############################
 # Define the terminal inputs #
@@ -126,7 +129,7 @@ class JetKinem(processor.ProcessorABC):
         pass
 
 ###################
-# Load the events #
+# Load the fileset #
 ###################
 
 with open("fileset.json") as f:
@@ -136,6 +139,13 @@ with open("fileset.json") as f:
 # Run the processor #
 #################################
 
+#Create a log file
+logging.basicConfig(
+        format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
+        level=logging.WARNING,
+    )
+
+#For local execution
 if inputs.executor == "local" :
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(compression=None, workers=4),
@@ -149,8 +159,26 @@ if inputs.executor == "local" :
         "Events",
         processor_instance=JetKinem()
     )
+
+#For condor execution
 elif inputs.executor == "condor" :
-    sys.exit("Condor feature not available yet!")
+    #sys.exit("Condor feature not available yet!")
+    print("Preparing to run at condor\n")
+    executor = condor.runCondor()
+    runner = processor.Runner(
+        executor=executor,
+        schema=NanoAODSchema,
+        chunksize=inputs.chunk_size,
+        maxchunks=inputs.max_chunks,
+        xrootdtimeout=300,
+    )
+    print("Running...\n")
+    Output = runner(
+        files,
+        treename="Events",
+        processor_instance=JetKinem,
+    )
+
     
 #######################
 # Plot the histograms #
