@@ -2,7 +2,6 @@
 This is a helper file. This file sets the proxy for condor jobs and allocates resources.
 """
 
-import logging
 import os
 from coffea import processor
 
@@ -24,12 +23,6 @@ def move_X509():
     _x509_path = f'/scratch/{os.environ["USER"]}/{_x509_localpath.split("/")[-1]}'
     os.system(f"cp {_x509_localpath} {_x509_path}")
     return os.path.basename(_x509_localpath)
-
-if __name__ == "__main__":
-    logging.basicConfig(
-        format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
-        level=logging.WARNING,
-    )
 
 def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers=4):
     from distributed import Client

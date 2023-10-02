@@ -11,7 +11,7 @@ Created: 30 Sept 2023
 import awkward as ak
 import argparse
 from coffea.analysis_tools import PackedSelection
-from coffea.nanoevents import NanoAODSchema #,NanoAODSchema 
+from coffea.nanoevents import NanoAODSchema #,NanoEventsFactory 
 from coffea import processor
 import condor
 import hist
@@ -20,9 +20,7 @@ import logging
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np
-import os
 plt.style.use(hep.style.CMS)
-import sys
 #import uproot
 
 ##############################
@@ -63,7 +61,7 @@ inputs = parser.parse_args()
 
 class JetKinem(processor.ProcessorABC):
     def __init__(self):
-        # Initialize the cutflow array
+        # Initialize the cutflow dictionary
         self.cutflow = {}
         pass
     def process(self, events):
@@ -74,7 +72,7 @@ class JetKinem(processor.ProcessorABC):
         BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
         events = events[BasicCuts.all("pt_cut")]
         Jets = events.Jet
-        self.cutflow["JetCut"] = ak.sum(ak.num(Jets)) #No of jets passing the BasicCuts
+        self.cutflow["ReducedJets"] = ak.sum(ak.num(Jets)) #No of jets passing the BasicCuts
 
         #Apply the btag 
         btag_WP_medium = 0.3040 # Medium Weight Parameter
@@ -128,18 +126,11 @@ class JetKinem(processor.ProcessorABC):
     def postprocess(self, accumulator):
         pass
 
-###################
-# Load the fileset #
-###################
-
-with open("fileset.json") as f:
-    files = json.load(f)
-
 #################################
 # Run the processor #
 #################################
 
-#Create a log file
+#Create a console log in case of a warning 
 logging.basicConfig(
         format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
         level=logging.WARNING,
@@ -149,6 +140,8 @@ Mode = inputs.Mode
 
 #For local execution
 if inputs.executor == "local" :
+    with open("fileset.json") as f: #load the fileset
+        files = json.load(f)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(compression=None, workers=4),
         schema=NanoAODSchema,
@@ -163,7 +156,6 @@ if inputs.executor == "local" :
 
 #For condor execution
 elif inputs.executor == "condor" :
-    #sys.exit("Condor feature not available yet!")
     print("Preparing to run at condor\n")
     executor , client = condor.runCondor()
     client.upload_file("fileset.json")
