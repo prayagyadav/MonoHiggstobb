@@ -176,7 +176,7 @@ elif inputs.executor == "condor" :
     Output = runner(
         files,
         treename="Events",
-        processor_instance=JetKinem,
+        processor_instance=JetKinem(),
     )
 
     
