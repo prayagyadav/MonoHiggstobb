@@ -63,4 +63,4 @@ def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers
     )
     cluster.adapt(minimum=1, maximum=workers)
     executor = processor.DaskExecutor(client=Client(cluster))
-    return executor
+    return executor, Client(cluster)
