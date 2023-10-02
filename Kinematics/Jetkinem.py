@@ -28,7 +28,7 @@ import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "mode",
+    "Mode",
     help="Enter MC to run Monte Carlo Samples or enter Data to run Data samples"
     )
 parser.add_argument(
