@@ -20,6 +20,7 @@ import mplhep as hep
 import numpy as np
 #import uproot
 plt.style.use(hep.style.CMS)
+import sys
 
 ##############################
 # Define the terminal inputs #
@@ -27,9 +28,17 @@ plt.style.use(hep.style.CMS)
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "Mode",
+    "mode",
     help="Enter MC to run Monte Carlo Samples or enter Data to run Data samples"
     )
+parser.add_argument(
+    "-e",
+    "--executor",
+    choices=["local","condor"],
+    help="Enter where to run the file : local or condor",
+    default="local",
+    type=str
+)
 parser.add_argument(
     "-c",
     "--chunk_size",
@@ -127,19 +136,22 @@ with open("fileset.json") as f:
 # Run the processor #
 #################################
 
-futures_run = processor.Runner(
-    executor = processor.FuturesExecutor(compression=None, workers=4),
-    schema=NanoAODSchema,
-    chunksize= inputs.chunk_size ,
-    maxchunks= inputs.max_chunks,
-)
-Mode = inputs.Mode
-Output = futures_run(
-    files[Mode],
-    "Events",
-    processor_instance=JetKinem()
-)
-
+if inputs.executor == "local" :
+    futures_run = processor.Runner(
+        executor = processor.FuturesExecutor(compression=None, workers=4),
+        schema=NanoAODSchema,
+        chunksize= inputs.chunk_size ,
+        maxchunks= inputs.max_chunks,
+    )
+    Mode = inputs.Mode
+    Output = futures_run(
+        files[Mode],
+        "Events",
+        processor_instance=JetKinem()
+    )
+elif inputs.executor == "condor" :
+    sys.exit("Condor feature not available yet!")
+    
 #######################
 # Plot the histograms #
 #######################
