@@ -145,6 +145,8 @@ logging.basicConfig(
         level=logging.WARNING,
     )
 
+Mode = inputs.Mode
+
 #For local execution
 if inputs.executor == "local" :
     futures_run = processor.Runner(
@@ -153,7 +155,6 @@ if inputs.executor == "local" :
         chunksize= inputs.chunk_size ,
         maxchunks= inputs.max_chunks,
     )
-    Mode = inputs.Mode
     Output = futures_run(
         files[Mode],
         "Events",
@@ -174,7 +175,7 @@ elif inputs.executor == "condor" :
     )
     print("Running...\n")
     Output = runner(
-        files,
+        files[Mode],
         treename="Events",
         processor_instance=JetKinem(),
     )
