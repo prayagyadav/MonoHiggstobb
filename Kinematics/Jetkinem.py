@@ -99,7 +99,7 @@ class JetKinem(processor.ProcessorABC):
 
         #Create the histograms
         #1. bTag score histogram
-        TagHist = hist.Hist.new.Reg(20,0,1).Double().fill(ak.flatten(Jets.btagDeepFlavB))
+        TagHist = hist.Hist.new.Reg(20,0.,1.).Double().fill(ak.flatten(Jets.btagDeepFlavB))
 
         #2. Jets pt : Untagged and Tagged 
         JetHist= (
@@ -204,7 +204,7 @@ MET_Hist = Output["Histograms"]["MET"]
 #1. bTag score histogram
 x_min = 0.
 x_max = 1.
-bin_size = 0.1
+bin_size = 0.05
 n_bins=int((x_max - x_min)/bin_size)
 fig , ax = plt.subplots()
 hep.histplot(
