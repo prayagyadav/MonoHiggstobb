@@ -53,6 +53,12 @@ parser.add_argument(
     help="Enter the number of chunks to be processed; by default None ie full dataset",
     type=int
     )
+parser.add_argument(
+    "-w",
+    "--workers",
+    help="Enter the number of workers to be employed for processing in local; by default 4",
+    type=int
+    )
 inputs = parser.parse_args()
 
 ########################
@@ -150,7 +156,7 @@ if inputs.executor == "local" :
     with open("fileset.json") as f: #load the fileset
         files = json.load(f)
     futures_run = processor.Runner(
-        executor = processor.FuturesExecutor(compression=None, workers=4),
+        executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
         chunksize= inputs.chunk_size ,
         maxchunks= inputs.max_chunks,
