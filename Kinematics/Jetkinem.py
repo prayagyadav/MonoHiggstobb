@@ -197,15 +197,14 @@ MET_Hist = Output["Histograms"]["MET"]
 
 #1. bTag score histogram
 x_min = 0.
-x_max = 500.
-bin_size = 10
+x_max = 1.
+bin_size = 0.1
 n_bins=int((x_max - x_min)/bin_size)
 fig , ax = plt.subplots()
 hep.histplot(
     Tag_Hist ,
     histtype="fill",
     color='#8A307F',
-    alpha=0.7 ,
     edgecolor="black",
     label=r"Tag" ,
     ax=ax
@@ -229,7 +228,6 @@ hep.histplot(Jetpt_Hist["Untagged",:],
              #bins=bins ,
              histtype="fill",
              color="#8A307F",
-             alpha=0.7,
              edgecolor="black",
              label=r"Untagged",
              ax=ax
@@ -238,7 +236,6 @@ hep.histplot(Jetpt_Hist["btagDeepFlavB",:],
              #bins=bins ,
              histtype="fill",
              color="#79A7D3",
-             alpha=0.7,
              edgecolor="black",
              label=r"btagDeepFlavB",
              ax=ax
@@ -262,7 +259,6 @@ hep.histplot(DiJetMass_Hist["Untagged",:],
              #bins=bins ,
              histtype="fill",
              color="#8A307F",
-             alpha=0.7,
              edgecolor="black",
              label=r"Untagged",
              ax=ax
@@ -271,7 +267,6 @@ hep.histplot(DiJetMass_Hist["btagDeepFlavB",:],
              #bins=bins ,
              histtype="fill",
              color="#79A7D3",
-             alpha=0.7,
              edgecolor="black",
              label=r"btagDeepFlavB",
              ax=ax
@@ -295,7 +290,6 @@ hep.histplot(
     MET_Hist ,
     histtype="fill",
     color='#79A7D3',
-    alpha=0.7 ,
     edgecolor="black",
     label=r"MET pt" ,
     ax=ax
