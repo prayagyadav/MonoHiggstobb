@@ -216,11 +216,11 @@ hep.histplot(
     lw=1,
     ax=ax
 )
-ax.set_title("BTag Score", y=1.0, pad = -35 , fontsize=25, color="#053B50")
+ax.set_title("BTag Score", y=1.0, pad = -35 , fontsize=25, color="#053B50") #Teal
 ax.set_xlabel("Score", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size}", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
-hep.cms.label("Preliminary",data = Mode == "Data", ) #rlabel="unknown $fb^{-1}$")
+hep.cms.label("Preliminary",data = Mode == "Data", rlabel="")
 fig.savefig(f"Tag{Mode}.png", dpi= 320)
 plt.clf()
 
@@ -249,11 +249,11 @@ hep.histplot(Jetpt_Hist["btagDeepFlavB",:],
              lw=1,
              ax=ax
             )
-ax.set_title("Jet $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50")
+ax.set_title("Jet $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50") #Teal
 ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
-hep.cms.label("Preliminary",data = Mode == "Data", ) #rlabel="unknown $fb^{-1}$")
+hep.cms.label("Preliminary",data = Mode == "Data" , rlabel="")
 ax.legend()
 fig.savefig(f"Jets{Mode}.png", dpi= 300)
 plt.clf()
@@ -282,11 +282,11 @@ hep.histplot(DiJetMass_Hist["btagDeepFlavB",:],
              lw=1,
              ax=ax
             )
-ax.set_title("DiJet Invariant Mass", y=1.0, pad = 35 , fontsize=25, color="#053B50" )
+ax.set_title("DiJet Invariant Mass", y=1.0, pad = 35 , fontsize=25, color="#053B50" ) #Teal
 ax.set_xlabel("Mass (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
-hep.cms.label("Preliminary",data = Mode == "Data", ) #rlabel="unknown $fb^{-1}$")
+hep.cms.label("Preliminary",data = Mode == "Data" , rlabel="")
 ax.legend()
 fig.savefig(f"DiJets{Mode}.png", dpi= 300)
 plt.clf()
@@ -306,10 +306,10 @@ hep.histplot(
     lw=1,
     ax=ax
 )
-ax.set_title("MET $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50")
+ax.set_title("MET $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50") #Teal
 ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
-hep.cms.label("Preliminary",data = Mode == "Data", ) #rlabel="unknown $fb^{-1}$")
+hep.cms.label("Preliminary",data = Mode == "Data", rlabel="")
 fig.savefig(f"MET{Mode}.png", dpi= 320)
 plt.clf()
