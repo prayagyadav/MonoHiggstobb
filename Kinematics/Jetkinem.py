@@ -213,6 +213,7 @@ hep.histplot(
     color='#8A307F',
     edgecolor="black",
     label=r"Tag" ,
+    lw=1,
     ax=ax
 )
 ax.set_title("BTag Score", y=1.0, pad = -35 , fontsize=25, color="#053B50")
@@ -236,6 +237,7 @@ hep.histplot(Jetpt_Hist["Untagged",:],
              color="#8A307F",
              edgecolor="black",
              label=r"Untagged",
+             lw=1,
              ax=ax
             )
 hep.histplot(Jetpt_Hist["btagDeepFlavB",:], 
@@ -244,6 +246,7 @@ hep.histplot(Jetpt_Hist["btagDeepFlavB",:],
              color="#79A7D3",
              edgecolor="black",
              label=r"btagDeepFlavB",
+             lw=1,
              ax=ax
             )
 ax.set_title("Jet $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50")
@@ -267,6 +270,7 @@ hep.histplot(DiJetMass_Hist["Untagged",:],
              color="#8A307F",
              edgecolor="black",
              label=r"Untagged",
+             lw=1,
              ax=ax
             )
 hep.histplot(DiJetMass_Hist["btagDeepFlavB",:], 
@@ -275,6 +279,7 @@ hep.histplot(DiJetMass_Hist["btagDeepFlavB",:],
              color="#79A7D3",
              edgecolor="black",
              label=r"btagDeepFlavB",
+             lw=1,
              ax=ax
             )
 ax.set_title("DiJet Invariant Mass", y=1.0, pad = 35 , fontsize=25, color="#053B50" )
@@ -298,6 +303,7 @@ hep.histplot(
     color='#79A7D3',
     edgecolor="black",
     label=r"MET pt" ,
+    lw=1,
     ax=ax
 )
 ax.set_title("MET pt", y=1.0, pad = -35 , fontsize=25, color="#053B50")
