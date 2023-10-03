@@ -113,13 +113,20 @@ class JetKinem(processor.ProcessorABC):
         DiJetHist.fill(Type="Untagged", mass = DiJets.mass)
         DiJetHist.fill(Type="btagDeepFlavB", mass = DiJets_bb.mass)
 
+        #4. MET histogram
+        metHist = (
+            hist.Hist.new.Reg(100,0,500).Double()
+        )
+        metHist.fill(events.MET.pt)
+
         #Prepare the output
         output = {
             "Cutflow": self.cutflow ,
             "Histograms": {
                 "Tag" : TagHist ,
                 "Jetpt" : JetHist ,
-                "DiJetMass" : DiJetHist 
+                "DiJetMass" : DiJetHist ,
+                "MET": metHist 
             }
         }
         return output
@@ -186,10 +193,29 @@ print("The flow of events :\n ", Output["Cutflow"])
 Tag_Hist = Output["Histograms"]["Tag"]
 Jetpt_Hist = Output["Histograms"]["Jetpt"]
 DiJetMass_Hist = Output["Histograms"]["DiJetMass"]
+MET_Hist = Output["Histograms"]["MET"]
 
 #1. bTag score histogram
-Tag_Hist.plot()
-plt.savefig(f"Tag{Mode}.png", dpi= 320)
+x_min = 0.
+x_max = 500.
+bin_size = 10
+n_bins=int((x_max - x_min)/bin_size)
+fig , ax = plt.subplots()
+hep.histplot(
+    Tag_Hist ,
+    histtype="fill",
+    color='b',
+    alpha=0.7 ,
+    edgecolor="black",
+    label=r"Tag" ,
+    ax=ax
+)
+ax.set_title("BTag Score", y=1.0, pad = -35 , fontsize=25, color="#053B50")
+ax.set_xlabel("Score", fontsize=20)
+ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
+ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
+hep.cms.label("Preliminary",data = Mode == "Data", rlabel="unknown $fb^{-1}$")
+fig.savefig(f"Tag{Mode}.png", dpi= 320)
 plt.clf()
 
 #2. Jets pt : Untagged and Tagged 
@@ -198,7 +224,7 @@ x_max = 500.
 bin_size = 10
 n_bins=int((x_max - x_min)/bin_size)
 #fig , ax= plt.subplots(figsize=(10,10))
-fig , ax= plt.subplots()
+fig , ax = plt.subplots()
 hep.histplot(Jetpt_Hist["Untagged",:], 
              #bins=bins ,
              histtype="fill",
@@ -257,4 +283,27 @@ ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
 hep.cms.label("Preliminary",data = Mode == "Data", rlabel="unknown $fb^{-1}$")
 ax.legend()
 fig.savefig(f"DiJets{Mode}.png", dpi= 300)
+plt.clf()
+
+#4. MET histogram
+x_min = 0.
+x_max = 500.
+bin_size = 10
+n_bins=int((x_max - x_min)/bin_size)
+fig , ax = plt.subplots()
+hep.histplot(
+    MET_Hist ,
+    histtype="fill",
+    color='b',
+    alpha=0.7 ,
+    edgecolor="black",
+    label=r"MET pt" ,
+    ax=ax
+)
+ax.set_title("MET pt", y=1.0, pad = -35 , fontsize=25, color="#053B50")
+ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
+ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
+ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
+hep.cms.label("Preliminary",data = Mode == "Data", rlabel="unknown $fb^{-1}$")
+fig.savefig(f"MET{Mode}.png", dpi= 320)
 plt.clf()
