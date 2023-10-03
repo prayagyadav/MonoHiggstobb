@@ -218,7 +218,7 @@ hep.histplot(
 )
 ax.set_title("BTag Score", y=1.0, pad = -35 , fontsize=25, color="#053B50")
 ax.set_xlabel("Score", fontsize=20)
-ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
+ax.set_ylabel(f"Events / {bin_size}", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
 hep.cms.label("Preliminary",data = Mode == "Data", ) #rlabel="unknown $fb^{-1}$")
 fig.savefig(f"Tag{Mode}.png", dpi= 320)
@@ -306,7 +306,7 @@ hep.histplot(
     lw=1,
     ax=ax
 )
-ax.set_title("MET pt", y=1.0, pad = -35 , fontsize=25, color="#053B50")
+ax.set_title("MET $p_t$", y=1.0, pad = -35 , fontsize=25, color="#053B50")
 ax.set_xlabel("$p_t$ (GeV)", fontsize=20)
 ax.set_ylabel(f"Events / {bin_size} GeV", fontsize=20)
 ax.set_xticks(np.arange(x_min,x_max+bin_size,bin_size*10))
