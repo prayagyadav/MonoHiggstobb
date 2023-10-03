@@ -156,7 +156,7 @@ if inputs.executor == "local" :
 
 #For condor execution
 elif inputs.executor == "condor" :
-    print("Preparing to run at condor\n")
+    print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
     client.upload_file("fileset.json")
     with open("fileset.json") as f:
