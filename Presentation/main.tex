@@ -1,0 +1,70 @@
+\documentclass[10pt,xcolor=dvipsnames]{beamer}
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+\definecolor{maroon}{RGB}{175,50,53} % Define a custom maroon color
+
+\usepackage{pdfpages}
+\setbeamercolor{section title}{fg=maroon,bg=maroon}
+\setbeamercolor*{structure}{bg=maroon!20,fg=maroon}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor{progress bar}{fg=gray, bg=gray}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{My Progress}
+\subtitle{MonoHiggs Group presentation}
+\date{\today}
+\author{Prayag Yadav}
+\institute{University of Hyderabad}
+\titlegraphic{\hfill\includegraphics[height=1.5cm]{uoh_logo.png}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents%[hideallsubsections]
+\end{frame}
+
+\section[Basic kinematic plots without selections, corrections and Scale Factors ]{Basic kinematic plots }
+
+\begin{frame}[fragile]{BTag Scores : MC }
+
+Clearly state your research question and hypothesis\cite{griffiths}
+  
+\end{frame}
+
+
+\begin{frame}[fragile]{BTag Scores : Data}
+
+Clearly state your research question and hypothesis
+  
+\end{frame}
+
+\appendix
+
+\begin{frame}[fragile]{Backup slides}
+  If any
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+
+  \bibliography{references}
+  \bibliographystyle{abbrv}
+
+\end{frame}
+
+\end{document}
