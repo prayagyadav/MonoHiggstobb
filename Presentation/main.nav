@@ -25,6 +25,4 @@
 \headcommand {\beamer@subsectionpages {6}{7}}
 \headcommand {\beamer@sectionpages {6}{7}}
 \headcommand {\beamer@documentpages {7}}
-\headcommand {\gdef \inserttotalframenumber {2}}
-\headcommand {\gdef \inserttotalframenumber {3}}
-\headcommand {\gdef \appendixtotalframenumber {2}}
+\headcommand {\gdef \inserttotalframenumber {5}}
