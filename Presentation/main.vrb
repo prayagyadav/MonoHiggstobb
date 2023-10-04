@@ -1,2 +1,7 @@
-\frametitle{Backup slides}
-If any
+\frametitle{DiJet mass : Data }
+\begin{figure}
+      \centering
+      \includegraphics[width=0.65\textwidth]{../Kinematics/DiJetsData.png}
+      \label{DiJetsData}
+      \caption{DiJet mass of Data samples}
+    \end{figure}

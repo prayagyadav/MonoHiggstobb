@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.14.0 (TeX Live 2022/dev/Debian)  (format=lualatex 2023.10.2)  5 OCT 2023 00:01
+This is LuaHBTeX, Version 1.14.0 (TeX Live 2022/dev/Debian)  (format=lualatex 2023.10.2)  5 OCT 2023 00:34
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/home/prayag/Analysis/Coffea/Sync/Presentation/main.tex
@@ -939,6 +939,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 33.
 LaTeX Info: Redefining \pageref on input line 33.
 LaTeX Info: Redefining \nameref on input line 33.
+ (./main.out) (./main.out)
 \@outlinefile=\write5
 
 \openout5 = main.out
@@ -1006,7 +1007,7 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ) (./main.nav)
-<uoh_logo.jpg, id=13, 819.06pt x 481.8pt>
+<uoh_logo.jpg, id=21, 819.06pt x 481.8pt>
 File: uoh_logo.jpg Graphic file (type jpg)
 <use uoh_logo.jpg>
 Package luatex.def Info: uoh_logo.jpg  used on input line 35.
@@ -1021,9 +1022,7 @@ Overfull \vbox (13.79993pt too high) detected at line 35
 
 [1
 
-{/home/prayag/.texlive2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}<./uoh_logo.jpg>]
-No file main.toc.
-[2
+{/home/prayag/.texlive2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}<./uoh_logo.jpg>] (./main.toc) [2
 
 ]
 LaTeX Font Info:    Trying to load font information for U+msa on input line 42.
@@ -1038,38 +1037,99 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ]
 \openout4 = main.vrb
  (./main.vrb
+<../Kinematics/TagMC.png, id=46, 722.7pt x 722.7pt>
+File: ../Kinematics/TagMC.png Graphic file (type png)
+<use ../Kinematics/TagMC.png>
+Package luatex.def Info: ../Kinematics/TagMC.png  used on input line 4.
+(luatex.def)             Requested size: 199.73653pt x 199.73007pt.
+)
+Overfull \vbox (23.64136pt too high) detected at line 51
+ []
 
-LaTeX Warning: Citation `griffiths' on page 4 undefined on input line 3.
+[4
 
-) [4
-
-]
+<../Kinematics/TagMC.png>]
 \openout4 = main.vrb
- (./main.vrb) [5
+ (./main.vrb
+<../Kinematics/TagData.png, id=54, 722.7pt x 722.7pt>
+File: ../Kinematics/TagData.png Graphic file (type png)
+<use ../Kinematics/TagData.png>
+Package luatex.def Info: ../Kinematics/TagData.png  used on input line 5.
+(luatex.def)             Requested size: 199.73653pt x 199.73007pt.
+)
+Overfull \vbox (23.64136pt too high) detected at line 62
+ []
 
-]
+[5
+
+<../Kinematics/TagData.png>]
+\openout4 = main.vrb
+ (./main.vrb
+<../Kinematics/JetsMC.png, id=62, 722.7pt x 722.7pt>
+File: ../Kinematics/JetsMC.png Graphic file (type png)
+<use ../Kinematics/JetsMC.png>
+Package luatex.def Info: ../Kinematics/JetsMC.png  used on input line 4.
+(luatex.def)             Requested size: 199.73653pt x 199.73007pt.
+)
+Overfull \vbox (23.64136pt too high) detected at line 71
+ []
+
+[6
+
+<../Kinematics/JetsMC.png>]
+\openout4 = main.vrb
+ (./main.vrb
+<../Kinematics/JetsData.png, id=71, 722.7pt x 722.7pt>
+File: ../Kinematics/JetsData.png Graphic file (type png)
+<use ../Kinematics/JetsData.png>
+Package luatex.def Info: ../Kinematics/JetsData.png  used on input line 5.
+(luatex.def)             Requested size: 199.73653pt x 199.73007pt.
+)
+Overfull \vbox (23.64136pt too high) detected at line 82
+ []
+
+[7
+
+<../Kinematics/JetsData.png>]
+\openout4 = main.vrb
+ (./main.vrb
+<../Kinematics/DiJetsMC.png, id=79, 722.7pt x 722.7pt>
+File: ../Kinematics/DiJetsMC.png Graphic file (type png)
+<use ../Kinematics/DiJetsMC.png>
+Package luatex.def Info: ../Kinematics/DiJetsMC.png  used on input line 4.
+(luatex.def)             Requested size: 199.73653pt x 199.73007pt.
+)
+Overfull \vbox (23.64136pt too high) detected at line 91
+ []
+
+[8
+
+<../Kinematics/DiJetsMC.png>]
+\openout4 = main.vrb
+ (./main.vrb
+<../Kinematics/DiJetsData.png, id=87, 722.7pt x 722.7pt>
+File: ../Kinematics/DiJetsData.png Graphic file (type png)
+<use ../Kinematics/DiJetsData.png>
+Package luatex.def Info: ../Kinematics/DiJetsData.png  used on input line 4.
+(luatex.def)             Requested size: 199.73653pt x 199.73007pt.
+)
+Overfull \vbox (23.64136pt too high) detected at line 100
+ []
+
+[9
+
+<../Kinematics/DiJetsData.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\translate ' on input line 57.
+(hyperref)                removing `\translate ' on input line 102.
 
+(./main.bbl
 
-\openout4 = main.vrb
-(./main.vrb) [6
+LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
-] (./main.bbl
-./main.bbl:6: Misplaced alignment tab character &.
-l.6 \newblock John Wiley &
-                         Sons Inc, 1987.
-I can't figure out why you would want to use a tab mark
-here. If you just want an ampersand, the remedy is
-simple: Just type `I\&' now. But if some right brace
-up above has ended a previous alignment prematurely,
-you're probably due for more error messages, and you
-might try typing `S' now just to see what is salvageable.
+) [10
 
-) [7
-
-</usr/share/texlive/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>]
+]
 \tf@nav=\write6
 
 \openout6 = main.nav
@@ -1080,36 +1140,24 @@ might try typing `S' now just to see what is salvageable.
 
 \openout8 = main.snm
  (./main.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  4ECF16883E8BD373BA55E42463B2F9DF;243.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 4ECF16883E8BD373BA55E42463B2F9DF;243.
 )
 
 Here is how much of LuaTeX's memory you used:
- 40398 strings out of 477805
+ 40581 strings out of 477805
  125031,1648299 words of node,token memory allocated
- 2698 words of node memory still in use:
-   29 hlist, 8 vlist, 6 rule, 12 disc, 4 local_par, 58 glue, 29 kern, 17 penalty, 97 glyph, 80 attribute, 70 glue_spec, 80 attribute_list, 4 write, 1 pdf_dest, 1 pdf_action, 28 pdf_colorstack nodes
-   avail lists: 1:2,2:246,3:178,4:146,5:148,6:30,7:611,8:11,9:233,10:6,11:32
- 59334 multiletter control sequences out of 65536+600000
- 71 fonts using 16039199 bytes
+ 1395 words of node memory still in use:
+   20 hlist, 8 vlist, 5 rule, 2 disc, 1 local_par, 24 glue, 12 kern, 10 penalty, 14 glyph, 52 attribute, 70 glue_spec, 52 attribute_list, 4 write, 1 pdf_action, 18 pdf_colorstack nodes
+   avail lists: 1:2,2:411,3:185,4:186,5:165,6:33,7:728,8:12,9:243,10:4,11:42
+ 59428 multiletter control sequences out of 65536+600000
+ 100 fonts using 19836775 bytes
  104i,13n,131p,1873b,821s stack positions out of 5000i,500n,10000p,200000b,80000s
-</home/prayag/texmf/fonts/opentype/public/fira/FiraSans-Italic.otf></home/prayag/texmf/fonts/opentype/public/fira/FiraSans-Light.otf></home/prayag/texmf/fonts/opentype/public/fira/FiraSans-Regular.otf>
-Output written on main.pdf (7 pages, 105506 bytes).
+</home/prayag/texmf/fonts/opentype/public/fira/FiraSans-LightItalic.otf></home/prayag/texmf/fonts/opentype/public/fira/FiraSans-Light.otf></home/prayag/texmf/fonts/opentype/public/fira/FiraSans-Regular.otf>
+Output written on main.pdf (10 pages, 1264725 bytes).
 
-PDF statistics: 88 PDF objects out of 1000 (max. 8388607)
- 59 compressed objects within 1 object stream
- 18 named destinations out of 1000 (max. 131072)
- 16 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 123 PDF objects out of 1000 (max. 8388607)
+ 82 compressed objects within 1 object stream
+ 29 named destinations out of 1000 (max. 131072)
+ 32 words of extra memory for PDF output out of 10000 (max. 100000000)
 
