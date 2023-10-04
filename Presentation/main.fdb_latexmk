@@ -6,7 +6,7 @@
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1696426699 "/home/prayag/Analysis/Coffea/Sync/Presentation/main.tex" "main.pdf" "main" 1696426699
+["pdflatex"] 1696434108 "/home/prayag/Analysis/Coffea/Sync/Presentation/main.tex" "main.pdf" "main" 1696434108
   "/etc/texmf/web2c/texmf.cnf" 1696226223 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/prayag/.texlive2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1696424785 165097 abf95700e65de9823128d9a10784d0cb ""
   "/home/prayag/Analysis/Coffea/Sync/Presentation/main.tex" 1696426697 1756 f02a07139f4182c286e1fc65d835561c ""
@@ -269,8 +269,8 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1696226231 1435838 317232411fa1d809f10d19f8836cae4f ""
-  "main.aux" 1696426699 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "main.bbl" 1696426698 178 07af8a8bfa2cfc8e6313c93176a30418 "bibtex main"
+  "main.aux" 1696434108 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.bbl" 1696434106 178 07af8a8bfa2cfc8e6313c93176a30418 "bibtex main"
   "main.nav" 0 -1 0 "pdflatex"
   "main.out" 0 -1 0 "pdflatex"
   "main.tex" 1696426697 1756 f02a07139f4182c286e1fc65d835561c ""
