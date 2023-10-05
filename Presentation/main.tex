@@ -3,6 +3,8 @@
 %\usepackage[usenames,dvipsnames]{xcolor}
 %\usepackage{appendixnumberbeamer}
 \usepackage{booktabs}
+\usepackage{datetime}
+\usepackage{datetime2}
 \usepackage{color}
 \usepackage[scale=2]{ccicons}
 
@@ -10,7 +12,7 @@
 \usepgfplotslibrary{dateplot}
 
 \usepackage{xspace}
-\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
 \definecolor{maroon}{RGB}{175,50,53} % Define a custom maroon color
 
 \usepackage{pdfpages}
@@ -19,13 +21,14 @@
 \setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
 \setbeamercolor{progress bar}{fg=gray, bg=gray}
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{My Progress}
-\subtitle{MonoHiggs Group presentation}
-\date{\today}
+\subtitle{MonoHiggs to $b \bar{b}$}
 \author{Prayag Yadav}
 \institute{University of Hyderabad}
+\date{Last updated: \DTMnow{}}
 \titlegraphic{\hfill\includegraphics[height=1.5cm]{uoh_logo.jpg}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,65 +42,180 @@
   \tableofcontents%[hideallsubsections]
 \end{frame}
 
-\section[Basic kinematic plots without selections, corrections and Scale Factors ]{Basic kinematic plots }
+\section[Basic kinematic plots ]{\small{Thu, $5^{th}$ October 2023 } \\ Basic kinematic plots(\tiny{Without any scale factors or corrections}) }
 
-\begin{frame}[fragile]{BTag Scores : MC }
-\begin{figure}
-  \centering
-  \includegraphics[width=0.65\textwidth]{../Kinematics/TagMC.png}
-  \label{TagMC}
-  \caption{BTag score for signal MC sample}
-\end{figure}  
-\end{frame}
-
-\begin{frame}[fragile]{BTag Scores : Data}
-
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.65\textwidth]{../Kinematics/TagData.png}
-    \label{TagData}
+  %%%%%%%%%%%%%%%%%%%%%%%%%generated%%%%%%%%%%%%%%%%
+  \begin{frame}[fragile]{BTag Scores : MC} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/TagMC.png }
+    \label{TagMC} 
+    \caption{BTag score for signal MC sample}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item {Btagger used : \texttt{btagDeepFlavB}} 
+    \item {Sample used: \texttt{MonoHTobb\_ZpBaryonic}} 
+    \item Lots of bjets in Signal MC 
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+    
+    
+   \begin{frame}[fragile]{BTag Scores : Data} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/TagData.png }
+    \label{TagData} 
     \caption{BTag score for Data samples}
-  \end{figure}  
-
-\end{frame}
-
-\begin{frame}[fragile]{Jet $p_t$ : MC }
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.65\textwidth]{../Kinematics/JetsMC.png}
-    \label{JetMC}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item {Btagger used : \texttt{btagDeepFlavB}} 
+    \item {Sample used: \texttt{Run2018A/MET}} 
+    \item Less number of bjets in Data
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+    
+    
+   \begin{frame}[fragile]{Jet $p_t$ : MC} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/JetsMC.png }
+    \label{JetMC} 
     \caption{Jet $p_t$ of signal MC samples}
-  \end{figure}  
-  \end{frame}
-  
-  \begin{frame}[fragile]{Jet $p_t$ : Data}
-  
-    \begin{figure}
-      \centering
-      \includegraphics[width=0.65\textwidth]{../Kinematics/JetsData.png}
-      \label{JetData}
-      \caption{Jet $p_t$ of Data samples}
-    \end{figure}  
-  
-  \end{frame}
-
-  \begin{frame}[fragile]{DiJet mass : MC }
-    \begin{figure}
-      \centering
-      \includegraphics[width=0.65\textwidth]{../Kinematics/DiJetsMC.png}
-      \label{DiJetMC}
-      \caption{DiJet mass of signal MC samples}
-    \end{figure}  
-  \end{frame}
-
-  \begin{frame}[fragile]{DiJet mass : Data }
-    \begin{figure}
-      \centering
-      \includegraphics[width=0.65\textwidth]{../Kinematics/DiJetsData.png}
-      \label{DiJetsData}
-      \caption{DiJet mass of Data samples}
-    \end{figure}  
-  \end{frame}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item Basic selections : $p_t > 25 GeV $ and $|\eta | < 2.5 $
+    \item {Btagger used : \texttt{btagDeepFlavB}} 
+    \item {Sample used: \texttt{MonoHTobb\_ZpBaryonic}} 
+    \item Medium Weight Parameter used for ak4bjets : 0.3040  
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+    
+    
+   \begin{frame}[fragile]{Jet $p_t$ : Data} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/JetsData.png }
+    \label{JetData} 
+    \caption{Jet $p_t$ of Data samples}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item Basic selections : $p_t > 25 GeV $ and $|\eta | < 2.5 $
+    \item {Btagger used : \texttt{btagDeepFlavB}} 
+    \item {Sample used: \texttt{Run2018A/MET}} 
+    \item Medium Weight Parameter used for ak4bjets : 0.3040
+    \item Not as predictable as signal MC 
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+    
+    
+   \begin{frame}[fragile]{DiJet mass : MC} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/DiJetsMC.png }
+    \label{DiJetMC} 
+    \caption{DiJet mass of signal MC samples}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item Basic selections : $p_t > 25 GeV $ and $|\eta | < 2.5 $ for each jet
+    \item {Btagger used : \texttt{btagDeepFlavB}} 
+    \item {Sample used: \texttt{MonoHTobb\_ZpBaryonic}} 
+    \item Medium Weight Parameter used for ak4bjets selection : 0.3040
+    \item Peaks around SM Higgs mass 
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+    
+    
+   \begin{frame}[fragile]{DiJet mass : Data} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/DiJetsData.png }
+    \label{DiJetData} 
+    \caption{DiJet mass of Data samples}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item Basic selections : $p_t > 25 GeV $ and $|\eta | < 2.5 $ for each jet
+    \item {Btagger used : \texttt{btagDeepFlavB}} 
+    \item {Sample used: \texttt{Run2018A/MET}} 
+    \item Medium Weight Parameter used for ak4bjets selection : 0.3040
+    \item Lot of noise, no clear structure 
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+    
+    
+   \begin{frame}[fragile]{MET $p_t$ : MC} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/METMC.png }
+    \label{METMC} 
+    \caption{MET $p_t$ for signal MC samples}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item No filters or Trigger applied
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+    
+    
+   \begin{frame}[fragile]{MET $p_t$ : Data} 
+    \begin{columns}
+    \column{0.58\textwidth} 
+    \begin{figure} 
+    \centering 
+     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/METData.png }
+    \label{METMC} 
+    \caption{MET $p_t$ for Data samples}
+    \end{figure} 
+    \column{0.38\textwidth} 
+    \begin{itemize} 
+    \raggedright 
+    \small
+    \item No filters or Trigger applied
+    \item Looks similar to the Jet data
+    \end{itemize}
+    \end{columns} 
+    \end{frame} 
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \appendix
 
