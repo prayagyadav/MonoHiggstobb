@@ -171,7 +171,7 @@ if inputs.executor == "futures" :
     )
 
 #For dask execution
-if inputs.executor == "dask" :
+elif inputs.executor == "dask" :
     from dask.distributed import Client , LocalCluster
     cluster = LocalCluster()
     client = Client(cluster)
