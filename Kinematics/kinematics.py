@@ -172,10 +172,10 @@ if inputs.executor == "futures" :
 
 #For dask execution
 if inputs.executor == "dask" :
-    from dask.distributed import Client
-    from dask.distributed import LocalCluster
+    from dask.distributed import Client , LocalCluster
     cluster = LocalCluster()
     client = Client(cluster)
+    cluster.scale(inputs.workers)
     client.upload_file("fileset.json")
     with open("fileset.json") as f: #load the fileset
         files = json.load(f)
