@@ -58,7 +58,8 @@ parser.add_argument(
     "-w",
     "--workers",
     help="Enter the number of workers to be employed for processing in local; by default 4",
-    type=int
+    type=int ,
+    default=4 
     )
 inputs = parser.parse_args()
 
