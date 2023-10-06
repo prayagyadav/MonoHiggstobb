@@ -175,7 +175,7 @@ if inputs.executor == "futures" :
 if inputs.executor == "dask" :
     with open("fileset.json") as f: #load the fileset
         files = json.load(f)
-        client = Client("tcp://127.0.0.1:10371")
+        client = Client("tls://localhost:8786")
     dask_run = processor.Runner(
         executor = processor.DaskExecutor(client=client),
         schema=NanoAODSchema,
