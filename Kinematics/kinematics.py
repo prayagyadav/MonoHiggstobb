@@ -15,6 +15,7 @@ from coffea.nanoevents import NanoAODSchema #,NanoEventsFactory
 from coffea import processor
 from coffea import util
 import condor
+from dask.distributed import Client
 import hist
 import json
 import logging
@@ -174,8 +175,9 @@ if inputs.executor == "futures" :
 if inputs.executor == "dask" :
     with open("fileset.json") as f: #load the fileset
         files = json.load(f)
+        client = Client("tcp://127.0.0.1:10371")
     dask_run = processor.Runner(
-        executor = processor.DaskExecutor(),
+        executor = processor.DaskExecutor(client=client),
         schema=NanoAODSchema,
         chunksize= inputs.chunk_size ,
         maxchunks= inputs.max_chunks,
