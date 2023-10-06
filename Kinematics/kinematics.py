@@ -175,7 +175,7 @@ if inputs.executor == "dask" :
     with open("fileset.json") as f: #load the fileset
         files = json.load(f)
     dask_run = processor.Runner(
-        executor = processor.DaskExecutor(workers=inputs.workers),
+        executor = processor.DaskExecutor(),
         schema=NanoAODSchema,
         chunksize= inputs.chunk_size ,
         maxchunks= inputs.max_chunks,
