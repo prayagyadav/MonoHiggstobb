@@ -162,6 +162,7 @@ if inputs.executor == "local" :
         schema=NanoAODSchema,
         chunksize= inputs.chunk_size ,
         maxchunks= inputs.max_chunks,
+        xrootdtimeout=300
     )
     Output = futures_run(
         files[Mode],
