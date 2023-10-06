@@ -13,7 +13,7 @@ import argparse
 from coffea.analysis_tools import PackedSelection
 from coffea.nanoevents import NanoAODSchema #,NanoEventsFactory 
 from coffea import processor
-from coffea.util import save
+from coffea import util
 import condor
 import hist
 import json
@@ -36,9 +36,9 @@ parser.add_argument(
 parser.add_argument(
     "-e",
     "--executor",
-    choices=["local","condor"],
-    help="Enter where to run the file : local or condor",
-    default="local",
+    choices=["futures","condor", "dask"],
+    help="Enter where to run the file : futures(local) or dask(local) or condor",
+    default="futures",
     type=str
 )
 parser.add_argument(
@@ -153,8 +153,8 @@ logging.basicConfig(
 
 Mode = inputs.Mode
 
-#For local execution
-if inputs.executor == "local" :
+#For futures execution
+if inputs.executor == "futures" :
     with open("fileset.json") as f: #load the fileset
         files = json.load(f)
     futures_run = processor.Runner(
@@ -162,9 +162,26 @@ if inputs.executor == "local" :
         schema=NanoAODSchema,
         chunksize= inputs.chunk_size ,
         maxchunks= inputs.max_chunks,
-        xrootdtimeout=300
+        xrootdtimeout=120
     )
     Output = futures_run(
+        files[Mode],
+        "Events",
+        processor_instance=JetKinem()
+    )
+
+#For dask execution
+if inputs.executor == "dask" :
+    with open("fileset.json") as f: #load the fileset
+        files = json.load(f)
+    dask_run = processor.Runner(
+        executor = processor.DaskExecutor(workers=inputs.workers),
+        schema=NanoAODSchema,
+        chunksize= inputs.chunk_size ,
+        maxchunks= inputs.max_chunks,
+        xrootdtimeout=120
+    )
+    Output = dask_run(
         files[Mode],
         "Events",
         processor_instance=JetKinem()
@@ -197,6 +214,5 @@ elif inputs.executor == "condor" :
 #################################
 output_file = f"Datakinematics.coffea"
 print("Saving the output to : " , output_file)
-save(output= Output, filename=output_file)
+util.save(output= Output, filename=output_file)
 print(f"File {output_file} saved.")
-
