@@ -29,7 +29,7 @@ def plot(filename):
         lw=1,
         ax=ax
     )
-    hep.cms.label("")
+    hep.cms.label("Preliminary", data=True)
     ax.set_ylabel("Events / 5 GeV")
     fig.legend(loc=10)
     plotname = f"{Mode}METflags.png"
