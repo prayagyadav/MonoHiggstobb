@@ -25,7 +25,7 @@ def plot(filename):
     hep.histplot(
         [METhist["noflags",:],METhist["flags",:] ],
         histtype="fill",
-        color=["#79A7D3","#8A307F"],
+        color=["#525FE1","#F86F03"],
         label=["noflags","flags"],
         edgecolor="black",
         lw=1,
@@ -33,6 +33,7 @@ def plot(filename):
     )
     hep.cms.label("Preliminary", data=True)
     ax.set_ylabel("Events / 5 GeV")
+    ax.set_title("MET")
     fig.legend(loc=10)
     plotname = f"{Mode}METflags.png"
     fig.savefig(plotname, dpi=300)
