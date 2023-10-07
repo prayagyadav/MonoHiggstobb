@@ -24,8 +24,10 @@ def plot(filename):
     fig, ax = plt.subplots()
     hep.histplot(
         [METhist["noflags",:],METhist["flags",:] ],
-        color=["red","green"],
+        histtype="fill",
+        color=["#79A7D3","#8A307F"],
         label=["noflags","flags"],
+        edgecolor="black",
         lw=1,
         ax=ax
     )
