@@ -20,7 +20,7 @@ def plot(filename):
         Mode = "Data"
     elif filename.startswith("MC"):
         Mode = "MC"
-    METhist = Output["Histograms"]["METhist"]
+    METhist = Output["Histograms"]["MET"]
     fig, ax = plt.subplots()
     hep.histplot(
         [METhist["noflags",:],METhist["flags",:] ],
@@ -32,10 +32,11 @@ def plot(filename):
     hep.cms.label("")
     ax.set_ylabel("Events / 5 GeV")
     fig.legend(loc=10)
-    fig.savefig(f"{Mode}METflags.png", dpi=280)
+    plotname = f"{Mode}METflags.png"
+    fig.savefig(plotname, dpi=300)
+    print(plotname , f" created at {os.getcwd()}")
 
-filenames = ["DataMETflags.png", "MCMETflags.png"]
+filenames = ["DataMETstudy.coffea", "MCMETstudy.coffea"]
 for file in filenames:
     if file in os.listdir():
         plot(file)
-        print(file, "created.")
