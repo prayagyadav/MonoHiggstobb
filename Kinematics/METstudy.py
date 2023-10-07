@@ -88,7 +88,7 @@ class METstudy(processor.ProcessorABC):
         METflags.add("hbheNoise", events.Flag.HBHENoiseFilter)
         METflags.add("hbheNoiseIso", events.Flag.HBHENoiseIsoFilter)
         METflags.add("eebadSC", events.Flag.eeBadScFilter)
-        METflags.add("ECalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
+        METflags.add("EcalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
         METflags.add("badPFmuon", events.Flag.BadPFMuonFilter )
         METflags.add("Ecalbadcalib",events.Flag.ecalBadCalibFilter )
 
