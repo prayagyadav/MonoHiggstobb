@@ -172,6 +172,7 @@ if inputs.executor == "futures" :
 
 #For dask execution
 elif inputs.executor == "dask" :
+    print("WARNING: This feature is still in development!\nAttemping to run nevertheless ...")
     from dask.distributed import Client , LocalCluster
     cluster = LocalCluster()
     client = Client(cluster)
@@ -217,7 +218,7 @@ elif inputs.executor == "condor" :
 #################################
 # Create the output file #
 #################################
-output_file = f"Datakinematics.coffea"
+output_file = f"{Mode}kinematics.coffea"
 print("Saving the output to : " , output_file)
 util.save(output= Output, filename=output_file)
 print(f"File {output_file} saved.")
