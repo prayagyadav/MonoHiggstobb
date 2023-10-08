@@ -131,7 +131,7 @@ class METstudy(processor.ProcessorABC):
         #Fill the histogram
         METHist_pt.fill(type="noflags", pt= events.MET.pt)
         METHist_pt.fill(type="flags", pt=  MET.pt)
-        METHist_phi.fill(type="noflag", phi=events.MET.phi)
+        METHist_phi.fill(type="noflags", phi=events.MET.phi)
         METHist_phi.fill(type="flags", phi=MET.phi)
 
         #Prepare the output
