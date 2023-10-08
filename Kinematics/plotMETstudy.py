@@ -50,7 +50,8 @@ def plot(filename):
         ax=ax
     )
     hep.cms.label("Preliminary", data= Mode=="Data")
-    ax.set_ylabel("Events / 5 GeV")
+    ax.set_ylabel(f"Events / {round(2*np.pi / 100.0, 3) } radians")
+    ax.set_xlabel("$\phi$ (radians)")
     ax.set_title("MET $\phi$",pad=35)
     fig.legend(loc='center', bbox_to_anchor=(0.5, 0.5))
     plotname = f"{Mode}phiMETflags.png"
