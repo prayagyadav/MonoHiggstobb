@@ -31,9 +31,9 @@ def plot(filename):
         lw=2,
         ax=ax
     )
-    hep.cms.label("Preliminary", data=True)
+    hep.cms.label("Preliminary", data= Mode == "Data")
     ax.set_ylabel("Events / 5 GeV")
-    ax.set_title("MET $p_t$")
+    ax.set_title("MET $p_t$",pad=35)
     fig.legend(loc='upper right', bbox_to_anchor=(0.7, 0.7))
     plotname = f"{Mode}ptMETflags.png"
     fig.savefig(plotname, dpi=300)
@@ -49,9 +49,9 @@ def plot(filename):
         lw=2,
         ax=ax
     )
-    hep.cms.label("Preliminary", data=True)
+    hep.cms.label("Preliminary", data= Mode=="Data")
     ax.set_ylabel("Events / 5 GeV")
-    ax.set_title("MET $\phi$")
+    ax.set_title("MET $\phi$",pad=35)
     fig.legend(loc='center', bbox_to_anchor=(0.5, 0.5))
     plotname = f"{Mode}phiMETflags.png"
     fig.savefig(plotname, dpi=300)
