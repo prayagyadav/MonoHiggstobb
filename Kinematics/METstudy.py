@@ -106,8 +106,8 @@ class METstudy(processor.ProcessorABC):
         MET = events.MET[flags]
         self.cutflow["After_Flags"] = len(MET)
 
-        #Creating the MET histogram
-        METhist = (
+        #Creating the MET pt histogram
+        METHist_pt = (
             hist.
             Hist.
             new.
@@ -116,15 +116,30 @@ class METstudy(processor.ProcessorABC):
             .Double()
             )
         
+        #Note: MET has no eta
+
+        #Creating the MET phi histogram
+        METHist_phi = (
+            hist.
+            Hist.
+            new.
+            StrCat(["noflags","flags"], name="type").
+            Reg(100,-np.pi,np.pi, name="phi", label="$\phi$")
+            .Double()
+            )
+        
         #Fill the histogram
-        METhist.fill(type="noflags", pt= events.MET.pt)
-        METhist.fill(type="flags", pt=  MET.pt)
+        METHist_pt.fill(type="noflags", pt= events.MET.pt)
+        METHist_pt.fill(type="flags", pt=  MET.pt)
+        METHist_phi.fill(type="noflag", phi=events.MET.phi)
+        METHist_phi.fill(type="flags", phi=MET.phi)
 
         #Prepare the output
         output = {
             "Cutflow": self.cutflow ,
             "Histograms": {
-                "MET": METhist 
+                "METpt": METHist_pt ,
+                "METphi": METHist_phi 
             }
         }
         return output

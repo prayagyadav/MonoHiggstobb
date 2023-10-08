@@ -20,10 +20,12 @@ def plot(filename):
         Mode = "Data"
     elif filename.startswith("MC"):
         Mode = "MC"
-    METhist = Output["Histograms"]["MET"]
+    
+    #pt plot
+    ptHist = Output["Histograms"]["METpt"]
     fig, ax = plt.subplots()
     hep.histplot(
-        [METhist["noflags",:],METhist["flags",:] ],
+        [ptHist["noflags",:], ptHist["flags",:] ],
         histtype="fill",
         color=["#525FE1","#F86F03"],
         label=["noflags","flags"],
@@ -33,9 +35,29 @@ def plot(filename):
     )
     hep.cms.label("Preliminary", data=True)
     ax.set_ylabel("Events / 5 GeV")
-    ax.set_title("MET")
+    ax.set_title("MET $p_t$")
     fig.legend(loc=10)
-    plotname = f"{Mode}METflags.png"
+    plotname = f"{Mode}ptMETflags.png"
+    fig.savefig(plotname, dpi=300)
+    print(plotname , f" created at {os.getcwd()}")
+
+    #phi plot
+    phiHist = Output["Histograms"]["METphi"]
+    fig, ax = plt.subplots()
+    hep.histplot(
+        [phiHist["noflags",:], phiHist["flags",:] ],
+        histtype="fill",
+        color=["#525FE1","#F86F03"],
+        label=["noflags","flags"],
+        edgecolor="black",
+        lw=1,
+        ax=ax
+    )
+    hep.cms.label("Preliminary", data=True)
+    ax.set_ylabel("Events / 5 GeV")
+    ax.set_title("MET $\phi$")
+    fig.legend()
+    plotname = f"{Mode}phiMETflags.png"
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
