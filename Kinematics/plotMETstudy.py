@@ -26,17 +26,15 @@ def plot(filename):
     fig, ax = plt.subplots()
     hep.histplot(
         [ptHist["noflags",:], ptHist["flags",:] ],
-        histtype="fill",
         color=["#525FE1","#F86F03"],
         label=["noflags","flags"],
-        edgecolor="black",
-        lw=1,
+        lw=2,
         ax=ax
     )
     hep.cms.label("Preliminary", data=True)
     ax.set_ylabel("Events / 5 GeV")
     ax.set_title("MET $p_t$")
-    fig.legend(loc=10)
+    fig.legend(loc='upper right', bbox_to_anchor=(0.7, 0.7))
     plotname = f"{Mode}ptMETflags.png"
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
@@ -46,17 +44,15 @@ def plot(filename):
     fig, ax = plt.subplots()
     hep.histplot(
         [phiHist["noflags",:], phiHist["flags",:] ],
-        histtype="fill",
         color=["#525FE1","#F86F03"],
         label=["noflags","flags"],
-        edgecolor="black",
-        lw=1,
+        lw=2,
         ax=ax
     )
     hep.cms.label("Preliminary", data=True)
     ax.set_ylabel("Events / 5 GeV")
     ax.set_title("MET $\phi$")
-    fig.legend()
+    fig.legend(loc='center', bbox_to_anchor=(0.5, 0.5))
     plotname = f"{Mode}phiMETflags.png"
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
