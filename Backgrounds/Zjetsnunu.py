@@ -75,7 +75,7 @@ class Zjetsnunu(processor.ProcessorABC):
         BasicCuts = PackedSelection()
         BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
         BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
-        events = events[BasicCuts.all("pt_cut", "eta_cuts")]
+        events = events[BasicCuts.all("pt_cut", "eta_cut")]
         self.cutflow["ReducedEvents"] = len(events)
 
         #MET Filters
