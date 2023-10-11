@@ -1,7 +1,7 @@
 """
-Insert description of the file.
+This script studies the Z--> \nu + \nu + jets background .
 Author: Prayag Yadav
-Created: 8 Oct 2023
+Created: 11 Oct 2023
 """
 
 #################################
@@ -63,41 +63,81 @@ inputs = parser.parse_args()
 # Define the processor #
 ########################
 
-class MyProcessor(processor.ProcessorABC):
+class Zjetsnunu(processor.ProcessorABC):
     def __init__(self):
         # Initialize the cutflow dictionary
         self.cutflow = {}
         pass
     def process(self, events):
         self.cutflow["Total_Events"] = len(events) #Total Number of events
+
         #Apply the basic cuts like pt and eta
-        # BasicCuts = PackedSelection()
-        # BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
-        # BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
-        # events = events[BasicCuts.all("pt_cut")]
-        # self.cutflow["ReducedEvents"] = len(events)
+        BasicCuts = PackedSelection()
+        BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
+        BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
+        events = events[BasicCuts.all("pt_cut", "eta_cuts")]
+        self.cutflow["ReducedEvents"] = len(events)
+
+        #MET Filters
+        flags = PackedSelection()
+        flags.add("goodVertices", events.Flag.goodVertices)
+        flags.add("tightHalo", events.Flag.globalTightHalo2016Filter)
+        flags.add("hbheNoise", events.Flag.HBHENoiseFilter)
+        flags.add("hbheNoiseIso", events.Flag.HBHENoiseIsoFilter)
+        flags.add("eebadSC", events.Flag.eeBadScFilter)
+        flags.add("EcalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
+        flags.add("badPFmuon", events.Flag.BadPFMuonFilter )
+        flags.add("Ecalbadcalib",events.Flag.ecalBadCalibFilter )
+
+        flagcut = flags.all(
+            "goodVertices",
+            "tightHalo",
+            "hbheNoise",
+            "hbheNoiseIso",
+            "eebadSC",
+            "EcalDeadcell",
+            "badPFmuon",
+            "Ecalbadcalib"
+            )
+        
+        events = events[flagcut]
+        
+        Jets = events.Jet
+        #Apply the btag 
+        btag_WP_medium = 0.3040 # Medium Working Point
+        btag_WP_tight = 0.7476 # Tight Working Point
+        GoodJetCut = Jets.btagDeepFlavB > btag_WP_tight 
+        ak4_BJets_tight = Jets[GoodJetCut]
+        self.cutflow["ak4bJetsTight"] = ak.sum(ak.num(ak4_BJets_tight)) #No of ak4 tight bjets
+
+        #Create Dijets
+        def ObtainDiJets(jet):
+            jet = jet[ak.num(jet)>1]
+            Dijet = jet[:,0]+jet[:,1]
+            return Dijet 
+        DiJets = ObtainDiJets(ak4_BJets_tight)
+        self.cutflow["bbDiJets"] = len(DiJets) #No of bb Dijets
 
         #Creating histograms
         x_min = 0
         x_max = 500
         nbins = 100
-        h = (
+        DiJetHist = (
             hist.
             Hist.
             new.
-            StrCat(["type1","type2"], name="Attribute").
-            Reg(nbins,x_min,x_max, name="Name", label="xlabel")
-            .Double()
+            Reg(nbins,x_min,x_max).
+            Double()
             )
         
         #Fill the histogram
-        h.fill(Attribute="type1", Name = events.MET.pt )
+        DiJetHist.fill( DiJets.mass )
 
         #Prepare the output
         output = {
             "Cutflow": self.cutflow ,
             "Histograms": {
-                "Histogram": h ,
+                "Histogram": DiJetHist ,
             }
         }
         return output
@@ -116,8 +156,9 @@ logging.basicConfig(
 
 #For futures execution
 if inputs.executor == "futures" :
-    with open("fileset.json") as f: #load the fileset
+    with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
         files = json.load(f)
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:5]}
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
@@ -126,9 +167,9 @@ if inputs.executor == "futures" :
         xrootdtimeout=120
     )
     Output = futures_run(
-        files["Data"],
+        files,
         "Events",
-        processor_instance=MyProcessor()
+        processor_instance=Zjetsnunu()
     )
 
 #For dask execution
@@ -139,8 +180,9 @@ elif inputs.executor == "dask" :
     client = Client(cluster)
     cluster.scale(inputs.workers)
     client.upload_file("fileset.json")
-    with open("fileset.json") as f: #load the fileset
+    with open("newfileset.json") as f: #load the fileset
         files = json.load(f)
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:5]}
     dask_run = processor.Runner(
         executor = processor.DaskExecutor(client=client),
         schema=NanoAODSchema,
@@ -149,9 +191,9 @@ elif inputs.executor == "dask" :
         xrootdtimeout=120
     )
     Output = dask_run(
-        files["Data"],
+        files,
         "Events",
-        processor_instance=MyProcessor()
+        processor_instance=Zjetsnunu()
     )
 
 #For condor execution
@@ -159,8 +201,9 @@ elif inputs.executor == "condor" :
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
     client.upload_file("fileset.json")
-    with open("fileset.json") as f:
+    with open("newfileset.json") as f:
         files = json.load(f)
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:5]}
 
     runner = processor.Runner(
         executor=executor,
@@ -171,15 +214,15 @@ elif inputs.executor == "condor" :
     )
     print("Running...\n")
     Output = runner(
-        files["Data"],
+        files,
         treename="Events",
-        processor_instance=MyProcessor(),
+        processor_instance=Zjetsnunu(),
     )
 
 #################################
 # Create the output file #
 #################################
-output_file = f"Output.coffea"
+output_file = f"Zjetsnunu.coffea"
 print("Saving the output to : " , output_file)
 util.save(output= Output, filename=output_file)
 print(f"File {output_file} saved.")
