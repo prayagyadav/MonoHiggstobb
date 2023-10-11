@@ -1,0 +1,5 @@
+setup.py
+monoHbbtools.egg-info/PKG-INFO
+monoHbbtools.egg-info/SOURCES.txt
+monoHbbtools.egg-info/dependency_links.txt
+monoHbbtools.egg-info/top_level.txt

@@ -11,6 +11,7 @@ Presentation/main.fdb_latexmk
 Presentation/main.vrb
 Presentation/main.blg
 Presentation/main.snm
+slidegentemp.py
 Kinematics/.env
 Kinematics/.ipynb_checkpoints
 .env
