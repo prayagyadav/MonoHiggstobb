@@ -137,7 +137,7 @@ class Zjetsnunu(processor.ProcessorABC):
         output = {
             "Cutflow": self.cutflow ,
             "Histograms": {
-                "Histogram": DiJetHist ,
+                "Dijet": DiJetHist ,
             }
         }
         return output

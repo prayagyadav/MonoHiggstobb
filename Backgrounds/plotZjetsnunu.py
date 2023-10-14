@@ -20,7 +20,7 @@ def plot(filename):
     Output = util.load(filename)
     
     #pt plot
-    h = Output["Histograms"]["Histogram"]
+    h = Output["Histograms"]["Dijet"]
     fig, ax = plt.subplots()
     hep.histplot(
         h,
