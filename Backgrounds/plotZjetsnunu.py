@@ -14,11 +14,17 @@ import mplhep as hep
 import numpy as np
 import os
 plt.style.use(hep.style.CMS)
+import rich
 
 #Load the output
+def showinfo(filename):
+    Output = util.load(filename)
+    cutflow = Output["Cutflow"]
+    rich.print(cutflow)
+
 def plot(filename):
     Output = util.load(filename)
-    
+
     #pt plot
     h = Output["Histograms"]["Dijet"]
     fig, ax = plt.subplots()
@@ -34,7 +40,7 @@ def plot(filename):
     hep.cms.label("Preliminary", data= True)
     ax.set_ylabel("Events")
     ax.set_xlabel("Mass (GeV)")
-    ax.set_title("$ Z \\rightarrow \\nu + \\nu + jets $",pad=35)
+    ax.set_title("Dijet mass",pad=35)
     fig.legend()
     plotname = f"ZnunuDijets.png"
     fig.savefig(plotname, dpi=300)
@@ -43,4 +49,5 @@ def plot(filename):
 filenames = ["Zjetsnunu.coffea"]
 for file in filenames:
     if file in os.listdir():
+        showinfo(file)
         plot(file)
