@@ -158,7 +158,7 @@ logging.basicConfig(
 if inputs.executor == "futures" :
     with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
         files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:]}
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:15]}
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
