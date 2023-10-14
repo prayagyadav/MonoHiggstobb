@@ -57,6 +57,12 @@ parser.add_argument(
     type=int ,
     default=4 
     )
+parser.add_argument(
+    "-f",
+    "--files",
+    help="Enter the number of files to be processed",
+    type=int 
+    )
 inputs = parser.parse_args()
 
 ########################
@@ -158,7 +164,7 @@ logging.basicConfig(
 if inputs.executor == "futures" :
     with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
         files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:15]}
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
@@ -179,10 +185,10 @@ elif inputs.executor == "dask" :
     cluster = LocalCluster()
     client = Client(cluster)
     cluster.scale(inputs.workers)
-    client.upload_file("fileset.json")
+    client.upload_file("../monoHbbtools/Load/newfileset.json")
     with open("newfileset.json") as f: #load the fileset
         files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:5]}
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     dask_run = processor.Runner(
         executor = processor.DaskExecutor(client=client),
         schema=NanoAODSchema,
@@ -200,10 +206,10 @@ elif inputs.executor == "dask" :
 elif inputs.executor == "condor" :
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
-    client.upload_file("fileset.json")
+    client.upload_file("../monoHbbtools/Load/newfileset.json")
     with open("newfileset.json") as f:
         files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:5]}
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
 
     runner = processor.Runner(
         executor=executor,
