@@ -207,7 +207,7 @@ elif inputs.executor == "condor" :
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
     client.upload_file("../monoHbbtools/Load/newfileset.json")
-    with open("newfileset.json") as f:
+    with open("../monoHbbtools/Load/newfileset.json") as f:
         files = json.load(f)
     files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
 
