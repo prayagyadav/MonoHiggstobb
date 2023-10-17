@@ -170,7 +170,8 @@ if inputs.executor == "futures" :
     try :
         fileset_dict = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     except :
-        raise "Numbers of files requested is greater than the numbers of files in first dictionary of the fileset."
+        print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
+        raise ValueError
     # with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
     #     files = json.load(f)
     # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
