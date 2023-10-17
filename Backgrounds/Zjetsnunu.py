@@ -164,7 +164,7 @@ logging.basicConfig(
 #For futures execution
 if inputs.executor == "futures" :
 
-    f = Load.Loadfileset("../fileset.json")
+    f = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     f.getFileset("Data","MET_Run2018A", redirector="fnal")
 
     # with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
