@@ -166,12 +166,9 @@ if inputs.executor == "futures" :
 
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
+    fileset_dict = Load.buildFileset(fileset_dict["Data"]["MET"],"fnal")
     try :
-        fileset_dict = Load.buildFileset(fileset_dict["Data"]["MET"],"fnal")
-        try :
-            files = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
-        except :
-            files = fileset_dict
+        fileset_dict = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     except :
         raise "Numbers of files requested is greater than the numbers of files in first dictionary of the fileset."
     # with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
