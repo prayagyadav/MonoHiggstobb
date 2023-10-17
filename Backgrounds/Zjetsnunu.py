@@ -14,6 +14,7 @@ from coffea.analysis_tools import PackedSelection
 from coffea.nanoevents import NanoAODSchema #,NanoEventsFactory 
 from coffea import processor
 from coffea import util
+from monoHbbtools import Load
 from monoHbbtools.Utilities import condor
 import hist
 import json
@@ -162,9 +163,13 @@ logging.basicConfig(
 
 #For futures execution
 if inputs.executor == "futures" :
-    with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
-        files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+
+    f = Load.Loadfileset("../fileset.json")
+    f.getFileset("Data","MET_Run2018A", redirector="fnal")
+
+    # with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
+    #     files = json.load(f)
+    # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
@@ -173,7 +178,7 @@ if inputs.executor == "futures" :
         xrootdtimeout=120
     )
     Output = futures_run(
-        files,
+        f,
         "Events",
         processor_instance=Zjetsnunu()
     )
