@@ -164,9 +164,16 @@ logging.basicConfig(
 #For futures execution
 if inputs.executor == "futures" :
 
-    f = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
-    f.getFileset("Data","MET_Run2018A", redirector="fnal")
-
+    fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
+    fileset_dict = fileset.getraw()
+    try :
+        fileset_dict = Load.buildFileset(fileset_dict["Data"]["MET"],"fnal")
+        try :
+            files = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+        except :
+            files = fileset_dict
+    except :
+        raise "Numbers of files requested is greater than the numbers of files in first dictionary of the fileset."
     # with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
     #     files = json.load(f)
     # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
@@ -178,7 +185,7 @@ if inputs.executor == "futures" :
         xrootdtimeout=120
     )
     Output = futures_run(
-        f,
+        fileset_dict,
         "Events",
         processor_instance=Zjetsnunu()
     )
