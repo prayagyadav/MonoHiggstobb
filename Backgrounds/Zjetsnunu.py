@@ -166,9 +166,9 @@ if inputs.executor == "futures" :
 
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
-    fileset_dict = Load.buildFileset(fileset_dict["Data"]["MET"],"fnal")
+    runnerfileset = Load.buildFileset(fileset_dict["Data"]["MET"],"fnal")
     try :
-        fileset_dict = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+        runnerfileset = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     except :
         print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
         raise ValueError
@@ -183,7 +183,7 @@ if inputs.executor == "futures" :
         xrootdtimeout=120
     )
     Output = futures_run(
-        fileset_dict,
+        runnerfileset,
         "Events",
         processor_instance=Zjetsnunu()
     )
