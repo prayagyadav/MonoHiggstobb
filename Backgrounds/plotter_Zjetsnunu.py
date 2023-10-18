@@ -27,26 +27,29 @@ def plot(filename):
     Output = util.load(filename)
 
     #pt plot
-    h = Output["Histograms"]["Dijet"]
-    fig, ax = plt.subplots()
-    hep.histplot(
-        h,
-        histtype="fill",
-        color="#525FE1",
-        label="Dijet mass",
-        edgecolor="black",
-        lw=1,
-        ax=ax
-    )
-    hep.cms.label("Preliminary", data= True)
-    ax.set_ylabel("Events")
-    ax.set_xlabel("Mass (GeV)")
-    ax.set_title("Dijet mass",pad=35)
-    fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
-    fig.legend()
-    plotname = f"ZnunuDijets.png"
-    fig.savefig(plotname, dpi=300)
-    print(plotname , f" created at {os.getcwd()}")
+    for key in Output["Histograms"].keys() :
+        h = Output["Histograms"][key]
+        fig, ax = plt.subplots()
+        hep.histplot(
+            h,
+            histtype="fill",
+            color="#525FE1",
+            label="Dijet mass",
+            edgecolor="black",
+            lw=1,
+            ax=ax
+        )
+        hep.cms.label("Preliminary", data= "Data" in filename)
+        ax.set_ylabel("Events")
+        ax.set_xlabel("Mass (GeV)")
+        ax.set_title("Dijet mass",pad=35)
+        fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
+        fig.legend()
+        plotname = f"ZnunuDijets{key}.png"
+        fig.savefig(plotname, dpi=300)
+        print(plotname , f" created at {os.getcwd()}")
+
+
 
 filenames = ["Zjetsnunu.coffea"]
 for file in filenames:

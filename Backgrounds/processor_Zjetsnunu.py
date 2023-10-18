@@ -73,6 +73,7 @@ inputs = parser.parse_args()
 class Zjetsnunu(processor.ProcessorABC):
     def __init__(self):
         # Initialize the cutflow dictionary
+        self.mode = ""
         self.cutflow = {}
         pass
     def process(self, events):
