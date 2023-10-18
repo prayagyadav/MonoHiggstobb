@@ -17,7 +17,9 @@ import mplhep as hep
 from monoHbbtools.Utilities import get_timestamp
 import numpy as np
 import os
-plt.style.use(hep.style.CMS)
+#plt.style.use(hep.style.CMS)
+#hep.style.use(["CMS","fira","firamath"])
+hep.style.use("CMSTex")
 import rich
 
 #Load the output
@@ -68,7 +70,7 @@ def combined_plot(filename):
         Hist_sumlist.append(Output[key]["Histograms"]["DiJet"].sum())
         label_List.append(key)
     nHists = len(Hist_List)
-    Hist_List = sorted(Hist_List, key = lambda x :  x.sum()) # To sort the histograms in ascending order of their integrals
+    Hist_List = sorted(Hist_List, key = lambda x :  x.sum(), reverse=True) # To sort the histograms in descending order of their integrals
     fig, ax = plt.subplots()
     hep.histplot(
         Hist_List,
@@ -82,8 +84,9 @@ def combined_plot(filename):
     hep.cms.label("Preliminary", data= False)
     ax.set_ylabel("Events")
     ax.set_xlabel("Mass (GeV)")
-    ax.set_title("Dijet mass",pad=35)
+    ax.set_title(r"$b \bar{b} $ mass",pad=40, color="#192655")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
+    fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
     fig.legend(loc= (0.57,0.64))
     plotname = f"ZnunuCombined.png"
     fig.savefig(plotname, dpi=300)
