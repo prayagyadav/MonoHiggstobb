@@ -65,12 +65,17 @@ inputs = parser.parse_args()
 # Run the processor #
 #################################
 
+keylist = ["MET","Zjetsnunu"]
+
 #For futures execution
 if inputs.executor == "futures" :
 
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
-    runnerfileset = Load.buildFileset(fileset_dict["Data"]["MET"],"fnal")
+    runnerfileset = processor.accumulate([
+        Load.buildFileset(fileset_dict["Data"]["MET"],"fnal") ,
+        Load.buildFileset(fileset_dict["MC"]["Zjetsnunu"],"fnal")
+        ])
     try :
         runnerfileset = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     except :
@@ -86,7 +91,7 @@ if inputs.executor == "futures" :
     Output = futures_run(
         runnerfileset,
         "Events",
-        processor_instance=Zjetsnunu()
+        processor_instance=Zjetsnunu(keylist=keylist)
     )
 
 #For dask execution
@@ -110,7 +115,7 @@ elif inputs.executor == "dask" :
     Output = dask_run(
         files,
         "Events",
-        processor_instance=Zjetsnunu()
+        processor_instance=Zjetsnunu(keylist=keylist)
     )
 
 #For condor execution
@@ -133,7 +138,7 @@ elif inputs.executor == "condor" :
     Output = runner(
         files,
         treename="Events",
-        processor_instance=Zjetsnunu(),
+        processor_instance=Zjetsnunu(keylist=keylist),
     )
 
 #################################

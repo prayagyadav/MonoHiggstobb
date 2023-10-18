@@ -105,7 +105,9 @@ class Zjetsnunu(processor.ProcessorABC):
 
     def process(self, events):
         #self.keylist = ["MET", "Zjetsnunu"]
-        return processor.accumulate(self.process_bykeynames(events, keyname=keyname) for keyname in self.keylist)
+        print(events.medata)
+        return events.metadata 
+        #return processor.accumulate(self.process_bykeynames(events, keyname=keyname) for keyname in self.keylist)
         #Apply the basic cuts like pt and eta
         BasicCuts = PackedSelection()
         BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
