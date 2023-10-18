@@ -11,6 +11,7 @@ import awkward as ak
 from coffea import util
 import matplotlib.pyplot as plt
 import mplhep as hep
+from monoHbbtools.Utilities import get_timestamp
 import numpy as np
 import os
 plt.style.use(hep.style.CMS)
@@ -41,6 +42,7 @@ def plot(filename):
     ax.set_ylabel("Events")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title("Dijet mass",pad=35)
+    fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.legend()
     plotname = f"ZnunuDijets.png"
     fig.savefig(plotname, dpi=300)
