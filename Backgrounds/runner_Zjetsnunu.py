@@ -67,6 +67,23 @@ inputs = parser.parse_args()
 
 keylist = ["MET","Zjetsnunu"]
 
+def getDataset():
+    fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
+    fileset_dict = fileset.getraw()
+    runnerfileset = processor.accumulate([
+        Load.buildFileset(fileset_dict["Data"]["MET"],"fnal") ,
+        Load.buildFileset(fileset_dict["MC"]["Zjetsnunu"],"fnal")
+        ])
+    try :
+        runnerfileset = {
+            "MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files] ,
+            "Z1Jets_Nu_Nu": fileset_dict["MC"]["Zjetsnunu"]["Z1Jets_NuNu_ZpT_50To150_18"][:inputs.files]
+            }
+    except :
+        print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
+        raise ValueError
+    return runnerfileset
+
 #For futures execution
 if inputs.executor == "futures" :
 
@@ -125,10 +142,11 @@ elif inputs.executor == "dask" :
 elif inputs.executor == "condor" :
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
-    client.upload_file("../monoHbbtools/Load/newfileset.json")
-    with open("../monoHbbtools/Load/newfileset.json") as f:
-        files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+    # client.upload_file("../monoHbbtools/Load/newfileset.json")
+    # with open("../monoHbbtools/Load/newfileset.json") as f:
+    #     files = json.load(f)
+    # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+    files = getDataset()
 
     runner = processor.Runner(
         executor=executor,
