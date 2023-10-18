@@ -48,7 +48,7 @@ def plot(filename):
         ax.set_title("Dijet mass",pad=35)
         fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
         fig.legend()
-        plotname = f"ZnunuDijets{key}.png"
+        plotname = f"Znunu{key}.png"
         fig.savefig(plotname, dpi=300)
         print(plotname , f" created at {os.getcwd()}")
 
