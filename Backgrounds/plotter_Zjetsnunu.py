@@ -18,8 +18,8 @@ from monoHbbtools.Utilities import get_timestamp
 import numpy as np
 import os
 #plt.style.use(hep.style.CMS)
-#hep.style.use(["CMS","fira","firamath"])
-hep.style.use("CMSTex")
+hep.style.use(["CMS","fabiola","firamath"])
+#hep.style.use("CMSTex")
 import rich
 
 #Load the output
@@ -45,7 +45,7 @@ def plot(filename):
             lw=1,
             ax=ax
         )
-        hep.cms.label("Preliminary", data= "Data" in filename)
+        hep.cms.label("Preliminary", data= key.startswith("MET"))
         ax.set_ylabel("Events")
         ax.set_xlabel("Mass (GeV)")
         ax.set_title(f"{key} : Dijet mass",pad=35,  fontsize= "20")
@@ -84,7 +84,7 @@ def combined_plot(filename):
     hep.cms.label("Preliminary", data= False)
     ax.set_ylabel("Events")
     ax.set_xlabel("Mass (GeV)")
-    ax.set_title(r"$b \bar{b} $ mass",pad=40, color="#192655")
+    ax.set_title(r"$b \bar{b}$ mass",pad=40, color="#192655")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
     fig.legend(loc= (0.57,0.64))
