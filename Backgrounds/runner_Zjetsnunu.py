@@ -77,7 +77,10 @@ if inputs.executor == "futures" :
         Load.buildFileset(fileset_dict["MC"]["Zjetsnunu"],"fnal")
         ])
     try :
-        runnerfileset = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+        runnerfileset = {
+            "MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files] ,
+            "Z1Jets_Nu_Nu": fileset_dict["MC"]["ZJetsnunu"]["Z1Jets_NuNu_ZpT_50To150_18"][:inputs.files]
+            }
     except :
         print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
         raise ValueError
