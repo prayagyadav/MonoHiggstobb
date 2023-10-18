@@ -1,7 +1,10 @@
-"""
-This is a template of the plotter for data obtained from a processor.
-Author : Prayag Yadav
-Created : 11 October 2023
+""" 
+~~~~~~~~~~~~~~~~~~~~~~~PLOTTER SCRIPT~~~~~~~~~~~~~~~~~~~~~~
+This script studies the Z--> \nu + \nu + jets background .
+
+/Author/: Prayag Yadav
+/Created/: 11 Oct 2023
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 #################################
 # Import the necessary packages #
