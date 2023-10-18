@@ -20,15 +20,22 @@ import hist
 # Define the processor #
 ########################
 
-class Zjetsnunu(processor.ProcessorABC):
+class Zjetsnunu(processor.ProcessorABC ):
     def __init__(self):
         # Initialize the cutflow dictionary
-        self.mode = ""
         self.cutflow = {}
+        
+    def process_bykeynames(self, keyname):
+        self.mode = keyname
+
+
         pass
+
     def process(self, events):
+        
         self.cutflow["Total_Events"] = len(events) #Total Number of events
 
+        pass
         #Apply the basic cuts like pt and eta
         BasicCuts = PackedSelection()
         BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
@@ -93,11 +100,14 @@ class Zjetsnunu(processor.ProcessorABC):
 
         #Prepare the output
         output = {
-            "Cutflow": self.cutflow ,
-            "Histograms": {
-                "Dijet": DiJetHist ,
+            self.mode : {
+                "Cutflow": self.cutflow ,
+                "Histograms": {
+                    "DiJet" : DiJetHist
+                    }
+                }
             }
-        }
         return output
+    
     def postprocess(self, accumulator):
         pass
