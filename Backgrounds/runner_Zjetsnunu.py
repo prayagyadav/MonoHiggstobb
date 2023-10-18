@@ -15,6 +15,7 @@ import argparse
 from coffea.nanoevents import NanoAODSchema #,NanoEventsFactory 
 from coffea import processor
 from coffea import util
+import logging
 from monoHbbtools import Load
 from monoHbbtools.Utilities import condor
 from processor_Zjetsnunu import Zjetsnunu
@@ -140,6 +141,11 @@ elif inputs.executor == "dask" :
 
 #For condor execution
 elif inputs.executor == "condor" :
+    #Create a console log in case of a warning 
+    logging.basicConfig(
+        format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
+        level=logging.WARNING,
+    )
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
     # client.upload_file("../monoHbbtools/Load/newfileset.json")
