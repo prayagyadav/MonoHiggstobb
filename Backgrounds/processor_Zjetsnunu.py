@@ -80,7 +80,7 @@ class Zjetsnunu(processor.ProcessorABC):
 
         #Creating histograms
         x_min = 0
-        x_max = 500
+        x_max = 1000
         nbins = 100
         DiJetHist = (
             hist.

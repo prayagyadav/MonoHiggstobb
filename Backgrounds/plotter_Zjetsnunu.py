@@ -60,12 +60,15 @@ def combined_plot(filename):
 
     #Dijet mass plot
     Hist_List = []
+    Hist_sumlist = []
     Color_List = ["#4E3636","#116D6E","#321E1E",]
     label_List = []
     for key in Output.keys() :
         Hist_List.append(Output[key]["Histograms"]["DiJet"])
+        Hist_sumlist.append(Output[key]["Histograms"]["DiJet"].sum())
         label_List.append(key)
     nHists = len(Hist_List)
+    Hist_List = sorted(Hist_List, key = lambda x :  x.sum()) # To sort the histograms in ascending order of their integrals
     fig, ax = plt.subplots()
     hep.histplot(
         Hist_List,
@@ -73,7 +76,6 @@ def combined_plot(filename):
         color=Color_List[:nHists],
         label=label_List,
         edgecolor="black",
-        stack=True,
         lw=1,
         ax=ax
         )
