@@ -1,5 +1,5 @@
 """
-This is a helper file. This file sets the proxy for condor jobs and allocates resources.
+This file sets the proxy for condor jobs and allocates resources.
 """
 
 import os
