@@ -18,7 +18,7 @@ from monoHbbtools.Utilities import get_timestamp
 import numpy as np
 import os
 #plt.style.use(hep.style.CMS)
-hep.style.use(["CMS","fabiola","firamath"])
+hep.style.use(["CMS","fira","firamath"])
 #hep.style.use("CMSTex")
 import rich
 
