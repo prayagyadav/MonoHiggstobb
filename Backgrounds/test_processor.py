@@ -105,7 +105,7 @@ class Zjetsnunu(processor.ProcessorABC):
 
     def process(self, events):
         #self.keylist = ["MET", "Zjetsnunu"]
-        print(events.medata)
+        print(events.metadata)
         return events.metadata 
 
     def postprocess(self, accumulator):
