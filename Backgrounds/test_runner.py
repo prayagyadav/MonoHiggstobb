@@ -4,7 +4,7 @@ from coffea import processor
 from coffea import util
 from monoHbbtools import Load
 from monoHbbtools.Utilities import condor
-from processor_Zjetsnunu import Zjetsnunu
+from test_runner import Zjetsnunu
 import json
 keylist = ["MET","Zjetsnunu"]
 fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
