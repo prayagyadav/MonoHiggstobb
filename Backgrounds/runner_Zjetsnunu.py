@@ -65,12 +65,6 @@ inputs = parser.parse_args()
 # Run the processor #
 #################################
 
-#Create a console log in case of a warning 
-# logging.basicConfig(
-#         format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
-#         level=logging.WARNING,
-#     )
-
 #For futures execution
 if inputs.executor == "futures" :
 
@@ -82,9 +76,6 @@ if inputs.executor == "futures" :
     except :
         print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
         raise ValueError
-    # with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
-    #     files = json.load(f)
-    # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
