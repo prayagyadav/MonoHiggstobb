@@ -52,7 +52,8 @@ runnerfileset = processor.accumulate([
     Load.buildFileset(fileset_dict["MC"]["Zjetsnunu"],"fnal")
     ])
 try :
-    runnerfileset = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][0:inputs.files]}
+    #runnerfileset = {"MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][0:inputs.files]}
+    runnerfileset = {"Zjetsnunu": fileset_dict["MC"]["Zjetsnunu"]["Z1Jets_NuNu_ZpT_50To150_18"][0:inputs.files]}
 except :
     print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
     raise ValueError
