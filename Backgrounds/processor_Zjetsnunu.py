@@ -31,6 +31,26 @@ class Zjetsnunu(processor.ProcessorABC):
         self.mode = dataset
         cutflow = {}
         cutflow["Total_Events"] = len(events) #Total Number of events
+
+        #Preparing histogram objects
+        x_min = 0
+        x_max = 1000
+        nbins = 50
+        DiJetHist = (
+            hist.
+            Hist.
+            new.
+            Reg(nbins,x_min,x_max).
+            Double()
+            )
+        DiJetHistwithMETselection = (
+            hist.
+            Hist.
+            new.
+            Reg(nbins,x_min,x_max).
+            Double()
+            )
+
         #Apply the basic cuts like pt and eta
         BasicCuts = PackedSelection()
         BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
@@ -39,7 +59,7 @@ class Zjetsnunu(processor.ProcessorABC):
         cutflow["ReducedEvents"] = len(events)
 
         #MET Selection
-        events = events[events.MET.pt > 200 ] #250GeV for boosted category
+        eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
 
         #MET Filters
         flags = PackedSelection()
@@ -64,14 +84,20 @@ class Zjetsnunu(processor.ProcessorABC):
             )
 
         events = events[flagcut]
+        eventsMETcut = eventsMETcut[flagcut]
+
         
         Jets = events.Jet
+        JetswMET = eventsMETcut.Jet
         #Apply the btag 
-        btag_WP_medium = 0.3040 # Medium Working Point
-        btag_WP_tight = 0.7476 # Tight Working Point
+        btag_WP_medium = 0.3040 # Medium Working Point for 2018
+        btag_WP_tight = 0.7476 # Tight Working Point for 2018
         GoodJetCut = Jets.btagDeepFlavB > btag_WP_tight 
+        GoodJetCutwMET = JetswMET.btagDeepFlavB > btag_WP_tight 
         ak4_BJets_tight = Jets[GoodJetCut]
+        ak4_BJets_tightwMET = JetswMET[GoodJetCutwMET]
         cutflow["ak4bJetsTight"] = ak.sum(ak.num(ak4_BJets_tight)) #No of ak4 tight bjets
+        cutflow["ak4bJetsTight_with_MET_cut"] = ak.sum(ak.num(ak4_BJets_tightwMET)) #No of ak4 tight bjets with MET cut
 
         #Create Dijets
         def ObtainDiJets(jet):
@@ -79,29 +105,21 @@ class Zjetsnunu(processor.ProcessorABC):
             Dijet = jet[:,0]+jet[:,1]
             return Dijet 
         DiJets = ObtainDiJets(ak4_BJets_tight)
+        DiJetswMET = ObtainDiJets(ak4_BJets_tightwMET)
         cutflow["bbDiJets"] = len(DiJets) #No of bb Dijets
+        cutflow["bbDiJets_with_MET_cut"] = len(DiJetswMET) #No of bb Dijets with MET cut
 
-        #Creating histograms
-        x_min = 0
-        x_max = 1000
-        nbins = 50
-        DiJetHist = (
-            hist.
-            Hist.
-            new.
-            Reg(nbins,x_min,x_max).
-            Double()
-            )
-        
         #Fill the histogram
-        DiJetHist.fill( DiJets.mass )
+        DiJetHist.fill(DiJets.mass)
+        DiJetHistwithMETselection.fill(DiJetswMET.mass)
 
         #Prepare the output
         output = {
             self.mode : {
                 "Cutflow": cutflow ,
                 "Histograms": {
-                    "DiJet" : DiJetHist
+                    "DiJet" : DiJetHist ,
+                    "DiJetMETcut" : DiJetHistwithMETselection
                     }
                 }
             }

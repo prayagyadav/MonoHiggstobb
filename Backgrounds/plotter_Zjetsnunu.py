@@ -29,6 +29,15 @@ def showinfo(filename):
         cutflow = Output[key]["Cutflow"]
         rich.print(cutflow)
 
+def get_plotting_essentials(Output, histogram_key) :
+    color_list = ["#4E3636","#116D6E","#321E1E"]
+    hist_tuple = [(key, Output[key]["Histograms"][histogram_key] ) for key in Output.keys()]
+    sorted_hist_tuple = sorted(hist_tuple , key = lambda x : x[1].sum() , reverse=True)
+    sorted_hists = [i[1] for i in sorted_hist_tuple]
+    sorted_labels = [i[0] for i in sorted_hist_tuple]
+    color_list = color_list[:len(sorted_hists)]
+    return sorted_hists, sorted_labels, color_list 
+
 def plot(filename):
     Output = util.load(filename)
 
@@ -61,21 +70,13 @@ def combined_plot(filename):
     Output = util.load(filename)
 
     #Dijet mass plot
-    Hist_List = []
-    Hist_sumlist = []
-    Color_List = ["#4E3636","#116D6E","#321E1E",]
-    label_List = []
-    for key in Output.keys() :
-        Hist_List.append(Output[key]["Histograms"]["DiJet"])
-        Hist_sumlist.append(Output[key]["Histograms"]["DiJet"].sum())
-        label_List.append(key)
-    nHists = len(Hist_List)
-    Hist_List = sorted(Hist_List, key = lambda x :  x.sum(), reverse=True) # To sort the histograms in descending order of their integrals
+   
+    Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJet")
     fig, ax = plt.subplots()
     hep.histplot(
         Hist_List,
         histtype="fill",
-        color=Color_List[:nHists],
+        color=Color_List,
         label=label_List,
         edgecolor="black",
         lw=1,
@@ -89,6 +90,28 @@ def combined_plot(filename):
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
     fig.legend(loc= (0.57,0.64))
     plotname = f"ZnunuCombined.png"
+    fig.savefig(plotname, dpi=300)
+    print(plotname , f" created at {os.getcwd()}")
+
+    Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJetMETcut")
+    fig, ax = plt.subplots()
+    hep.histplot(
+        Hist_List,
+        histtype="fill",
+        color=Color_List,
+        label=label_List,
+        edgecolor="black",
+        lw=1,
+        ax=ax
+        )
+    hep.cms.label("Preliminary", data= False)
+    ax.set_ylabel("Events")
+    ax.set_xlabel("Mass (GeV)")
+    ax.set_title(r"$b \bar{b}$ mass with MET cut",pad=40, color="#192655")
+    fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
+    fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
+    fig.legend(loc= (0.57,0.64))
+    plotname = f"ZnunuCombinedwithMETcut.png"
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
