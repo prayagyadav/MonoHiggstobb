@@ -39,7 +39,7 @@ class Zjetsnunu(processor.ProcessorABC):
         cutflow["ReducedEvents"] = len(events)
 
         #MET Selection
-        events = events[events.MET.pt > 200 ] #250 for boosted category
+        events = events[events.MET.pt > 200 ] #250GeV for boosted category
 
         #MET Filters
         flags = PackedSelection()
