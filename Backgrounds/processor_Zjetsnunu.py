@@ -58,9 +58,6 @@ class Zjetsnunu(processor.ProcessorABC):
         events = events[BasicCuts.all("pt_cut", "eta_cut")]
         cutflow["ReducedEvents"] = len(events)
 
-        #MET Selection
-        eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
-
         #MET Filters
         flags = PackedSelection()
         flags.add("goodVertices", events.Flag.goodVertices)
@@ -84,8 +81,9 @@ class Zjetsnunu(processor.ProcessorABC):
             )
 
         events = events[flagcut]
-        eventsMETcut = eventsMETcut[flagcut]
 
+        #MET Selection
+        eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
         
         Jets = events.Jet
         JetswMET = eventsMETcut.Jet
