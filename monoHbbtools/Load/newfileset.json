@@ -218,7 +218,7 @@
         }
     },
     "MC": {
-        "Zjetsnunu": {
+        "Z1Jets_NuNu": {
             "Z1Jets_NuNu_ZpT_50To150_18": [
                 "root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/Z1JetsToNuNu_M-50_LHEFilterPtZ-50To150_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/0F8CC648-9AF6-B044-802A-0EB7C835E0A2.root",
                 "root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/Z1JetsToNuNu_M-50_LHEFilterPtZ-50To150_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/28D97AEC-59D5-B740-A770-93FE1BAEE2B4.root",

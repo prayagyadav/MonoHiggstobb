@@ -35,6 +35,13 @@ parser.add_argument(
     type=str
 )
 parser.add_argument(
+    "-k",
+    "--keymap",
+    choices=["MET","Z1Jets_Nu_Nu"],
+    help="Enter which dataset to run: example MET , Z1Jets_Nu_Nu etc.",
+    type=str
+)
+parser.add_argument(
     "-c",
     "--chunk_size",
     help="Enter the chunksize; by default 100k",
@@ -60,48 +67,37 @@ parser.add_argument(
     help="Enter the number of files to be processed",
     type=int 
     )
+
 inputs = parser.parse_args()
 
 #################################
 # Run the processor #
 #################################
 
-keylist = ["MET","Zjetsnunu"]
-
-def getDataset():
+def getDataset(keymap, files=None):
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
-    runnerfileset = processor.accumulate([
-        Load.buildFileset(fileset_dict["Data"]["MET"],"fnal") ,
-        Load.buildFileset(fileset_dict["MC"]["Zjetsnunu"],"fnal")
-        ])
-    try :
-        runnerfileset = {
-            "MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files] ,
-            "Z1Jets_Nu_Nu": fileset_dict["MC"]["Zjetsnunu"]["Z1Jets_NuNu_ZpT_50To150_18"][:inputs.files]
-            }
-    except :
-        print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
-        raise ValueError
-    return runnerfileset
+    MCmaps = ["Z1Jets_NuNu"]
+
+    if keymap == "MET" :
+        runnerfileset = Load.buildFileset(fileset_dict["Data"][keymap],"fnal")
+    elif keymap in MCmaps :
+        runnerfileset = Load.buildFileset(fileset_dict["MC"][keymap],"fnal")
+    
+    flat_list={}
+    flat_list[keymap] = []
+    for key in runnerfileset.keys() :
+        flat_list[keymap] += runnerfileset[key]
+    
+    outputfileset = {keymap : flat_list[keymap][:files]}
+    if files == None :
+        print("No max files provided.\nFalling back to full dataset...")
+    
+    return outputfileset
 
 #For futures execution
 if inputs.executor == "futures" :
-
-    fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
-    fileset_dict = fileset.getraw()
-    runnerfileset = processor.accumulate([
-        Load.buildFileset(fileset_dict["Data"]["MET"],"fnal") ,
-        Load.buildFileset(fileset_dict["MC"]["Zjetsnunu"],"fnal")
-        ])
-    try :
-        runnerfileset = {
-            "MET": fileset_dict["Data"]["MET"]["MET_Run2018A"][:inputs.files] ,
-            "Z1Jets_Nu_Nu": fileset_dict["MC"]["Zjetsnunu"]["Z1Jets_NuNu_ZpT_50To150_18"][:inputs.files]
-            }
-    except :
-        print("Numbers of files requested is greater than the numbers of files in first dictionary of the fileset.")
-        raise ValueError
+    files = getDataset(inputs.keymap)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
@@ -110,9 +106,9 @@ if inputs.executor == "futures" :
         xrootdtimeout=120
     )
     Output = futures_run(
-        runnerfileset,
+        files,
         "Events",
-        processor_instance=Zjetsnunu(keylist=keylist)
+        processor_instance=Zjetsnunu()
     )
 
 #For dask execution
@@ -136,7 +132,7 @@ elif inputs.executor == "dask" :
     Output = dask_run(
         files,
         "Events",
-        processor_instance=Zjetsnunu(keylist=keylist)
+        processor_instance=Zjetsnunu()
     )
 
 #For condor execution
@@ -148,11 +144,11 @@ elif inputs.executor == "condor" :
     )
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
-    # client.upload_file("../monoHbbtools/Load/newfileset.json")
+    client.upload_file("../monoHbbtools/Load/newfileset.json")
     # with open("../monoHbbtools/Load/newfileset.json") as f:
     #     files = json.load(f)
     # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
-    files = getDataset()
+    files = getDataset(inputs.keymap)
 
     runner = processor.Runner(
         executor=executor,
@@ -161,17 +157,17 @@ elif inputs.executor == "condor" :
         maxchunks=inputs.max_chunks,
         xrootdtimeout=300,
     )
-    print("Running...\n")
+    print("Starting the workers...\n")
     Output = runner(
         files,
         treename="Events",
-        processor_instance=Zjetsnunu(keylist=keylist),
+        processor_instance=Zjetsnunu(),
     )
 
 #################################
 # Create the output file #
 #################################
-output_file = f"Zjetsnunu.coffea"
+output_file = f"Zjetsnunu_{inputs.keymap}.coffea"
 print("Saving the output to : " , output_file)
 util.save(output= Output, filename=output_file)
 print(f"File {output_file} saved.")

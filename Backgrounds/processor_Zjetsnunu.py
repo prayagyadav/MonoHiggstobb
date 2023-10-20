@@ -20,11 +20,10 @@ import hist
 # Define the processor #
 ########################
 
-class Zjetsnunu(processor.ProcessorABC):
-    def __init__(self, keylist):
+class SignalSignature(processor.ProcessorABC):
+    def __init__(self):
         # Initialize the cutflow dictionary
         self.cutflow = {}
-        self.keylist = keylist
         
     def process(self, events):
         dataset = events.metadata["dataset"]
@@ -58,29 +57,30 @@ class Zjetsnunu(processor.ProcessorABC):
         events = events[BasicCuts.all("pt_cut", "eta_cut")]
         cutflow["ReducedEvents"] = len(events)
 
-        #MET Filters
-        flags = PackedSelection()
-        flags.add("goodVertices", events.Flag.goodVertices)
-        flags.add("tightHalo", events.Flag.globalTightHalo2016Filter)
-        flags.add("hbheNoise", events.Flag.HBHENoiseFilter)
-        flags.add("hbheNoiseIso", events.Flag.HBHENoiseIsoFilter)
-        flags.add("eebadSC", events.Flag.eeBadScFilter)
-        flags.add("EcalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
-        flags.add("badPFmuon", events.Flag.BadPFMuonFilter )
-        flags.add("Ecalbadcalib",events.Flag.ecalBadCalibFilter )
+        if (self.mode).startswith("MET") :
+            #MET Filters
+            flags = PackedSelection()
+            flags.add("goodVertices", events.Flag.goodVertices)
+            flags.add("tightHalo", events.Flag.globalTightHalo2016Filter)
+            flags.add("hbheNoise", events.Flag.HBHENoiseFilter)
+            flags.add("hbheNoiseIso", events.Flag.HBHENoiseIsoFilter)
+            flags.add("eebadSC", events.Flag.eeBadScFilter)
+            flags.add("EcalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
+            flags.add("badPFmuon", events.Flag.BadPFMuonFilter )
+            flags.add("Ecalbadcalib",events.Flag.ecalBadCalibFilter )
 
-        flagcut = flags.all(
-            "goodVertices",
-            "tightHalo",
-            "hbheNoise",
-            "hbheNoiseIso",
-            "eebadSC",
-            "EcalDeadcell",
-            "badPFmuon",
-            "Ecalbadcalib"
-            )
+            flagcut = flags.all(
+                "goodVertices",
+                "tightHalo",
+                "hbheNoise",
+                "hbheNoiseIso",
+                "eebadSC",
+                "EcalDeadcell",
+                "badPFmuon",
+                "Ecalbadcalib"
+                )
 
-        events = events[flagcut]
+            events = events[flagcut]
 
         #MET Selection
         eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
