@@ -11,7 +11,7 @@ This script studies the Z--> \nu + \nu + jets background .
 #################################
 
 import awkward as ak 
-from coffea import util
+from coffea import util, processor
 import matplotlib.pyplot as plt
 import mplhep as hep
 from monoHbbtools.Utilities import get_timestamp
@@ -23,8 +23,7 @@ hep.style.use(["CMS","fira","firamath"])
 import rich
 
 #Load the output
-def showinfo(filename):
-    Output = util.load(filename)
+def showinfo(Output):
     for key in Output.keys():
         cutflow = Output[key]["Cutflow"]
         rich.print(cutflow)
@@ -38,8 +37,7 @@ def get_plotting_essentials(Output, histogram_key) :
     color_list = color_list[:len(sorted_hists)]
     return sorted_hists, sorted_labels, color_list 
 
-def plot(filename):
-    Output = util.load(filename)
+def plot(Output):
 
     #Dijet mass plot
     for key in Output.keys() :
@@ -66,8 +64,7 @@ def plot(filename):
         print(plotname , f" created at {os.getcwd()}")
 
 
-def combined_plot(filename):
-    Output = util.load(filename)
+def combined_plot(Output):
 
     #Dijet mass plot
    
@@ -116,9 +113,10 @@ def combined_plot(filename):
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
-filenames = ["Zjetsnunu.coffea"]
-for file in filenames:
-    if file in os.listdir():
-        showinfo(file)
-        plot(file)
-        combined_plot(file)
+MET = util.load("Zjetsnunu_MET.coffea")
+Znunu = util.load("Zjetsnunu_Z1Jets_NuNu.coffea")
+master_dict = processor.accumulate([MET,Znunu])
+util.save(master_dict, "BackgroundDijets.coffea")
+showinfo(master_dict)
+plot(master_dict)
+combined_plot(master_dict)
