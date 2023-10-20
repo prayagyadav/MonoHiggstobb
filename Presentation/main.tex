@@ -22,7 +22,7 @@
 \setbeamercolor{progress bar}{fg=gray, bg=gray}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{My Progress}
 \subtitle{MonoHiggs to $b \bar{b}$}
@@ -31,62 +31,63 @@
 \date{Last updated: \DTMnow{}}
 \titlegraphic{\hfill\includegraphics[height=1.5cm]{uoh_logo.jpg}}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\maketitle
+  \maketitle
 
-\begin{frame}{Table of contents}
-  \setbeamertemplate{section in toc}[sections numbered]
-  \tableofcontents%[hideallsubsections]
-\end{frame}
+  \begin{frame}{Table of contents}
+    \setbeamertemplate{section in toc}[sections numbered]
+    \tableofcontents%[hideallsubsections]
+  \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section[Basic kinematic plots ]{\small{Thu, $5^{th}$ October 2023 } \\ Basic kinematic plots \tiny{(Without any scale factors or corrections)} }
+  \section[Basic kinematic plots ]{\small{Thu, $5^{th}$ October 2023 } \\ Basic kinematic plots \tiny{(Without any scale factors or corrections)} }
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%generated%%%%%%%%%%%%%%%%
-  \begin{frame}[fragile]{BTag Scores : MC} 
-    \begin{columns}
-    \column{0.58\textwidth} 
-    \begin{figure} 
-    \centering 
-     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/TagMC.png }
-    \label{TagMC} 
-    \caption{BTag score for signal MC sample}
-    \end{figure} 
-    \column{0.38\textwidth} 
-    \begin{itemize} 
-    \raggedright 
-    \small
-    \item {Btagger used : \texttt{btagDeepFlavB}} 
-    \item {Sample used: \texttt{MonoHTobb\_ZpBaryonic}} 
-    \item Lots of bjets in Signal MC 
-    \end{itemize}
-    \end{columns} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \begin{frame}[fragile]{BTag Scores : MC} 
+      \begin{columns}
+        \column{0.58\textwidth} 
+        \begin{figure} 
+          \centering 
+          \includegraphics[width=1\textwidth]{../Archive/KinemPlots/TagMC.png }
+          \label{TagMC} 
+          \caption{BTag score for signal MC sample}
+        \end{figure} 
+        \column{0.38\textwidth} 
+        \begin{itemize} 
+          \raggedright 
+          \small
+          \item {Btagger used : \texttt{btagDeepFlavB}} 
+          \item {Sample used: \texttt{MonoHTobb\_ZpBaryonic}} 
+          \item Lots of bjets in Signal MC 
+        \end{itemize}
+      \end{columns} 
     \end{frame} 
     
     
-   \begin{frame}[fragile]{BTag Scores : Data} 
+  \begin{frame}[fragile]{BTag Scores : Data} 
     \begin{columns}
-    \column{0.58\textwidth} 
-    \begin{figure} 
-    \centering 
-     \includegraphics[width=1\textwidth]{../Archive/KinemPlots/TagData.png }
-    \label{TagData} 
-    \caption{BTag score for Data samples}
-    \end{figure} 
-    \column{0.38\textwidth} 
-    \begin{itemize} 
-    \raggedright 
-    \small
-    \item {Btagger used : \texttt{btagDeepFlavB}} 
-    \item {Sample used: \texttt{Run2018A/MET}} 
-    \item Less number of bjets in Data
-    \end{itemize}
+      \column{0.58\textwidth} 
+      \begin{figure} 
+        \centering 
+        \includegraphics[width=1\textwidth]{../Archive/KinemPlots/TagData.png }
+        \label{TagData} 
+        \caption{BTag score for Data samples}
+      \end{figure} 
+      \column{0.38\textwidth} 
+      \begin{itemize} 
+        \raggedright 
+        \small
+        \item {Btagger used : \texttt{btagDeepFlavB}} 
+        \item {Sample used: \texttt{Run2018A/MET}} 
+        \item Less number of bjets in Data
+      \end{itemize}
     \end{columns} 
-    \end{frame} 
+  \end{frame} 
     
     
    \begin{frame}[fragile]{Jet $p_t$ : MC} 
@@ -218,7 +219,7 @@
     \end{columns} 
     \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section[MET Filters ]{\small{Thu, $26^{th}$ October 2023 } \\ MET Filters / MET Flags}
 
@@ -298,7 +299,39 @@
       \end{columns} 
       \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section[Backgrounds ]{\small{Thu, $26^{th}$ October 2023 } \\ Backgrounds}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Section label]{\small{\today} \\ Thu, $5^{th}$ October 2023  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+     \begin{frame}[fragile]{Frame title}
+      \begin{columns}
+        \column{0.58\textwidth}
+        \begin{figure}
+          \centering
+          \includegraphics[width=1\textwidth]{uoh_logo.png}
+          \label{plot label}
+          \caption{Your caption}
+        \end{figure}
+        \column{0.38\textwidth}
+        \begin{itemize}
+          \raggedright 
+          \small
+          \item {point 1}
+          \item {point 2}
+        \end{itemize}
+      \end{columns}
+    \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \appendix
 
