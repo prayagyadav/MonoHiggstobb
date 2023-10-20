@@ -28,7 +28,6 @@ class SignalSignature(processor.ProcessorABC):
     def process(self, events):
         dataset = events.metadata["dataset"]
         self.mode = dataset
-        self._event_counter += len(events)
         cutflow = {}
         cutflow["Total_Events"] = len(events) #Total Number of events
 
