@@ -97,7 +97,7 @@ def getDataset(keymap, files=None):
 
 #For futures execution
 if inputs.executor == "futures" :
-    files = getDataset(inputs.keymap)
+    files = getDataset(inputs.keymap, inputs.files)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
@@ -148,7 +148,7 @@ elif inputs.executor == "condor" :
     # with open("../monoHbbtools/Load/newfileset.json") as f:
     #     files = json.load(f)
     # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
-    files = getDataset(inputs.keymap)
+    files = getDataset(inputs.keymap, inputs.files)
 
     runner = processor.Runner(
         executor=executor,
