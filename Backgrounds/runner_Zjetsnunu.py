@@ -18,7 +18,7 @@ from coffea import util
 import logging
 from monoHbbtools import Load
 from monoHbbtools.Utilities import condor
-from processor_Zjetsnunu import Zjetsnunu
+from processor_Zjetsnunu import SignalSignature
 import json
 
 ##############################
@@ -108,7 +108,7 @@ if inputs.executor == "futures" :
     Output = futures_run(
         files,
         "Events",
-        processor_instance=Zjetsnunu()
+        processor_instance=SignalSignature()
     )
 
 #For dask execution
@@ -132,7 +132,7 @@ elif inputs.executor == "dask" :
     Output = dask_run(
         files,
         "Events",
-        processor_instance=Zjetsnunu()
+        processor_instance=SignalSignature()
     )
 
 #For condor execution
@@ -161,7 +161,7 @@ elif inputs.executor == "condor" :
     Output = runner(
         files,
         treename="Events",
-        processor_instance=Zjetsnunu(),
+        processor_instance=SignalSignature()
     )
 
 #################################
