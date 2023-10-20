@@ -24,16 +24,13 @@ class SignalSignature(processor.ProcessorABC):
     def __init__(self):
         # Initialize the cutflow dictionary
         self.cutflow = {}
-        self._event_counter = 0 
-        
+
     def process(self, events):
         dataset = events.metadata["dataset"]
         self.mode = dataset
         self._event_counter += len(events)
         cutflow = {}
         cutflow["Total_Events"] = len(events) #Total Number of events
-        if cutflow["Total_Events"] >= 5000000:
-            return output
 
         #Preparing histogram objects
         x_min = 0
