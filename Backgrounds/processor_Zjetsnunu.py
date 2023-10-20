@@ -29,7 +29,7 @@ class SignalSignature(processor.ProcessorABC):
     def process(self, events):
         dataset = events.metadata["dataset"]
         self.mode = dataset
-        if self._event_counter >= 5000000  :
+        if cutflow["Total_Events"] >= 5000000:
             return output
         self._event_counter += len(events)
         cutflow = {}
