@@ -37,8 +37,8 @@ parser.add_argument(
 parser.add_argument(
     "-k",
     "--keymap",
-    choices=["MET","Z1Jets_NuNu"],
-    help="Enter which dataset to run: example MET , Z1Jets_Nu_Nu etc.",
+    choices=["MET","ZJets_NuNu"],
+    help="Enter which dataset to run: example MET , ZJets_Nu_Nu etc.",
     type=str
 )
 parser.add_argument(
@@ -77,7 +77,7 @@ inputs = parser.parse_args()
 def getDataset(keymap, files=None):
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
-    MCmaps = ["Z1Jets_NuNu"]
+    MCmaps = ["ZJets_NuNu"]
 
     if keymap == "MET" :
         runnerfileset = Load.buildFileset(fileset_dict["Data"][keymap],"fnal")
@@ -95,7 +95,7 @@ def getDataset(keymap, files=None):
                 for key in runnerfileset.keys() :
                     flat_list[keymap] += runnerfileset[key]
                 outputfileset = {keymap : flat_list[keymap][:files]}
-            case "Z1Jets_NuNu": # Divide the share of files from all the 8 categories of Z1Jets_NuNu
+            case "ZJets_NuNu": # Divide the share of files from all the 8 categories of ZJets_NuNu
                 file_number = 0
                 while file_number < files :
                     for key in runnerfileset.keys():
