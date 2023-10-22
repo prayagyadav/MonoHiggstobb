@@ -83,13 +83,26 @@ def getDataset(keymap, files=None):
         runnerfileset = Load.buildFileset(fileset_dict["Data"][keymap],"fnal")
     elif keymap in MCmaps :
         runnerfileset = Load.buildFileset(fileset_dict["MC"][keymap],"fnal")
+        match keymap :
+            case "Z1Jets_NuNu" :
+
+                pass
     
     flat_list={}
     flat_list[keymap] = []
-    for key in runnerfileset.keys() :
-        flat_list[keymap] += runnerfileset[key]
-    
-    outputfileset = {keymap : flat_list[keymap][:files]}
+
+    match keymap :
+        case "MET": #Simply chain up all the files
+            for key in runnerfileset.keys() :
+                flat_list[keymap] += runnerfileset[key]
+                outputfileset = {keymap : flat_list[keymap][:files]}
+        case "Z1Jets_NuNu": # Divide the share of files from all the 8 categories of Z1Jets_NuNu
+            file_number = files 
+            while file_number > files :
+                for key in runnerfileset.keys():
+                    flat_list[keymap] += runnerfileset[key][0]
+                    file_number += 1
+            outputfileset = {keymap : flat_list[keymap]}
     if files == None :
         print("No max files provided.\nFalling back to full dataset...")
     
