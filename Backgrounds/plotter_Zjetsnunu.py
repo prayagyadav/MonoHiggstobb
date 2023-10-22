@@ -25,6 +25,7 @@ import rich
 #Load the output
 def showinfo(Output):
     for key in Output.keys():
+        rich.print(key, " :")
         cutflow = Output[key]["Cutflow"]
         rich.print(cutflow)
 
