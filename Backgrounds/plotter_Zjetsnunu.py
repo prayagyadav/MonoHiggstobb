@@ -72,10 +72,8 @@ def combined_plot(Output):
     Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJet")
     norm_Hist_List = []
     for histogram in Hist_List :
-        print("original sum : ", histogram.sum())
         histogram = normalize(histogram)
         norm_Hist_List.append(histogram)
-        print("new sum : ", histogram.sum())
     fig, ax = plt.subplots()
     hep.histplot(
         norm_Hist_List,
@@ -87,7 +85,7 @@ def combined_plot(Output):
         ax=ax
         )
     hep.cms.label("Preliminary", data= False)
-    ax.set_ylabel("Normalized with Events")
+    ax.set_ylabel("Normalized with integral")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
@@ -100,10 +98,8 @@ def combined_plot(Output):
     Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJetMETcut")
     norm_Hist_List = []
     for histogram in Hist_List :
-        print("original sum : ", histogram.sum())
         histogram = normalize(histogram)
         norm_Hist_List.append(histogram)
-        print("new sum : ", histogram.sum())
     fig, ax = plt.subplots()
     hep.histplot(
         norm_Hist_List,
@@ -115,7 +111,7 @@ def combined_plot(Output):
         ax=ax
         )
     hep.cms.label("Preliminary", data= False)
-    ax.set_ylabel("Normalized with Events")
+    ax.set_ylabel("Normalized with integral")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass with MET cut",pad=40, color="#192655")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
@@ -126,9 +122,9 @@ def combined_plot(Output):
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
-MET = util.load("Zjetsnunu_MET.coffea")
+MET_Run2018 = util.load("Zjetsnunu_MET_Run2018.coffea")
 Znunu = util.load("Zjetsnunu_ZJets_NuNu.coffea")
-master_dict = processor.accumulate([MET,Znunu])
+master_dict = processor.accumulate([MET_Run2018,Znunu])
 util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
 plot(master_dict)
