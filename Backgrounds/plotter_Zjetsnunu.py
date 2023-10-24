@@ -14,7 +14,7 @@ import awkward as ak
 from coffea import util, processor
 import matplotlib.pyplot as plt
 import mplhep as hep
-from monoHbbtools.Utilities import get_timestamp
+from monoHbbtools.Utilities import get_timestamp , normalize
 import numpy as np
 import os
 #plt.style.use(hep.style.CMS)
@@ -70,9 +70,15 @@ def combined_plot(Output):
     #Dijet mass plot
    
     Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJet")
+    norm_Hist_List = []
+    for histogram in Hist_List :
+        print("original sum : ", histogram.sum())
+        histogram = normalize(histogram)
+        norm_Hist_List.append(histogram)
+        print("new sum : ", histogram.sum())
     fig, ax = plt.subplots()
     hep.histplot(
-        Hist_List,
+        norm_Hist_List,
         histtype="fill",
         color=Color_List,
         label=label_List,
@@ -92,9 +98,15 @@ def combined_plot(Output):
     print(plotname , f" created at {os.getcwd()}")
 
     Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJetMETcut")
+    norm_Hist_List = []
+    for histogram in Hist_List :
+        print("original sum : ", histogram.sum())
+        histogram = normalize(histogram)
+        norm_Hist_List.append(histogram)
+        print("new sum : ", histogram.sum())
     fig, ax = plt.subplots()
     hep.histplot(
-        Hist_List,
+        norm_Hist_List,
         histtype="fill",
         color=Color_List,
         label=label_List,
