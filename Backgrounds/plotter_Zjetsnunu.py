@@ -87,7 +87,7 @@ def combined_plot(Output):
         ax=ax
         )
     hep.cms.label("Preliminary", data= False)
-    ax.set_ylabel("Events")
+    ax.set_ylabel("Normalized with Events")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
@@ -115,7 +115,7 @@ def combined_plot(Output):
         ax=ax
         )
     hep.cms.label("Preliminary", data= False)
-    ax.set_ylabel("Events")
+    ax.set_ylabel("Normalized with Events")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass with MET cut",pad=40, color="#192655")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
