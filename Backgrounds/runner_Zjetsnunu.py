@@ -37,7 +37,7 @@ parser.add_argument(
 parser.add_argument(
     "-k",
     "--keymap",
-    choices=["MET","ZJets_NuNu"],
+    choices=["MET_Run2018","ZJets_NuNu"],
     help="Enter which dataset to run: example MET , ZJets_Nu_Nu etc.",
     type=str
 )
@@ -79,7 +79,7 @@ def getDataset(keymap, files=None):
     fileset_dict = fileset.getraw()
     MCmaps = ["ZJets_NuNu"]
 
-    if keymap == "MET" :
+    if keymap == "MET_Run2018" :
         runnerfileset = Load.buildFileset(fileset_dict["Data"][keymap],"fnal")
     elif keymap in MCmaps :
         runnerfileset = Load.buildFileset(fileset_dict["MC"][keymap],"fnal")
@@ -91,7 +91,7 @@ def getDataset(keymap, files=None):
         outputfileset = runnerfileset
     else :
         match keymap :
-            case "MET": #Simply chain up all the files
+            case "MET_Run2018": #Simply chain up all the files
                 for key in runnerfileset.keys() :
                     flat_list[keymap] += runnerfileset[key]
                 outputfileset = {keymap : flat_list[keymap][:files]}
@@ -136,7 +136,7 @@ elif inputs.executor == "dask" :
     client.upload_file("../monoHbbtools/Load/newfileset.json")
     with open("newfileset.json") as f: #load the fileset
         files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+    files = {"MET": files["Data"]["MET_Run2018"]["MET_Run2018A"][:inputs.files]}
     dask_run = processor.Runner(
         executor = processor.DaskExecutor(client=client),
         schema=NanoAODSchema,
