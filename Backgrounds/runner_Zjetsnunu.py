@@ -38,7 +38,7 @@ parser.add_argument(
     "-k",
     "--keymap",
     choices=["MET_Run2018","ZJets_NuNu"],
-    help="Enter which dataset to run: example MET , ZJets_Nu_Nu etc.",
+    help="Enter which dataset to run: example MET_Run2018 , ZJets_Nu_Nu etc.",
     type=str
 )
 parser.add_argument(
