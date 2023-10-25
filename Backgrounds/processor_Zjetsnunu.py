@@ -58,6 +58,17 @@ class SignalSignature(processor.ProcessorABC):
         cutflow["ReducedEvents"] = len(events)
 
         if (self.mode).startswith("MET") :
+
+            #MET Triggers
+            trigger = PackedSelection()
+            trigger.add("noMuon", events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 | events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight | events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight)
+
+            trigger_cut = trigger.all(["noMuon"])
+
+            events[trigger_cut]
+
+            cutflow["triggered_events"] = len(events)
+
             #MET Filters
             flags = PackedSelection()
             flags.add("goodVertices", events.Flag.goodVertices)
@@ -81,6 +92,8 @@ class SignalSignature(processor.ProcessorABC):
                 )
 
             events = events[flagcut]
+
+            cutflow["filtered_events"] = len(events)
 
         #MET Selection
         eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
