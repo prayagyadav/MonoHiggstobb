@@ -21,6 +21,44 @@ import hist
 ########################
 
 class SignalSignature(processor.ProcessorABC):
+    """
+    Flow of Data:
+
+    INPUT EVENTS
+        |
+        |-------------------------------------------
+        |                                           |
+        |                                           |
+        v                                           v
+      if MET_Run2018                        else if ZJets_NuNu
+        |                                           |
+        |                                           |
+        |                                           |
+        v                                           |
+    MET TRIGGER                                     |
+        |                                           |
+        |                                           |
+        |                                           |
+        v                                           |
+    MET FILTERS                                     |
+        |                                           |
+        |<------------------------------------------
+        |                                           
+        v
+    MET CUT
+        |
+        |
+        |
+        v
+    OBJECT SELECTION
+        |
+        |
+        |
+        v
+    Make MET pt eta phi, DIJET mass etc plots - all of them plots
+    """
+
+
     def __init__(self):
         # Initialize the cutflow dictionary
         self.cutflow = {}
@@ -49,13 +87,6 @@ class SignalSignature(processor.ProcessorABC):
             Reg(nbins,x_min,x_max).
             Double()
             )
-
-        #Apply the basic cuts like pt and eta
-        BasicCuts = PackedSelection()
-        BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
-        BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
-        events = events[BasicCuts.all("pt_cut", "eta_cut")]
-        cutflow["ReducedEvents"] = len(events)
 
         if (self.mode).startswith("MET") :
 
@@ -97,6 +128,16 @@ class SignalSignature(processor.ProcessorABC):
 
         #MET Selection
         eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
+
+        #Object selections
+        #ak4Jets
+
+        #Apply the basic cuts like pt and eta
+        BasicCuts = PackedSelection()
+        BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
+        BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
+        events = events[BasicCuts.all("pt_cut", "eta_cut")]
+        cutflow["Events_with_good_jets"] = len(events)
         
         Jets = events.Jet
         JetswMET = eventsMETcut.Jet

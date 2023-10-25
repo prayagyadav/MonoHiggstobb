@@ -29,14 +29,20 @@ def showinfo(Output):
         cutflow = Output[key]["Cutflow"]
         rich.print(cutflow)
 
-def get_plotting_essentials(Output, histogram_key) :
+def get_plotting_essentials(Output, histogram_key, Sorted=True, Reverse=True) :
     color_list = ["#4E3636","#116D6E","#321E1E"]
     hist_tuple = [(key, Output[key]["Histograms"][histogram_key] ) for key in Output.keys()]
-    sorted_hist_tuple = sorted(hist_tuple , key = lambda x : x[1].sum() , reverse=True)
-    sorted_hists = [i[1] for i in sorted_hist_tuple]
-    sorted_labels = [i[0] for i in sorted_hist_tuple]
-    color_list = color_list[:len(sorted_hists)]
-    return sorted_hists, sorted_labels, color_list 
+    if Sorted :
+        output_hist_tuple = sorted(hist_tuple , key = lambda x : x[1].sum() , reverse=Reverse)
+    else :
+        output_hist_tuple = hist_tuple
+    output_hists = [i[1] for i in output_hist_tuple]
+    output_labels = [i[0] for i in output_hist_tuple]
+    color_list = color_list[:len(output_hists)]
+    # for index in range(len(output_labels)) :
+
+    #     if output_labels[index] == "MET_Run2018" :
+    return output_hists, output_labels, color_list 
 
 def plot(Output):
 
@@ -69,7 +75,7 @@ def combined_plot(Output):
 
     #Dijet mass plot
    
-    Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJet")
+    Hist_List , label_List , Color_List = get_plotting_essentials(Output, "DiJet", Sorted=True)
     norm_Hist_List = []
     for histogram in Hist_List :
         histogram = normalize(histogram)
