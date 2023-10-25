@@ -63,7 +63,7 @@ class SignalSignature(processor.ProcessorABC):
             trigger = PackedSelection()
             trigger.add("noMuon", events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 | events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight | events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight)
 
-            trigger_cut = trigger.all(["noMuon"])
+            trigger_cut = trigger.all("noMuon")
 
             events[trigger_cut]
 
