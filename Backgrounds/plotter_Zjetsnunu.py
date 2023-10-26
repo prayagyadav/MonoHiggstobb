@@ -134,15 +134,26 @@ def combined_plot_manual(Output):
     
     fig, ax = plt.subplots()
     hep.histplot(
-        [Data_hist,Zjets_hist],
-        histtype=["step","fill"],
-        color=["red","blue"],
+        Data_hist ,
+        histtype='fill',
+        color="red",
         #marker=[],
-        label=["MET_Run2018", "ZJets_NuNu"],
+        label="MET_Run2018",
         edgecolor="black",
         lw=1,
         ax=ax
         )
+    hep.histplot(
+        Zjets_hist,
+        histtype="fill",
+        color="blue",
+        #marker=[],
+        label="ZJets_NuNu",
+        edgecolor="black",
+        lw=1,
+        ax=ax
+        )
+
     hep.cms.label("Preliminary", data= False)
     ax.set_ylabel("Normalized with integral")
     ax.set_xlabel("Mass (GeV)")
@@ -156,7 +167,7 @@ def combined_plot_manual(Output):
     print(plotname , f" created at {os.getcwd()}")
 
     Data_hist = Output["MET_Run2018"]["Histograms"]["DiJetMETcut"]
-    Zjets_hist = Output["Zjets_NuNu"]["Histograms"]["DiJetMETcut"]
+    Zjets_hist = Output["ZJets_NuNu"]["Histograms"]["DiJetMETcut"]
     fig, ax = plt.subplots()
     hep.histplot(
         [Data_hist,Zjets_hist],
