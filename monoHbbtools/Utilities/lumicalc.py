@@ -1,16 +1,14 @@
 """
 This file generates a list of luminosity using brilcalc for different runs.
+python 2.7 compatible
 """
 
-import os , sys , subprocess
-from coffea import util
+import subprocess
 
-def Generate_Luminosity_file(data_dict):
-    runs = data_dict["MET_Run2018"]["RunSet"] #This is a set of runs
-    luminosities = {}
-    for run in runs :
+def Generate_Luminosity_file(runs):
+    runkeys = runs.keys()
+    for run in runkeys :
         output = subprocess.check_output(["brilcalc","lumi","-c","web","-r", str(run)]).decode("ASCII")
         out_list = output.split("\n")
-        with open("test.txt","a+") as outfile :    
+        with open("currentRunLumi.txt","a+") as outfile :    
             outfile.writelines([line+"\n" for line in out_list])
-    return luminosities
