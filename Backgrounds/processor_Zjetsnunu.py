@@ -67,8 +67,6 @@ class SignalSignature(processor.ProcessorABC):
     def process(self, events):
         dataset = events.metadata["dataset"]
         self.mode = dataset
-        
-        self.run_set.add(events.run[0])
 
         cutflow = {}
 
@@ -95,6 +93,8 @@ class SignalSignature(processor.ProcessorABC):
             )
 
         if (self.mode).startswith("MET") :
+
+            self.run_set.add(events.run[0])
 
             #MET Triggers
             trigger = PackedSelection()

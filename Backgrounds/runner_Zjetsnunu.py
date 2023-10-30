@@ -107,6 +107,8 @@ def getDataset(keymap, files=None):
                 outputfileset = {keymap : flat_list[keymap]}
         print("Running ", len(outputfileset[keymap]), " files...")
 
+    return outputfileset
+
 
 #For futures execution
 if inputs.executor == "futures" :
