@@ -14,6 +14,7 @@ import awkward as ak
 from coffea import util, processor
 import matplotlib.pyplot as plt
 import mplhep as hep
+from monoHbbtools.Load import crossSections
 from monoHbbtools.Utilities import get_timestamp , normalize
 import numpy as np
 import os
@@ -71,6 +72,9 @@ def plot(Output):
 
 
 def combined_plot(Output):
+
+
+    Integrated_luminosity = crossSections.lumis[2018]
 
     #Dijet mass plot
    

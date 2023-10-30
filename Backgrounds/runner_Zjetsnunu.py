@@ -106,8 +106,6 @@ def getDataset(keymap, files=None):
                         file_number += 1
                 outputfileset = {keymap : flat_list[keymap]}
         print("Running ", len(outputfileset[keymap]), " files...")
-    
-    return outputfileset
 
 
 #For futures execution
