@@ -94,7 +94,7 @@ class SignalSignature(processor.ProcessorABC):
 
         if (self.mode).startswith("MET") :
 
-            self.run_set.add(events.run[0])
+            self.run_set.add(*set(events.run))
 
             #MET Triggers
             trigger = PackedSelection()
