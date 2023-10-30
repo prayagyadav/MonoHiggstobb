@@ -178,7 +178,8 @@ class SignalSignature(processor.ProcessorABC):
                 "Histograms": {
                     "DiJet" : DiJetHist ,
                     "DiJetMETcut" : DiJetHistwithMETselection
-                    }
+                    },
+                "RunSet":self.run_set
                 }
             }
         return output
