@@ -98,7 +98,7 @@ class SignalSignature(processor.ProcessorABC):
             #Selecting use-able events
             path = "../monoHbbtools/Load/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
             lumimask = LumiMask(path)
-            events = events[corrections.lumimask(events.run, events.luminosityBlock)]
+            events = events[lumimask(events.run, events.luminosityBlock)]
             cutflow["lumimask"] = len(events)
 
             #Saving the event run
