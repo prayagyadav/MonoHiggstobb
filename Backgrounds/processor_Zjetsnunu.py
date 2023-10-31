@@ -15,7 +15,6 @@ import awkward as ak
 from coffea.analysis_tools import PackedSelection
 from coffea import processor
 from coffea.lumi_tools import LumiMask
-import corrections
 import hist
 
 ########################
