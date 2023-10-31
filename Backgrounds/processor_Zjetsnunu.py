@@ -14,6 +14,8 @@ This script studies the Z--> \nu + \nu + jets background .
 import awkward as ak
 from coffea.analysis_tools import PackedSelection
 from coffea import processor
+from coffea.lumi_tools import LumiMask
+import corrections
 import hist
 
 ########################
@@ -30,7 +32,7 @@ class SignalSignature(processor.ProcessorABC):
         |                                           |
         |                                           |
         v                                           v
-      if MET_Run2018                        else if ZJets_NuNu
+      if MET_Run2018                        else if MC
         |                                           |
         |                                           |
         |                                           |
@@ -93,6 +95,12 @@ class SignalSignature(processor.ProcessorABC):
             )
 
         if (self.mode).startswith("MET") :
+
+            #Selecting use-able events
+            path = "../monoHbbtools/Load/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
+            lumimask = LumiMask(path)
+            events = events[corrections.lumimask(events.run, events.luminosityBlock)]
+            cutflow["lumimask"] = len(events)
 
             #Saving the event run
             for run in set(events.run):
