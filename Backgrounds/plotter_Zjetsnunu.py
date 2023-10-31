@@ -12,6 +12,7 @@ This script studies the Z--> \nu + \nu + jets background .
 
 import awkward as ak 
 from coffea import util, processor
+import json
 import matplotlib.pyplot as plt
 import mplhep as hep
 from monoHbbtools.Load import crossSections
@@ -131,11 +132,23 @@ def combined_plot(Output):
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
-def combined_plot_manual(Output):
+def combined_plot_manual(Output,xsec = False):
     #Dijet Histogram
     Data_hist = Output["MET_Run2018"]["Histograms"]["DiJet"]
     Zjets_hist = Output["ZJets_NuNu"]["Histograms"]["DiJet"]
     
+    if xsec :
+        from monoHbbtools.Load import crossSections
+
+        with open("lumi_lookup.json") as f :
+            lumijson = json.load(f)
+        lumi = lumijson["Sum"]["Recorded"]
+        xsec = crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"]
+        N_i = Output["ZJets_NuNu"]["Cutflow"]["Total_Events"]
+        weight_factor = ( lumi * xsec )/N_i
+
+        Zjets_hist = Zjets_hist*weight_factor
+
     fig, ax = plt.subplots()
     hep.histplot(
         Data_hist ,
@@ -159,9 +172,10 @@ def combined_plot_manual(Output):
         )
 
     hep.cms.label("Preliminary", data= False)
-    ax.set_ylabel("Normalized with integral")
+    #ax.set_ylabel("Normalized with integral")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
+    plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
     fig.legend(loc= (0.57,0.64))
@@ -172,21 +186,49 @@ def combined_plot_manual(Output):
 
     Data_hist = Output["MET_Run2018"]["Histograms"]["DiJetMETcut"]
     Zjets_hist = Output["ZJets_NuNu"]["Histograms"]["DiJetMETcut"]
+
+    if xsec :
+        from monoHbbtools.Load import crossSections
+
+        with open("lumi_lookup.json") as f :
+            lumijson = json.load(f)
+        lumi = lumijson["Sum"]["Recorded"]
+        xsec = crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"]
+        N_i = Output["ZJets_NuNu"]["Cutflow"]["Total_Events"]
+        weight_factor = ( lumi * xsec )/N_i
+
+        Zjets_hist = Zjets_hist*weight_factor
+
+        print(weight_factor)
+
+
     fig, ax = plt.subplots()
     hep.histplot(
-        [Data_hist,Zjets_hist],
-        histtype=["step","fill"],
-        color=["red","blue"],
+        Data_hist ,
+        histtype='fill',
+        color="red",
         #marker=[],
-        label=["MET_Run2018", "ZJets_NuNu"],
+        label="MET_Run2018",
         edgecolor="black",
         lw=1,
         ax=ax
         )
+    hep.histplot(
+        Zjets_hist,
+        histtype="fill",
+        color="blue",
+        #marker=[],
+        label="ZJets_NuNu",
+        edgecolor="black",
+        lw=1,
+        ax=ax
+        )
+
     hep.cms.label("Preliminary", data= False)
-    ax.set_ylabel("Normalized with integral")
+    #ax.set_ylabel("Normalized with integral")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass with MET cut",pad=40, color="#192655")
+    plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
     fig.text(0.6,0.5," MET > 200 GeV", fontsize = "20")
@@ -202,4 +244,4 @@ util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
 plot(master_dict)
 #combined_plot(master_dict)
-combined_plot_manual(master_dict)
+combined_plot_manual(master_dict, xsec=True)
