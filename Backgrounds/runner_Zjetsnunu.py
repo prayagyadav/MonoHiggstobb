@@ -104,7 +104,10 @@ def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
             case "MET_Run2018": #Simply chain up all the files (Always sequential)
                 for key in runnerfileset.keys() :
                     flat_list[keymap] += runnerfileset[key]
-                outputfileset = {keymap : flat_list[keymap][:files]}
+                if (end - begin) > 0 :
+                    outputfileset = {keymap : flat_list[keymap][begin:end]}
+                else :
+                    outputfileset = {keymap : flat_list[keymap][:files]}
             case "ZJets_NuNu":
                 if mode=="divide": 
                     # Divide the share of files from all the 8 categories of ZJets_NuNu
