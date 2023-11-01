@@ -63,9 +63,6 @@ def taus(events):
     AntiMu = events.Tau.idAntiMu >= 1
     return events[Pt & Eta & decay & MVAid & AntiEle & AntiMu]
 
-def leptons(events):
-    pass
-
 def loose_photons(events):
     Pt = events.Photon.pt > 20 
     Eta = abs(events.Photon.eta ) < 2.5
@@ -127,9 +124,9 @@ class SignalSignature(processor.ProcessorABC):
         cutflow["Total_Events"] = len(events) #Total Number of events
 
         #Preparing histogram objects
-        x_min = 0
-        x_max = 1000
-        nbins = 50
+        x_min = 100
+        x_max = 150
+        nbins = 25
         DiJetHist = (
             hist.
             Hist.
@@ -195,7 +192,8 @@ class SignalSignature(processor.ProcessorABC):
 
         #MET Selection
         events_without_MET_selection = events
-        events = events[events.MET.pt > 200 ] #250GeV for boosted category
+        events = events[events.MET.pt > 200 ] #200 for resolved category and 250GeV for boosted category
+        cutflow["MET_greater_than_200GeV"] = len(events)
         
         #vetoes
         veto = PackedSelection()
@@ -218,7 +216,7 @@ class SignalSignature(processor.ProcessorABC):
         BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 30.0 , axis = 1))
         BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
         events = events[BasicCuts.all("pt_cut", "eta_cut")]
-        cutflow["Events_with_good_jets"] = len(events)
+        cutflow["Jets_eta_cut"] = len(events)
         
         Jets = events_without_MET_selection.Jet
         JetswMET = events.Jet
@@ -243,16 +241,16 @@ class SignalSignature(processor.ProcessorABC):
         def ObtainDiJets(jet):
             jet = jet[ak.num(jet)>1]
             leading_jet = jet[:,0]
-            leading_jet = leading_jet[leading_jet.pt > 50.0 ]
+            leading_jet = leading_jet[leading_jet.pt > 50.0 ] #Leading Jet pt cut
             subleading_jet = jet[:,1]
-            subleading_jet = subleading_jet[subleading_jet.pt > 30.0]
+            subleading_jet = subleading_jet[subleading_jet.pt > 30.0] #Subleading Jet pt cut (Redundant)
             Dijet = leading_jet + subleading_jet
             return Dijet 
         DiJets = ObtainDiJets(ak4_BJets_tight)
-        Dijets = Dijets[( Dijets.mass > 100 ) & ( Dijets.mass < 150.0 ) ] #Dijet mass window
+        Dijets = Dijets[( Dijets.mass > 100 ) & ( Dijets.mass < 150.0 ) ] #Dijet mass window cut
         Dijets = Dijets[Dijets.pt > 100.0 ] #Dijet pt cut
         DiJetswMET = ObtainDiJets(ak4_BJets_tightwMET)
-        DijetswMET = DijetswMET[( DijetswMET.mass > 100 ) & ( DijetswMET.mass < 150.0 ) ] #Dijet mass window
+        DijetswMET = DijetswMET[( DijetswMET.mass > 100 ) & ( DijetswMET.mass < 150.0 ) ] #Dijet mass window cut
         DiJetswMET = DiJetswMET[DiJetswMET.pt > 100.0 ] #Dijet pt cut
         cutflow["bbDiJets"] = len(DiJets) #No of bb Dijets
         cutflow["bbDiJets_with_MET_cut"] = len(DiJetswMET) #No of bb Dijets with MET cut
