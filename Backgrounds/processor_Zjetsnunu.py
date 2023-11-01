@@ -21,6 +21,24 @@ import hist
 # Define the processor #
 ########################
 
+
+#Define some selection functions to use in the processor
+def loose_electrons(events):
+    pass
+def tight_electrons(events):
+    pass
+def loose_muons(events):
+    pass
+def tight_muons(events):
+    pass
+def taus(events):
+    pass
+def leptons(events):
+    pass
+def loose_photons(events):
+    pass
+
+#Begin the processor definition
 class SignalSignature(processor.ProcessorABC):
     """
     Flow of Data:
@@ -144,12 +162,18 @@ class SignalSignature(processor.ProcessorABC):
         #MET Selection
         eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
 
+        # #vetoes
+        # veto = PackedSelection()
+        # veto.add("noLeptons", ak.num(events.Electron) == 0 & ak.num(events.Muon) == 0 )
+        # veto.add("noPhoton", ak.num(events.Photon))
+
+        
         #Object selections
         #ak4Jets
 
         #Apply the basic cuts like pt and eta
         BasicCuts = PackedSelection()
-        BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 25.0 , axis = 1))
+        BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 30.0 , axis = 1))
         BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
         events = events[BasicCuts.all("pt_cut", "eta_cut")]
         cutflow["Events_with_good_jets"] = len(events)

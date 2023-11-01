@@ -149,9 +149,13 @@ def combined_plot_manual(Output,xsec = False):
 
         Zjets_hist = Zjets_hist*weight_factor
 
+    #normalize
+    norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
+
+
     fig, ax = plt.subplots()
     hep.histplot(
-        Data_hist ,
+        norm_factor*Data_hist ,
         histtype='fill',
         color="red",
         #marker=[],
@@ -161,7 +165,7 @@ def combined_plot_manual(Output,xsec = False):
         ax=ax
         )
     hep.histplot(
-        Zjets_hist,
+        norm_factor*Zjets_hist,
         histtype="fill",
         color="blue",
         #marker=[],
@@ -172,7 +176,7 @@ def combined_plot_manual(Output,xsec = False):
         )
 
     hep.cms.label("Preliminary", data= False)
-    #ax.set_ylabel("Normalized with integral")
+    ax.set_ylabel("Normalized")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
     plt.yscale("log")
@@ -201,10 +205,13 @@ def combined_plot_manual(Output,xsec = False):
 
         print(weight_factor)
 
+    #normalize
+    norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
+
 
     fig, ax = plt.subplots()
     hep.histplot(
-        Data_hist ,
+        norm_factor*Data_hist ,
         histtype='fill',
         color="red",
         #marker=[],
@@ -214,7 +221,7 @@ def combined_plot_manual(Output,xsec = False):
         ax=ax
         )
     hep.histplot(
-        Zjets_hist,
+        norm_factor*Zjets_hist,
         histtype="fill",
         color="blue",
         #marker=[],
@@ -225,7 +232,7 @@ def combined_plot_manual(Output,xsec = False):
         )
 
     hep.cms.label("Preliminary", data= False)
-    #ax.set_ylabel("Normalized with integral")
+    ax.set_ylabel("Normalized")
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass with MET cut",pad=40, color="#192655")
     plt.yscale("log")
