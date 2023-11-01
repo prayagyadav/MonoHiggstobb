@@ -24,19 +24,53 @@ import hist
 
 #Define some selection functions to use in the processor
 def loose_electrons(events):
-    pass
+    Etagap = ( events.Electron.eta < 1.4442 ) & ( events.Electron.eta > 1.566 )
+    Eta = abs( events.Electron.eta ) < 2.5
+    Pt = events.Electron.pt > 10 
+    Id =events.Electron.cutBased >= 2 #meaning loose, medium or tight , ie , at least loosely an electron 
+    return events.Electron[Etagap & Eta & Pt & Id]
+
 def tight_electrons(events):
-    pass
+    Etagap = ( events.Electron.eta < 1.4442 ) & ( events.Electron.eta > 1.566 )
+    Eta = abs( events.Electron.eta ) < 2.5
+    Pt = events.Electron.pt > 40 
+    Id =events.Electron.cutBased == 2 #meaning only tight electrons 
+    return events.Electron[Etagap & Eta & Pt & Id]
+
 def loose_muons(events):
-    pass
+    PFCand = events.Muon.isPFcand
+    RelIso = events.Muon.pfRelIso04_all < 0.25
+    Eta = abs(events.Muon.eta) < 2.4
+    Pt = events.Muon.pt > 10
+    Id = events.Muon.looseId 
+    return events[PFCand & RelIso & Eta & Pt & Id]
+
 def tight_muons(events):
-    pass
+    PFCand = events.Muon.isPFcand
+    RelIso = events.Muon.pfRelIso04_all < 0.15
+    Eta = abs(events.Muon.eta) < 2.4
+    Pt = events.Muon.pt > 30
+    Id = events.Muon.tightId 
+    return events[PFCand & RelIso & Eta & Pt & Id]
+
 def taus(events):
-    pass
+    #check the purpose of different variables used here
+    Pt = events.Tau.pt > 20
+    Eta = abs(events.Tau.eta) < 2.3
+    decay = events.Tau.idDecayMode
+    MVAid = events.Tau.idMVAoldDM2017v2 == 4 # Check if this means a tight tau
+    AntiEle = events.Tau.idAntiEle >= 2 
+    AntiMu = events.Tau.idAntiMu >= 1
+    return events[Pt & Eta & decay & MVAid & AntiEle & AntiMu]
+
 def leptons(events):
     pass
+
 def loose_photons(events):
-    pass
+    Pt = events.Photon.pt > 20 
+    Eta = abs(events.Photon.eta ) < 2.5
+    Id = events.Photon.cutBased >= 1 #__doc = 0: fail  1: loose    2: medium   3: tight
+    return events[Pt & Eta & Id]
 
 #Begin the processor definition
 class SignalSignature(processor.ProcessorABC):
@@ -161,13 +195,16 @@ class SignalSignature(processor.ProcessorABC):
 
         #MET Selection
         eventsMETcut = events[events.MET.pt > 200 ] #250GeV for boosted category
-
-        # #vetoes
-        # veto = PackedSelection()
-        # veto.add("noLeptons", ak.num(events.Electron) == 0 & ak.num(events.Muon) == 0 )
-        # veto.add("noPhoton", ak.num(events.Photon))
-
         
+        #vetoes
+        veto = PackedSelection()
+        veto.add("noElectrons", ak.num( loose_electrons(events) ) == 0 )
+        veto.add("noMuons", ak.num( loose_muons(events) ) == 0 )
+        veto.add("noPhotons", ak.num( loose_photons(events) ) == 0 )
+        veto.add("noTaus", ak.num( taus(events) ) == 0 )
+        events = events[veto.all("noElectrons","noMuons","noPhotons","noTaus")]
+        cutflow["No_Leptons_Photons"] = len(events)
+
         #Object selections
         #ak4Jets
 
