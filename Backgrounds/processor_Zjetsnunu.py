@@ -57,7 +57,7 @@ def taus(events):
     #check the purpose of different variables used here
     Pt = events.Tau.pt > 20
     Eta = abs(events.Tau.eta) < 2.3
-    decay = events.Tau.idDecayMode
+    decay = events.Tau.decayMode
     MVAid = events.Tau.idMVAoldDM2017v2 == 4 # Check if this means a tight tau
     AntiEle = events.Tau.idAntiEle >= 2 
     AntiMu = events.Tau.idAntiMu >= 1
