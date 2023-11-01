@@ -84,6 +84,7 @@ inputs = parser.parse_args()
 #################################
 
 def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
+    #Warning : Never use files with begin and end
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
     MCmaps = ["ZJets_NuNu"]
@@ -95,8 +96,8 @@ def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
     flat_list={}
     flat_list[keymap] = []
 
-    if files == None :
-        print("No max files provided.\nFalling back to full dataset...")
+    if (files == None ) & (end - begin <= 0):
+        print("Invalid inputs.\nFalling back to full dataset...")
         outputfileset = runnerfileset
     else :
         match keymap :
@@ -130,7 +131,7 @@ def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
 
 #For futures execution
 if inputs.executor == "futures" :
-    files = getDataset(keymap=inputs.keymap, files=inputs.files, begin=inputs.begin, end=inputs.end)
+    files = getDataset(keymap=inputs.keymap, files=inputs.files, mode="sequential", begin=inputs.begin, end=inputs.end)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
