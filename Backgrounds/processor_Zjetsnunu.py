@@ -255,18 +255,17 @@ class SignalSignature(processor.ProcessorABC):
 
         #Create Dijets
         def ObtainDiJets(jet):
-            jet = jet[ak.num(jet)>1]
-            leading_jet = jet[:,0]
-            leading_jet = leading_jet[leading_jet.pt > 50.0 ] #Leading Jet pt cut
-            subleading_jet = jet[:,1]
-            subleading_jet = subleading_jet[subleading_jet.pt > 30.0] #Subleading Jet pt cut (Redundant)
-            Dijet = leading_jet + subleading_jet
+            #jet = jet[ak.num(jet)>1]
+            ljet_cut = jets[:,0].pt > 50.0 #Leading Jet pt cut
+            sjets_cut = jets[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
+            jets = jets[ljet_cut & sjets_cut]
+            Dijet = jet[:,0] + jet[:,1] #Leading jet + Subleading jet
             return Dijet 
         DiJets = ObtainDiJets(ak4_BJets_tight)
-        Dijets = Dijets[( Dijets.mass > 100 ) & ( Dijets.mass < 150.0 ) ] #Dijet mass window cut
+        Dijets = Dijets[( Dijets.mass > 100.0 ) & ( Dijets.mass < 150.0 ) ] #Dijet mass window cut
         Dijets = Dijets[Dijets.pt > 100.0 ] #Dijet pt cut
         DiJetswMET = ObtainDiJets(ak4_BJets_tightwMET)
-        DijetswMET = DijetswMET[( DijetswMET.mass > 100 ) & ( DijetswMET.mass < 150.0 ) ] #Dijet mass window cut
+        DijetswMET = DijetswMET[( DijetswMET.mass > 100.0 ) & ( DijetswMET.mass < 150.0 ) ] #Dijet mass window cut
         DiJetswMET = DiJetswMET[DiJetswMET.pt > 100.0 ] #Dijet pt cut
         cutflow["bbDiJets"] = len(DiJets) #No of bb Dijets
         cutflow["bbDiJets_with_MET_cut"] = len(DiJetswMET) #No of bb Dijets with MET cut
