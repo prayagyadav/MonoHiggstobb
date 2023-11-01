@@ -83,10 +83,13 @@ inputs = parser.parse_args()
 # Run the processor #
 #################################
 
-def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
+def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode = "sequential"):
     #Warning : Never use 'files' with 'begin' and 'end'
-    fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
-    fileset_dict = fileset.getraw()
+    if load :
+        fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
+        fileset_dict = fileset.getraw()
+    else :
+        fileset_dict = dict
     MCmaps = ["ZJets_NuNu"]
 
     if keymap == "MET_Run2018" :
@@ -129,7 +132,7 @@ def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
 
 #For futures execution
 if inputs.executor == "futures" :
-    files = getDataset(keymap=inputs.keymap, mode="sequential", begin=inputs.begin, end=inputs.end)
+    files = getDataset(keymap=inputs.keymap,load=True, mode="sequential", begin=inputs.begin, end=inputs.end)
     #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
@@ -179,10 +182,10 @@ elif inputs.executor == "condor" :
     executor , client = condor.runCondor()
     client.upload_file("../monoHbbtools/Load/newfileset.json")
     with open("../monoHbbtools/Load/newfileset.json") as f:
-        files = json.load(f)
+        filedict = json.load(f)
     #files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     #files = getDataset(inputs.keymap, inputs.files)
-    files = getDataset(keymap=inputs.keymap, mode="sequential", begin=inputs.begin, end=inputs.end)
+    files = getDataset(keymap=inputs.keymap,load=False ,dict=filedict, mode="sequential", begin=inputs.begin, end=inputs.end)
     #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
 
     runner = processor.Runner(
