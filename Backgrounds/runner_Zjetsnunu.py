@@ -106,7 +106,7 @@ def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode =
         else:
             for key in runnerfileset.keys() :
                 flat_list[keymap] += runnerfileset[key]
-            outputfileset = {keymap : flat_list[keymap][begin:end]}
+            outputfileset = {keymap : flat_list[keymap][(begin - 1) :end]}
     elif mode == "divide" :
         if files == None:
             print("Invalid number of files.\nFalling back to full dataset...")
