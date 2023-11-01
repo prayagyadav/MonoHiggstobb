@@ -26,7 +26,7 @@ inputs = parser.parse_args()
 
 keymap = inputs.keymap
 nset = inputs.nset
-maxchunks = inputs.maxchunks
+maxchunks = inputs.max_chunks
 
 with open("../monoHbbtools/Load/newfileset.json") as f:
         fileset_dict = json.load(f)
