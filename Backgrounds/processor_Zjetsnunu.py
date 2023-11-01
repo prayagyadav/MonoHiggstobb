@@ -262,10 +262,10 @@ class SignalSignature(processor.ProcessorABC):
             Dijet = jets[:,0] + jets[:,1] #Leading jet + Subleading jet
             return Dijet 
         DiJets = ObtainDiJets(ak4_BJets_tight)
-        Dijets = Dijets[( Dijets.mass > 100.0 ) & ( Dijets.mass < 150.0 ) ] #Dijet mass window cut
-        Dijets = Dijets[Dijets.pt > 100.0 ] #Dijet pt cut
+        DiJets = DiJets[( DiJets.mass > 100.0 ) & ( DiJets.mass < 150.0 ) ] #Dijet mass window cut
+        DiJets = DiJets[DiJets.pt > 100.0 ] #Dijet pt cut
         DiJetswMET = ObtainDiJets(ak4_BJets_tightwMET)
-        DijetswMET = DijetswMET[( DijetswMET.mass > 100.0 ) & ( DijetswMET.mass < 150.0 ) ] #Dijet mass window cut
+        DiJetswMET = DiJetswMET[( DiJetswMET.mass > 100.0 ) & ( DiJetswMET.mass < 150.0 ) ] #Dijet mass window cut
         DiJetswMET = DiJetswMET[DiJetswMET.pt > 100.0 ] #Dijet pt cut
         cutflow["bbDiJets"] = len(DiJets) #No of bb Dijets
         cutflow["bbDiJets_with_MET_cut"] = len(DiJetswMET) #No of bb Dijets with MET cut
