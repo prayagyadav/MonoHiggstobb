@@ -255,7 +255,7 @@ class SignalSignature(processor.ProcessorABC):
 
         #Create Dijets
         def ObtainDiJets(jets):
-            #jet = jet[ak.num(jet)>1]
+            jets = jets[ak.num(jet)>1]
             ljet_cut = jets[:,0].pt > 50.0 #Leading Jet pt cut
             sjets_cut = jets[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
             jets = jets[ljet_cut & sjets_cut]
