@@ -61,19 +61,21 @@ nchunks = nset
 split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks)]
 
 
-with open("log_futuresBatch.txt","a+") as logfile:
-    run_signature = logfile.readlines()
-    fileindex = 1
-    for chunk in split_list[:maxchunks] :
-        if str(chunk) in run_signature:
-             print(chunk, "\n already processed.\nDelete the logfile if that isn't the case.") 
-             continue
-        else:
-            command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk))
-            subprocess.run(command, shell=True ,executable="/bin/bash")
-            logfile.write(str(chunk)+"\n")
-            print("waiting...")
-            subprocess.run("sleep 1m",shell=True ,executable="/bin/bash")
-        fileindex += len(chunk)+1
+with open("log_futuresBatch_oldrun.txt","r") as oldlogfile:
+    with open("log_futuresBatch_newrun.txt","w") as newlogfile:
+        run_signature = oldlogfile.readlines()
+        fileindex = 1
+        for chunk in split_list[:maxchunks] :
+            print("processing-->",chunk)
+            if str(chunk)+"\n" in run_signature:
+                print(chunk, "\n already processed.\nDelete the old run logfile if that isn't the case.") 
+                continue
+            else:
+                command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk))
+                subprocess.run(command, shell=True ,executable="/bin/bash")
+                newlogfile.write(str(chunk)+"\n")
+                print("waiting...")
+                subprocess.run("sleep 1m",shell=True ,executable="/bin/bash")
+            fileindex += len(chunk)+1
 
 print("Execution completed")
