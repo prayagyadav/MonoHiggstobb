@@ -25,7 +25,7 @@ parser.add_argument(
 inputs = parser.parse_args()
 
 keymap = inputs.keymap
-nset = inputs.nset
+nset = inputs.nset - 1
 maxchunks = inputs.max_chunks
 
 with open("../monoHbbtools/Load/newfileset.json") as f:
@@ -65,5 +65,8 @@ fileindex = 1
 for chunk in split_list[:maxchunks] :
     command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk))
     subprocess.run(command, shell=True ,executable="/bin/bash")
+    print("waiting...")
     subprocess.run("sleep 1m",shell=True ,executable="/bin/bash")
     fileindex += len(chunk)+1
+
+print("Execution completed")
