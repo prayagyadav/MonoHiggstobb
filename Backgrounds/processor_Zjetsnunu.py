@@ -254,12 +254,12 @@ class SignalSignature(processor.ProcessorABC):
         cutflow["ak4bJetsTight_with_MET_cut"] = ak.sum(ak.num(ak4_BJets_tightwMET)) #No of ak4 tight bjets with MET cut
 
         #Create Dijets
-        def ObtainDiJets(jet):
+        def ObtainDiJets(jets):
             #jet = jet[ak.num(jet)>1]
             ljet_cut = jets[:,0].pt > 50.0 #Leading Jet pt cut
             sjets_cut = jets[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
             jets = jets[ljet_cut & sjets_cut]
-            Dijet = jet[:,0] + jet[:,1] #Leading jet + Subleading jet
+            Dijet = jets[:,0] + jets[:,1] #Leading jet + Subleading jet
             return Dijet 
         DiJets = ObtainDiJets(ak4_BJets_tight)
         Dijets = Dijets[( Dijets.mass > 100.0 ) & ( Dijets.mass < 150.0 ) ] #Dijet mass window cut
