@@ -60,6 +60,7 @@ for filename in files :
 nchunks = nset
 split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks)]
 
+os.rename("log_futuresBatch_oldrun.txt" , "log_futuresBatch_newrun.txt")
 
 with open("log_futuresBatch_oldrun.txt","r") as oldlogfile:
     with open("log_futuresBatch_newrun.txt","w") as newlogfile:
