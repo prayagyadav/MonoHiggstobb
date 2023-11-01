@@ -67,14 +67,23 @@ parser.add_argument(
     help="Enter the number of files to be processed",
     type=int 
     )
-
+parser.add_argument(
+    "--begin",
+    help="Begin Sequential execution from file number (inclusive)",
+    type=int
+)
+parser.add_argument(
+    "--end",
+    help="End Sequential execution from file number 'int'",
+    type=int
+)
 inputs = parser.parse_args()
 
 #################################
 # Run the processor #
 #################################
 
-def getDataset(keymap, files=None):
+def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
     MCmaps = ["ZJets_NuNu"]
@@ -91,19 +100,28 @@ def getDataset(keymap, files=None):
         outputfileset = runnerfileset
     else :
         match keymap :
-            case "MET_Run2018": #Simply chain up all the files
+            case "MET_Run2018": #Simply chain up all the files (Always sequential)
                 for key in runnerfileset.keys() :
                     flat_list[keymap] += runnerfileset[key]
                 outputfileset = {keymap : flat_list[keymap][:files]}
-            case "ZJets_NuNu": # Divide the share of files from all the 8 categories of ZJets_NuNu
-                file_number = 0
-                while file_number < files :
-                    for key in runnerfileset.keys():
-                        if file_number >= files :
-                            break
-                        flat_list[keymap] += [runnerfileset[key][0]]
-                        runnerfileset[key] = runnerfileset[key][1:]
-                        file_number += 1
+            case "ZJets_NuNu":
+                if mode=="divide": 
+                    # Divide the share of files from all the 8 categories of ZJets_NuNu
+                    file_number = 0
+                    while file_number < files :
+                        for key in runnerfileset.keys():
+                            if file_number >= files :
+                                break
+                            flat_list[keymap] += [runnerfileset[key][0]]
+                            runnerfileset[key] = runnerfileset[key][1:]
+                            file_number += 1
+                elif mode=="sequential" :
+                    for key in runnerfileset.keys() :
+                        flat_list[keymap] += runnerfileset[key]
+                    outputfileset = {keymap : flat_list[keymap][begin:end]}
+                else :
+                    print("Invalid mode in getDataset")
+                    raise KeyError
                 outputfileset = {keymap : flat_list[keymap]}
         print("Running ", len(outputfileset[keymap]), " files...")
 
@@ -112,7 +130,7 @@ def getDataset(keymap, files=None):
 
 #For futures execution
 if inputs.executor == "futures" :
-    files = getDataset(inputs.keymap, inputs.files)
+    files = getDataset(keymap=inputs.keymap, files=inputs.files, begin=inputs.begin, end=inputs.end)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
@@ -160,9 +178,9 @@ elif inputs.executor == "condor" :
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
     client.upload_file("../monoHbbtools/Load/newfileset.json")
-    # with open("../monoHbbtools/Load/newfileset.json") as f:
-    #     files = json.load(f)
-    # files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+    with open("../monoHbbtools/Load/newfileset.json") as f:
+        files = json.load(f)
+    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
     files = getDataset(inputs.keymap, inputs.files)
 
     runner = processor.Runner(
@@ -182,7 +200,12 @@ elif inputs.executor == "condor" :
 #################################
 # Create the output file #
 #################################
-output_file = f"Zjetsnunu_{inputs.keymap}.coffea"
+
+try :
+    output_file = f"Zjetsnunu_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
+    pass
+except :
+    output_file = f"Zjetsnunu_{inputs.keymap}.coffea"
 print("Saving the output to : " , output_file)
 util.save(output= Output, filename=output_file)
 print(f"File {output_file} saved.")
