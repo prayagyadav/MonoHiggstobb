@@ -84,7 +84,7 @@ inputs = parser.parse_args()
 #################################
 
 def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
-    #Warning : Never use files with begin and end
+    #Warning : Never use 'files' with 'begin' and 'end'
     fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
     fileset_dict = fileset.getraw()
     MCmaps = ["ZJets_NuNu"]
@@ -96,45 +96,41 @@ def getDataset(keymap, files=None, begin=0, end=0, mode = "sequential"):
     flat_list={}
     flat_list[keymap] = []
 
-    if (files == None ) & (end - begin <= 0):
-        print("Invalid inputs.\nFalling back to full dataset...")
-        outputfileset = runnerfileset
-    else :
-        match keymap :
-            case "MET_Run2018": #Simply chain up all the files (Always sequential)
-                for key in runnerfileset.keys() :
-                    flat_list[keymap] += runnerfileset[key]
-                if (end - begin) > 0 :
-                    outputfileset = {keymap : flat_list[keymap][begin:end]}
-                else :
-                    outputfileset = {keymap : flat_list[keymap][:files]}
-            case "ZJets_NuNu":
-                if mode=="divide": 
-                    # Divide the share of files from all the 8 categories of ZJets_NuNu
-                    file_number = 0
-                    while file_number < files :
-                        for key in runnerfileset.keys():
-                            if file_number >= files :
-                                break
-                            flat_list[keymap] += [runnerfileset[key][0]]
-                            runnerfileset[key] = runnerfileset[key][1:]
-                            file_number += 1
-                elif mode=="sequential" :
-                    for key in runnerfileset.keys() :
-                        flat_list[keymap] += runnerfileset[key]
-                    outputfileset = {keymap : flat_list[keymap][begin:end]}
-                else :
-                    print("Invalid mode in getDataset")
-                    raise KeyError
-                outputfileset = {keymap : flat_list[keymap]}
-        print("Running ", len(outputfileset[keymap]), " files...")
-
+    if mode == "sequential":
+        if end - begin <= 0:
+            print("Invalid begin and end values.\nFalling back to full dataset...")
+            outputfileset = runnerfileset
+        else:
+            for key in runnerfileset.keys() :
+                flat_list[keymap] += runnerfileset[key]
+            outputfileset = {keymap : flat_list[keymap][begin:end]}
+    elif mode == "divide" :
+        if files == None:
+            print("Invalid number of files.\nFalling back to full dataset...")
+            outputfileset = runnerfileset
+        else:
+            # Divide the share of files from all the 8 categories of ZJets_NuNu
+            file_number = 0
+            while file_number < files :
+                for key in runnerfileset.keys():
+                    if file_number >= files :
+                        break
+                    flat_list[keymap] += [runnerfileset[key][0]]
+                    runnerfileset[key] = runnerfileset[key][1:]
+                    file_number += 1
+            outputfileset = {keymap : flat_list[keymap]}
+    else:
+        print("Invalid mode of operation", mode)
+        raise KeyError
+    
+    print("Running ", len(outputfileset[keymap]), " files...")
     return outputfileset
 
 
 #For futures execution
 if inputs.executor == "futures" :
-    files = getDataset(keymap=inputs.keymap, files=inputs.files, mode="sequential", begin=inputs.begin, end=inputs.end)
+    files = getDataset(keymap=inputs.keymap, mode="sequential", begin=inputs.begin, end=inputs.end)
+    #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=inputs.workers),
         schema=NanoAODSchema,
@@ -184,8 +180,10 @@ elif inputs.executor == "condor" :
     client.upload_file("../monoHbbtools/Load/newfileset.json")
     with open("../monoHbbtools/Load/newfileset.json") as f:
         files = json.load(f)
-    files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
-    files = getDataset(inputs.keymap, inputs.files)
+    #files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
+    #files = getDataset(inputs.keymap, inputs.files)
+    files = getDataset(keymap=inputs.keymap, mode="sequential", begin=inputs.begin, end=inputs.end)
+    #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
 
     runner = processor.Runner(
         executor=executor,
