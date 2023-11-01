@@ -57,7 +57,7 @@ for filename in files :
         pass
 
 #generate chunks
-nchunks = 20
+nchunks = nset
 split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks)]
 
 fileindex = 1
