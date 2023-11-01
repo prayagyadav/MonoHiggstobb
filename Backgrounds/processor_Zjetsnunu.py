@@ -53,15 +53,31 @@ def tight_muons(events):
     Id = events.Muon.tightId 
     return events.Muon[PFCand & RelIso & Eta & Pt & Id]
 
-def taus(events):
-    #check the purpose of different variables used here
-    Pt = events.Tau.pt > 20
-    Eta = abs(events.Tau.eta) < 2.3
-    decay = events.Tau.decayMode
-    MVAid = events.Tau.idMVAoldDM2017v2 == 4 # Check if this means a tight tau
-    AntiEle = events.Tau.idAntiEle >= 2 
-    AntiMu = events.Tau.idAntiMu >= 1
-    return events.Tau[Pt & Eta & decay & MVAid & AntiEle & AntiMu]
+def taus(events, version = 9):
+    match version :
+        case 7 :
+            #check the purpose of different variables used here
+            Pt = events.Tau.pt > 20
+            Eta = abs(events.Tau.eta) < 2.3
+            decay = events.Tau.decayMode
+            MVAid = events.Tau.idMVAoldDM2017v2 == 4 # Check if this means a tight tau
+            AntiEle = events.Tau.idAntiEle >= 2 
+            AntiMu = events.Tau.idAntiMu >= 1
+            return events.Tau[Pt & Eta & decay & MVAid & AntiEle & AntiMu]
+        case 9 :
+            #check the purpose of different variables used here
+            Pt = events.Tau.pt > 20
+            Eta = abs(events.Tau.eta) < 2.3
+            decay = events.Tau.idDecayModeOldDMs
+            #decay = events.Tau.idMVAoldDM2017v2 >=4) #for previous campaign
+            AntiEle = events.Tau.idAntiEleDeadECal >= 2
+            AntiMu = events.Tau.idAntiMu >= 1
+            deepid1 = events.Tau.idDeepTau2017v2p1VSe >= 8 #for UL campaign and nanoAODv9
+            deepid2 = events.Tau.idDeepTau2017v2p1VSmu >= 2
+            deepid3 = events.Tau.idDeepTau2017v2p1VSjet >= 8
+            return events.Tau[Pt & Eta & decay & deepid1 & deepid2 & deepid3 & AntiEle & AntiMu]
+
+
 
 def loose_photons(events):
     Pt = events.Photon.pt > 20 
