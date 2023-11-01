@@ -43,7 +43,7 @@ def loose_muons(events):
     Eta = abs(events.Muon.eta) < 2.4
     Pt = events.Muon.pt > 10
     Id = events.Muon.looseId 
-    return events[PFCand & RelIso & Eta & Pt & Id]
+    return events.Muon[PFCand & RelIso & Eta & Pt & Id]
 
 def tight_muons(events):
     PFCand = events.Muon.isPFcand
@@ -51,7 +51,7 @@ def tight_muons(events):
     Eta = abs(events.Muon.eta) < 2.4
     Pt = events.Muon.pt > 30
     Id = events.Muon.tightId 
-    return events[PFCand & RelIso & Eta & Pt & Id]
+    return events.Muon[PFCand & RelIso & Eta & Pt & Id]
 
 def taus(events):
     #check the purpose of different variables used here
@@ -61,13 +61,13 @@ def taus(events):
     MVAid = events.Tau.idMVAoldDM2017v2 == 4 # Check if this means a tight tau
     AntiEle = events.Tau.idAntiEle >= 2 
     AntiMu = events.Tau.idAntiMu >= 1
-    return events[Pt & Eta & decay & MVAid & AntiEle & AntiMu]
+    return events.Tau[Pt & Eta & decay & MVAid & AntiEle & AntiMu]
 
 def loose_photons(events):
     Pt = events.Photon.pt > 20 
     Eta = abs(events.Photon.eta ) < 2.5
     Id = events.Photon.cutBased >= 1 #__doc = 0: fail  1: loose    2: medium   3: tight
-    return events[Pt & Eta & Id]
+    return events.Photon[Pt & Eta & Id]
 
 #Begin the processor definition
 class SignalSignature(processor.ProcessorABC):
