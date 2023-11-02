@@ -66,8 +66,8 @@ if inputs.skipchunks == 1:
     for filename in files :
         if filename.startswith(f"Zjetsnunu_{keymap}_from") :
             temp = filename.split("_")
-            from_number = temp[3]
-            to_number = temp[5]
+            from_number = temp[4]
+            to_number = temp[6].strip(".coffea")
             skiplist.append((from_number,to_number))
 
 #generate chunks
@@ -79,7 +79,6 @@ with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
         run_signature = oldlogfile.readlines()
         fileindex = 1
         for chunk in split_list[:maxchunks] :
-            print("processing-->",chunk)
             if str(chunk)+"\n" in run_signature:
                 print(chunk, "\n already processed.\nDelete the old run logfile if that isn't the case.") 
                 continue
@@ -87,9 +86,11 @@ with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
                 flag = True
                 for index_tuple in skiplist :
                     b , e = index_tuple
-                    if (fileindex == b) & (fileindex+len(chunk) == e) :
+                    if (fileindex == int(b)) & (fileindex+len(chunk) == int(e)) :
+                        print("Skipped file: ", f"Zjetsnunu_{keymap}_from_{b}_to_{e}.coffea" )
                         flag = False
                 if flag :
+                    print("processing-->",chunk)
                     command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk))
                     subprocess.run(command, shell=True ,executable="/bin/bash")
                     newlogfile.write(str(chunk)+"\n")
