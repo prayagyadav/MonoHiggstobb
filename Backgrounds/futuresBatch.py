@@ -22,6 +22,16 @@ parser.add_argument(
     help="Enter the number of chunks(filechunks) to be processed; by default None i.e.  full dataset",
     type=int
     )
+parser.add_argument(
+    "--skipchunks",
+    help="skip the already ran chunks; 1 for yes",
+    type=int
+        )
+parser.add_argument(
+    "--wait",
+    help="wait time in seconds after each run",
+    type = int
+        )
 inputs = parser.parse_args()
 
 keymap = inputs.keymap
@@ -49,12 +59,16 @@ full_list = fullfileset[keymap]
 begin = 0
 end = nset
 
-print("Current working directory : ", os.getcwd())
-files = os.listdir()
-for filename in files :
-    if filename.startswith(f"Zjetsnunu_{keymap}_from") :
-        print(filename, " already exists")
-        pass
+skiplist=[]
+if inputs.skipchunks == 1:
+    print("Current working directory : ", os.getcwd())
+    files = os.listdir()
+    for filename in files :
+        if filename.startswith(f"Zjetsnunu_{keymap}_from") :
+            temp = filename.split("_")
+            from_number = temp[3]
+            to_number = temp[5]
+            skiplist.append((from_number,to_number))
 
 #generate chunks
 nchunks = nset
@@ -70,11 +84,17 @@ with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
                 print(chunk, "\n already processed.\nDelete the old run logfile if that isn't the case.") 
                 continue
             else:
-                command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk))
-                subprocess.run(command, shell=True ,executable="/bin/bash")
-                newlogfile.write(str(chunk)+"\n")
-                print("waiting...")
-                subprocess.run("sleep 1m",shell=True ,executable="/bin/bash")
-            fileindex += len(chunk)+1
+                flag = True
+                for index_tuple in skiplist :
+                    b , e = index_tuple
+                    if (fileindex == b) & (fileindex+len(chunk) == e) :
+                        flag = False
+                if flag :
+                    command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk))
+                    subprocess.run(command, shell=True ,executable="/bin/bash")
+                    newlogfile.write(str(chunk)+"\n")
+                    print("waiting...")
+                    subprocess.run(f"sleep {inputs.wait}",shell=True ,executable="/bin/bash")
+                fileindex += len(chunk)+1
 
 print("Execution completed")
