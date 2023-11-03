@@ -144,12 +144,13 @@ def combined_plot(Output):
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
-def combined_plot_manual(Output,xsec = False):
+def combined_plot_manual(Output,norm = False , xsec = False):
     #Dijet Histogram
     Data_hist = Output["MET_Run2018"]["Histograms"]["DiJet"]
     Zjets_hist = Output["ZJets_NuNu"]["Histograms"]["DiJet"]
     
     Integrated_luminosity = crossSections.lumis[2018]
+    print("Integrated Luminosity: ", Integrated_luminosity)
     if xsec :
         match inputs.fulldataset :
             case 1 :
@@ -167,13 +168,16 @@ def combined_plot_manual(Output,xsec = False):
             crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"]+
             crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"]+
             crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
-            )
+            )/8.0
+        print("Zjets_NuNu cross section :", xsec)
         N_i = Output["ZJets_NuNu"]["Cutflow"]["Total_Events"]
         weight_factor = ( lumi * xsec )/N_i
         Zjets_hist = Zjets_hist*weight_factor
 
     #normalize
-    norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
+    norm_factor= 1.0
+    if norm :
+        norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
 
 
     fig, ax = plt.subplots()
@@ -231,19 +235,28 @@ def combined_plot_manual(Output,xsec = False):
             crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"]+
             crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"]+
             crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
-            )
+            )/8.0
         N_i = Output["ZJets_NuNu"]["Cutflow"]["Total_Events"]
+        N_o = Zjets_hist.sum()
+        print("N input: ", N_i)
         weight_factor = ( lumi * xsec )/N_i
+        print("Weight factor: ", weight_factor)
         Zjets_hist = Zjets_hist*weight_factor
 
     #normalize
-    norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
+    norm_factor= 1.0
+    if norm :
+        norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
 
 
     fig, ax = plt.subplots()
+
     hep.histplot(
         norm_factor*Data_hist ,
-        histtype='step',
+        histtype='errorbar',
+        color="black",
+        xerr=1,
+        yerr=0,
         label="MET_Run2018",
         lw=1,
         ax=ax
@@ -252,6 +265,7 @@ def combined_plot_manual(Output,xsec = False):
         norm_factor*Zjets_hist,
         histtype="fill",
         color="blue",
+        alpha=0.4,
         #marker=[],
         label="ZJets_NuNu",
         edgecolor="black",
@@ -293,4 +307,4 @@ util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
 plot(master_dict)
 #combined_plot(master_dict)
-combined_plot_manual(master_dict, xsec=True)
+combined_plot_manual(master_dict,norm=False, xsec=True)
