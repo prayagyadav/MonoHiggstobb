@@ -10,6 +10,7 @@ This script studies the Z--> \nu + \nu + jets background .
 # Import the necessary packages #
 #################################
 
+import argparse
 import awkward as ak 
 from coffea import util, processor
 import json
@@ -23,6 +24,17 @@ import os
 hep.style.use(["CMS","fira","firamath"])
 #hep.style.use("CMSTex")
 import rich
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "-f",
+    "--fulldataset",
+    help="1 if running on full dataset",
+    type = int ,
+    default= 0
+)
+inputs = parser.parse_args()
 
 #Load the output
 def showinfo(Output):
@@ -75,7 +87,7 @@ def plot(Output):
 def combined_plot(Output):
 
 
-    Integrated_luminosity = crossSections.lumis[2018]
+    Integrated_luminosity = crossSections.crossSections.lumis[2018]
 
     #Dijet mass plot
    
@@ -137,16 +149,27 @@ def combined_plot_manual(Output,xsec = False):
     Data_hist = Output["MET_Run2018"]["Histograms"]["DiJet"]
     Zjets_hist = Output["ZJets_NuNu"]["Histograms"]["DiJet"]
     
+    Integrated_luminosity = crossSections.lumis[2018]
     if xsec :
-        from monoHbbtools.Load import crossSections
-
-        with open("lumi_lookup.json") as f :
-            lumijson = json.load(f)
-        lumi = lumijson["Sum"]["Recorded"]
-        xsec = crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"]
+        match inputs.fulldataset :
+            case 1 :
+                lumi = Integrated_luminosity
+            case 0 :
+                with open("lumi_lookup.json") as f :
+                    lumijson = json.load(f)
+                lumi = lumijson["Sum"]["Recorded"]
+        xsec = (
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_50To150_18"]+
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"]+
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_250To400_18"]+
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_400Toinf_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_50To150_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
+            )
         N_i = Output["ZJets_NuNu"]["Cutflow"]["Total_Events"]
         weight_factor = ( lumi * xsec )/N_i
-
         Zjets_hist = Zjets_hist*weight_factor
 
     #normalize
@@ -192,8 +215,6 @@ def combined_plot_manual(Output,xsec = False):
     Zjets_hist = Output["ZJets_NuNu"]["Histograms"]["DiJetMETcut"]
 
     if xsec :
-        from monoHbbtools.Load import crossSections
-
         with open("lumi_lookup.json") as f :
             lumijson = json.load(f)
         lumi = lumijson["Sum"]["Recorded"]
@@ -244,9 +265,23 @@ def combined_plot_manual(Output,xsec = False):
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
-MET_Run2018 = util.load("Zjetsnunu_MET_Run2018.coffea")
-Znunu = util.load("Zjetsnunu_ZJets_NuNu.coffea")
-master_dict = processor.accumulate([MET_Run2018,Znunu])
+def accum(key):
+    list_files = os.listdir()
+    valid_list = []
+    for file in list_files :
+        if file.startswith(f"Zjetsnunu_{key}_from") :
+            valid_list.append(file)
+    full = processor.accumulate([util.load(name) for name in valid_list])
+    return full
+
+match inputs.fulldataset :
+    case 1 :
+        MET_Run2018 = accum("MET_Run2018")
+        ZJets_NuNu = accum("ZJets_NuNu")
+    case 0 :
+        MET_Run2018 = util.load("Zjetsnunu_MET_Run2018.coffea")
+        ZJets_NuNu = util.load("Zjetsnunu_ZJets_NuNu.coffea")
+master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu])
 util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
 plot(master_dict)
