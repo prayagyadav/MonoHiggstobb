@@ -26,22 +26,22 @@ import hist
 def loose_electrons(events):
     Etagap = ( events.Electron.eta < 1.4442 ) & ( events.Electron.eta > 1.566 )
     Eta = abs( events.Electron.eta ) < 2.5
-    Pt = events.Electron.pt > 10 
-    Id =events.Electron.cutBased >= 2 #meaning loose, medium or tight , ie , at least loosely an electron 
+    Pt = events.Electron.pt > 10.0 
+    Id = events.Electron.cutBased >= 2 #meaning loose, medium or tight , ie , at least loosely an electron 
     return events.Electron[Etagap & Eta & Pt & Id]
 
 def tight_electrons(events):
     Etagap = ( events.Electron.eta < 1.4442 ) & ( events.Electron.eta > 1.566 )
     Eta = abs( events.Electron.eta ) < 2.5
-    Pt = events.Electron.pt > 40 
-    Id =events.Electron.cutBased == 2 #meaning only tight electrons 
+    Pt = events.Electron.pt > 40.0 
+    Id = events.Electron.cutBased == 2 #meaning only tight electrons 
     return events.Electron[Etagap & Eta & Pt & Id]
 
 def loose_muons(events):
     PFCand = events.Muon.isPFcand
     RelIso = events.Muon.pfRelIso04_all < 0.25
     Eta = abs(events.Muon.eta) < 2.4
-    Pt = events.Muon.pt > 10
+    Pt = events.Muon.pt > 10.0
     Id = events.Muon.looseId 
     return events.Muon[PFCand & RelIso & Eta & Pt & Id]
 
@@ -49,7 +49,7 @@ def tight_muons(events):
     PFCand = events.Muon.isPFcand
     RelIso = events.Muon.pfRelIso04_all < 0.15
     Eta = abs(events.Muon.eta) < 2.4
-    Pt = events.Muon.pt > 30
+    Pt = events.Muon.pt > 30.0
     Id = events.Muon.tightId 
     return events.Muon[PFCand & RelIso & Eta & Pt & Id]
 
@@ -57,7 +57,7 @@ def taus(events, version = 9):
     match version :
         case 7 :
             #check the purpose of different variables used here
-            Pt = events.Tau.pt > 20
+            Pt = events.Tau.pt > 20.0
             Eta = abs(events.Tau.eta) < 2.3
             decay = events.Tau.decayMode
             MVAid = events.Tau.idMVAoldDM2017v2 == 4 # Check if this means a tight tau
@@ -66,7 +66,7 @@ def taus(events, version = 9):
             return events.Tau[Pt & Eta & decay & MVAid & AntiEle & AntiMu]
         case 9 :
             #check the purpose of different variables used here
-            Pt = events.Tau.pt > 20
+            Pt = events.Tau.pt > 20.0
             Eta = abs(events.Tau.eta) < 2.3
             decay = events.Tau.idDecayModeOldDMs
             #decay = events.Tau.idMVAoldDM2017v2 >=4) #for previous campaign
@@ -80,7 +80,7 @@ def taus(events, version = 9):
 
 
 def loose_photons(events):
-    Pt = events.Photon.pt > 20 
+    Pt = events.Photon.pt > 20.0
     Eta = abs(events.Photon.eta ) < 2.5
     Id = events.Photon.cutBased >= 1 #__doc = 0: fail  1: loose    2: medium   3: tight
     return events.Photon[Pt & Eta & Id]
@@ -140,21 +140,148 @@ class SignalSignature(processor.ProcessorABC):
         cutflow["Total_Events"] = len(events) #Total Number of events
 
         #Preparing histogram objects
-        x_min = 100
-        x_max = 150
-        nbins = 25
-        DiJetHist = (
+        #MET
+        met_pt_min = 0
+        met_pt_max = 1000
+        met_pt_nbins = 50
+        met_pt_hist = (
             hist.
             Hist.
             new.
-            Reg(nbins,x_min,x_max).
+            Reg(met_pt_nbins,met_pt_min,met_pt_max).
+            Double()
+        )
+        met_phi_min = -3.14
+        met_phi_max = 3.14
+        met_phi_nbins = 30
+        met_phi_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(met_phi_nbins,met_phi_min,met_phi_max).
+            Double()
+        )
+        #Leading ak4bjets
+        leadingjets_pt_min = 0
+        leadingjets_pt_max = 500
+        leadingjets_pt_nbins = 25
+        leadingjets_pt_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(leadingjets_pt_nbins,leadingjets_pt_min,leadingjets_pt_max).
+            Double()
+        )
+        leadingjets_eta_min = -3.0
+        leadingjets_eta_max = 3.0
+        leadingjets_eta_nbins = 30
+        leadingjets_eta_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(leadingjets_eta_nbins,leadingjets_eta_min,leadingjets_eta_max).
+            Double()
+        )
+        leadingjets_phi_min = -3.14
+        leadingjets_phi_max = 3.14
+        leadingjets_phi_nbins = 30
+        leadingjets_phi_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(leadingjets_phi_nbins,leadingjets_phi_min,leadingjets_phi_max).
+            Double()
+        )
+        leadingjets_mass_min = 0
+        leadingjets_mass_max = 500
+        leadingjets_mass_nbins = 25
+        leadingjets_mass_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(leadingjets_mass_nbins,leadingjets_mass_min,leadingjets_mass_max).
+            Double()
+        )
+        #Subleading ak4 bjets
+        subleadingjets_pt_min = 0
+        subleadingjets_pt_max = 500
+        subleadingjets_pt_nbins = 25
+        subleadingjets_pt_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(subleadingjets_pt_nbins,subleadingjets_pt_min,subleadingjets_pt_max).
+            Double()
+        )
+        subleadingjets_eta_min = -3.0
+        subleadingjets_eta_max = 3.0
+        subleadingjets_eta_nbins = 30
+        subleadingjets_eta_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(subleadingjets_eta_nbins,subleadingjets_eta_min,subleadingjets_eta_max).
+            Double()
+        )
+        subleadingjets_phi_min = -3.14
+        subleadingjets_phi_max = 3.14
+        subleadingjets_phi_nbins = 30
+        subleadingjets_phi_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(subleadingjets_phi_nbins,subleadingjets_phi_min,subleadingjets_phi_max).
+            Double()
+        )
+        subleadingjets_mass_min = 0
+        subleadingjets_mass_max = 500
+        subleadingjets_mass_nbins = 25
+        subleadingjets_mass_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(subleadingjets_mass_nbins,subleadingjets_mass_min,subleadingjets_mass_max).
+            Double()
+        )
+        #ak4bjet-ak4bjet dijets 
+        dijets_pt_min = 0
+        dijets_pt_max = 500
+        dijets_pt_nbins = 25
+        dijets_pt_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(dijets_pt_nbins,dijets_pt_min,dijets_pt_max).
             Double()
             )
-        DiJetHistwithMETselection = (
+        dijets_eta_min = -3.0
+        dijets_eta_max = 3.0
+        dijets_eta_nbins = 30
+        dijets_eta_hist = (
             hist.
             Hist.
             new.
-            Reg(nbins,x_min,x_max).
+            Reg(dijets_eta_nbins,dijets_eta_min,dijets_eta_max).
+            Double()
+            )
+        dijets_phi_min = -3.14
+        dijets_phi_max = 3.14
+        dijets_phi_nbins = 30
+        dijets_phi_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(dijets_phi_nbins,dijets_phi_min,dijets_phi_max).
+            Double()
+            )
+        dijets_mass_min = 100
+        dijets_mass_max = 150
+        dijets_mass_nbins = 25
+        dijets_mass_hist = (
+            hist.
+            Hist.
+            new.
+            Reg(dijets_mass_nbins,dijets_mass_min,dijets_mass_max).
             Double()
             )
 
@@ -207,7 +334,6 @@ class SignalSignature(processor.ProcessorABC):
             cutflow["filtered_events"] = len(events)
 
         #MET Selection
-        events_without_MET_selection = events
         events = events[events.MET.pt > 200 ] #200 for resolved category and 250GeV for boosted category
         cutflow["MET_greater_than_200GeV"] = len(events)
         
@@ -234,53 +360,64 @@ class SignalSignature(processor.ProcessorABC):
         events = events[BasicCuts.all("pt_cut", "eta_cut")]
         cutflow["Jets_eta_cut"] = len(events)
         
-        Jets = events_without_MET_selection.Jet
-        JetswMET = events.Jet
-        cutflow["Number_of_jets"] = ak.sum(ak.num(events.Jet))
+        jets = events.Jet
+        cutflow["Number_of_jets"] = ak.sum(ak.num(jets))
 
         #Anti-QCD DeltaPhi selection
-        delta_phi = events.Jet.delta_phi(events.MET)
-        events.Jet = events.Jet[abs(delta_phi) > 0.4]
-        cutflow["Number_of_jets_after_antiQCD"] = ak.sum(ak.num(events.Jet))
+        delta_phi = jets.delta_phi(events.MET)
+        jets = jets[abs(delta_phi) > 0.4]
+        cutflow["Number_of_jets_after_antiQCD"] = ak.sum(ak.num(jets))
 
         #Apply the btag 
+        #2018
         btag_WP_medium = 0.3040 # Medium Working Point for 2018
         btag_WP_tight = 0.7476 # Tight Working Point for 2018
-        GoodJetCut = Jets.btagDeepFlavB > btag_WP_tight 
-        GoodJetCutwMET = JetswMET.btagDeepFlavB > btag_WP_tight 
-        ak4_BJets_tight = Jets[GoodJetCut]
-        ak4_BJets_tightwMET = JetswMET[GoodJetCutwMET]
-        cutflow["ak4bJetsTight"] = ak.sum(ak.num(ak4_BJets_tight)) #No of ak4 tight bjets
-        cutflow["ak4bJetsTight_with_MET_cut"] = ak.sum(ak.num(ak4_BJets_tightwMET)) #No of ak4 tight bjets with MET cut
+        tight_bjets_selection = jets.btagDeepFlavB > btag_WP_tight 
+        jets = jets[tight_bjets_selection]
+        cutflow["ak4bJetsTight"] = ak.sum(ak.num(jets)) #No of ak4 tight bjets
 
         #Create Dijets
-        def ObtainDiJets(jets):
-            jets = jets[ak.num(jets)>1]
-            ljet_cut = jets[:,0].pt > 50.0 #Leading Jet pt cut
-            sjets_cut = jets[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
-            jets = jets[ljet_cut & sjets_cut]
-            Dijet = jets[:,0] + jets[:,1] #Leading jet + Subleading jet
-            return Dijet 
-        DiJets = ObtainDiJets(ak4_BJets_tight)
-        DiJets = DiJets[( DiJets.mass > 100.0 ) & ( DiJets.mass < 150.0 ) ] #Dijet mass window cut
-        DiJets = DiJets[DiJets.pt > 100.0 ] #Dijet pt cut
-        DiJetswMET = ObtainDiJets(ak4_BJets_tightwMET)
-        DiJetswMET = DiJetswMET[( DiJetswMET.mass > 100.0 ) & ( DiJetswMET.mass < 150.0 ) ] #Dijet mass window cut
-        DiJetswMET = DiJetswMET[DiJetswMET.pt > 100.0 ] #Dijet pt cut
-        cutflow["bbDiJets"] = len(DiJets) #No of bb Dijets
-        cutflow["bbDiJets_with_MET_cut"] = len(DiJetswMET) #No of bb Dijets with MET cut
+        jets = jets[ak.num(jets)>1]
+        ljets_cut = jets[:,0].pt > 50.0 #Leading Jet pt cut
+        sjets_cut = jets[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
+        jets = jets[ljets_cut & sjets_cut]
+        leading_jets = jets[:,0]
+        subleadingjets = jets[:,1]
+        dijets = jets[:,0] + jets[:,1] #Leading jet + Subleading jet
+        dijets = dijets[( dijets.mass > 100.0 ) & ( dijets.mass < 150.0 ) ] #Dijet mass window cut
+        dijets = dijets[dijets.pt > 100.0 ] #Dijet pt cut
+        cutflow["bbDiJets"] = len(dijets) #No of bb Dijets
 
         #Fill the histogram
-        DiJetHist.fill(DiJets.mass)
-        DiJetHistwithMETselection.fill(DiJetswMET.mass)
+        #MET
+        met_pt_hist.fill()
+        #Leading jets
+        leadingjets_pt_hist.fill(ak.flatten(leading_jets.pt))
+        leadingjets_eta_hist.fill(ak.flatten(leading_jets.eta))
+        leadingjets_eta_hist.fill(ak.flatten(leading_jets.eta))
+        leadingjets_eta_hist.fill(ak.flatten(leading_jets.eta))
+        #Subleading jets
+        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
+        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
+        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
+        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
+        #ak4bjet-ak4bjet dijets
+        dijets_pt_hist.fill(dijets.pt)
+        dijets_eta_hist.fill(dijets.eta)
+        dijets_phi_hist.fill(dijets.phi)
+        dijets_mass_hist.fill(dijets.mass)
+        
 
         #Prepare the output
         output = {
             self.mode : {
                 "Cutflow": cutflow ,
                 "Histograms": {
-                    "DiJet" : DiJetHist ,
-                    "DiJetMETcut" : DiJetHistwithMETselection
+                    "dijets_pt" : dijets_pt_hist ,
+                    "dijets_eta" : dijets_eta_hist ,
+                    "dijets_phi" : dijets_phi_hist ,
+                    "dijets_mass" : dijets_mass_hist ,
+
                     },
                 "RunSet":self.run_set
                 }
