@@ -33,7 +33,7 @@ class Loadfileset():
                                 rich.print("\t"+subsubkey+" : ")
     
     @numba.jit(forceobj=True)
-    def getFileset(self, mode , key, redirector ) :
+    def getFileset(self, mode ,superkey, key, redirector ) :
         # Construct with desired redirector
         match redirector :
             case "fnal" | 1 :
@@ -43,8 +43,8 @@ class Loadfileset():
             case "wisc" | 3 :
                 redirector_string = "root://pubxrootd.hep.wisc.edu//"
 
-        raw_fileset = self.handler[mode][key] 
-        requested_fileset = {key : [redirector_string+filename for filename in raw_fileset]}
+        raw_fileset = self.handler[mode][superkey][key] 
+        requested_fileset = {superkey : [redirector_string+filename for filename in raw_fileset]}
         return requested_fileset
     
     def getraw(self):
@@ -85,4 +85,15 @@ def buildFileset(dict , redirector):
                 output[key] = templist
         except :
             raise KeyError
+    return output
+
+def make_fileset(fileset_dictionary, Redirector="fnal"):
+    """
+    Returns the a triple nested fileset with desired redirector
+    """
+    output = {}
+    for Mode in fileset_dictionary.keys() :
+        output[Mode] = {}
+        for key in fileset_dictionary[Mode] :
+            output[Mode][key] = buildFileset(fileset_dictionary[Mode][key], redirector=Redirector)
     return output
