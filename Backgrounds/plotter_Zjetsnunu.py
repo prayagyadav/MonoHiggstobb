@@ -215,16 +215,26 @@ def combined_plot_manual(Output,xsec = False):
     Zjets_hist = Output["ZJets_NuNu"]["Histograms"]["DiJetMETcut"]
 
     if xsec :
-        with open("lumi_lookup.json") as f :
-            lumijson = json.load(f)
-        lumi = lumijson["Sum"]["Recorded"]
-        xsec = crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"]
+        match inputs.fulldataset :
+            case 1 :
+                lumi = Integrated_luminosity
+            case 0 :
+                with open("lumi_lookup.json") as f :
+                    lumijson = json.load(f)
+                lumi = lumijson["Sum"]["Recorded"]
+        xsec = (
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_50To150_18"]+
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"]+
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_250To400_18"]+
+            crossSections.crossSections["Z1Jets_NuNu_ZpT_400Toinf_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_50To150_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"]+
+            crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
+            )
         N_i = Output["ZJets_NuNu"]["Cutflow"]["Total_Events"]
         weight_factor = ( lumi * xsec )/N_i
-
         Zjets_hist = Zjets_hist*weight_factor
-
-        print(weight_factor)
 
     #normalize
     norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
@@ -233,11 +243,8 @@ def combined_plot_manual(Output,xsec = False):
     fig, ax = plt.subplots()
     hep.histplot(
         norm_factor*Data_hist ,
-        histtype='fill',
-        color="red",
-        #marker=[],
+        histtype='step',
         label="MET_Run2018",
-        edgecolor="black",
         lw=1,
         ax=ax
         )
