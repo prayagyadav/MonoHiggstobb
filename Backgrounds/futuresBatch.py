@@ -67,11 +67,11 @@ if inputs.skipchunks == 1:
             from_number = temp[4]
             to_number = temp[6].strip(".coffea")
             skiplist.append((from_number,to_number))
-print(skiplist)
+
 #generate chunks
 nchunks = nset
 split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks)]
-
+print(split_list[:maxchunks])
 with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
     with open("log_futuresBatch_newrun.txt","w+") as newlogfile:
         run_signature = oldlogfile.readlines()
