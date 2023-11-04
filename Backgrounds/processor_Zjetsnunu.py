@@ -351,12 +351,11 @@ class SignalSignature(processor.ProcessorABC):
         #ak4Jets
 
         #Apply pt and eta cut
-        BasicCuts = PackedSelection()
-        BasicCuts.add("pt > 30", ak.all(events.Jet.pt > 30.0 , axis = 1))
-        events = events[BasicCuts.all("pt > 30")]
+        pt_cut = ak.all(events.Jet.pt > 30.0 , axis = 1)
+        events = events[pt_cut]
         cutflow["pt > 30"] = len(events)
-        BasicCuts.add("abs(eta) < 2.5", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
-        events = events[BasicCuts.all("abs(eta) < 2.5")]
+        eta_cut = ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1)
+        events = events[eta_cut]
         cutflow["abs(eta) < 2.5"] = len(events)
         
         jets = events.Jet
