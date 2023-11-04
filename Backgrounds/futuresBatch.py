@@ -35,7 +35,7 @@ parser.add_argument(
 inputs = parser.parse_args()
 
 keymap = inputs.keymap
-nset = inputs.nset - 1
+nset = inputs.nset 
 maxchunks = inputs.max_chunks
 
 with open("../monoHbbtools/Load/newfileset.json") as f:
@@ -70,7 +70,7 @@ if inputs.skipchunks == 1:
 
 #generate chunks
 nchunks = nset
-split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks+1)]
+split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks)]
 print(split_list[:maxchunks])
 with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
     with open("log_futuresBatch_newrun.txt","w+") as newlogfile:
