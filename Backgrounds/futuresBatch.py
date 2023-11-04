@@ -94,6 +94,6 @@ with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
                     newlogfile.write(str(chunk)+"\n")
                     print("waiting...")
                     subprocess.run(f"sleep {inputs.wait}",shell=True ,executable="/bin/bash")
-                fileindex += len(chunk)+1
+                fileindex += len(chunk)
 
 print("Execution completed")
