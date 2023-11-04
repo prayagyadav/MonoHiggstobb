@@ -18,6 +18,7 @@ from coffea import util
 import logging
 from monoHbbtools import Load
 from monoHbbtools.Utilities import condor
+import numpy as np
 from processor_Zjetsnunu import SignalSignature
 import json
 
@@ -92,10 +93,8 @@ def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode =
         fileset_dict = dict
     MCmaps = ["ZJets_NuNu"]
 
-    if keymap == "MET_Run2018" :
-        runnerfileset = Load.buildFileset(fileset_dict["Data"][keymap],"fnal")
-    elif keymap in MCmaps :
-        runnerfileset = Load.buildFileset(fileset_dict["MC"][keymap],"fnal")
+    
+    runnerfileset = Load.buildFileset(fileset_dict[keymap],"fnal")
     flat_list={}
     flat_list[keymap] = []
 
@@ -104,9 +103,28 @@ def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode =
             print("Invalid begin and end values.\nFalling back to full dataset...")
             outputfileset = runnerfileset
         else:
+            # for key in runnerfileset.keys() :
+            #     flat_list[keymap] += runnerfileset[key]
+            #indexer
+            index={}
+            i = 1
             for key in runnerfileset.keys() :
-                flat_list[keymap] += runnerfileset[key]
-            outputfileset = {keymap : flat_list[keymap][(begin - 1) :end]}
+                index[key] = []
+                for file in runnerfileset[key] :
+                    index[key].append(i)
+                    i += 1
+
+            accept = np.arange(begin,end+1,1)
+            print(accept)
+            temp = {}
+            for key in fileset.keys() :
+                temp[key] = []
+                for i in range(len(fileset[key])) :
+                    if index[key][i] in accept :
+                        temp[key].append(fileset[key][i])
+            #outputfileset = {keymap : flat_list[keymap][(begin - 1) :end]}
+            #outputfileset = {keymap : temp}
+            outputfileset = temp
     elif mode == "divide" :
         if files == None:
             print("Invalid number of files.\nFalling back to full dataset...")

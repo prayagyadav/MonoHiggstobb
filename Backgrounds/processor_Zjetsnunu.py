@@ -353,10 +353,10 @@ class SignalSignature(processor.ProcessorABC):
         #Apply pt and eta cut
         pt_cut = ak.all(events.Jet.pt > 30.0 , axis = 1)
         events = events[pt_cut]
-        cutflow["pt > 30"] = len(events)
+        cutflow["jet pt > 30"] = len(events)
         eta_cut = ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1)
         events = events[eta_cut]
-        cutflow["abs(eta) < 2.5"] = len(events)
+        cutflow["jet abs(eta) < 2.5"] = len(events)
         
         jets = events.Jet
 
