@@ -84,12 +84,12 @@ with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
                 flag = True
                 for index_tuple in skiplist :
                     b , e = index_tuple
-                    if (fileindex == int(b)) & (fileindex+len(chunk) == int(e)) :
+                    if (fileindex == int(b)) & (fileindex+len(chunk)-1 == int(e)) :
                         print("Skipped file: ", f"Zjetsnunu_{keymap}_from_{b}_to_{e}.coffea" )
                         flag = False
                 if flag :
                     print("processing-->",chunk)
-                    command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk))
+                    command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 1000000 -w 12 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk)-1)
                     subprocess.run(command, shell=True ,executable="/bin/bash")
                     newlogfile.write(str(chunk)+"\n")
                     print("waiting...")
