@@ -144,7 +144,7 @@ def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode =
         print("Invalid mode of operation", mode)
         raise KeyError
     
-    print("Running ", len(outputfileset[keymap]), " files...")
+    print("Running ", np.array([len(value) for value in outputfileset.values()]).sum(), " files...")
     return outputfileset
 
 
