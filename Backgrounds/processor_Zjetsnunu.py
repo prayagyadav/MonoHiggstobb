@@ -133,11 +133,8 @@ class SignalSignature(processor.ProcessorABC):
     def process(self, events):
         dataset = events.metadata["dataset"]
         self.mode = dataset
-
         cutflow = {}
-
-
-        cutflow["Total_Events"] = len(events) #Total Number of events
+        cutflow["Total events"] = len(events) #Total Number of events
 
         #Preparing histogram objects
         #MET
@@ -299,13 +296,15 @@ class SignalSignature(processor.ProcessorABC):
 
             #MET Triggers
             trigger = PackedSelection()
-            trigger.add("noMuon", events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 | events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight | events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight)
-
+            trigger.add(
+                "noMuon",
+                events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 |
+                events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight |
+                events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight
+                )
             trigger_cut = trigger.all("noMuon")
-
-            events[trigger_cut]
-
-            cutflow["triggered_events"] = len(events)
+            events = events[trigger_cut]
+            cutflow["MET trigger"] = len(events)
 
             #MET Filters
             flags = PackedSelection()
@@ -317,7 +316,6 @@ class SignalSignature(processor.ProcessorABC):
             flags.add("EcalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
             flags.add("badPFmuon", events.Flag.BadPFMuonFilter )
             flags.add("Ecalbadcalib",events.Flag.ecalBadCalibFilter )
-
             flagcut = flags.all(
                 "goodVertices",
                 "tightHalo",
@@ -328,79 +326,85 @@ class SignalSignature(processor.ProcessorABC):
                 "badPFmuon",
                 "Ecalbadcalib"
                 )
-
             events = events[flagcut]
-
-            cutflow["filtered_events"] = len(events)
+            cutflow["MET filters"] = len(events)
 
         #MET Selection
         events = events[events.MET.pt > 200 ] #200 for resolved category and 250GeV for boosted category
-        cutflow["MET_greater_than_200GeV"] = len(events)
+        cutflow["MET > 200 GeV"] = len(events)
         
         #vetoes
         veto = PackedSelection()
-        veto.add("noElectrons", ak.num( loose_electrons(events) ) == 0 )
-        veto.add("noMuons", ak.num( loose_muons(events) ) == 0 )
-        veto.add("noPhotons", ak.num( loose_photons(events) ) == 0 )
-        veto.add("noTaus", ak.num( taus(events) ) == 0 )
-        events = events[veto.all("noElectrons","noMuons","noPhotons","noTaus")]
-        cutflow["No_Leptons_Photons"] = len(events)
+        veto.add("no electrons", ak.num( loose_electrons(events) ) == 0 ) #no electron
+        veto.add("no muons", ak.num( loose_muons(events) ) == 0 ) #no 
+        veto.add("no photons", ak.num( loose_photons(events) ) == 0 )
+        veto.add("no taus", ak.num( taus(events) ) == 0 )
+        for selection in veto.names :
+            events = events[veto.all(selection)]
+            cutflow[selection] = len(events)
 
         # Least number of jets and additional Jets
-        events = events[ (ak.num(events.Jet) >= 2) & (ak.num(events.Jet) <=4 )] # 4 meaning 2 to construct dijet and 2 are the maximum number of additional jets
-        cutflow["least_and_max_number_of_jets"] = len(events)
+        # events = events[ (ak.num(events.Jet) >= 2) & (ak.num(events.Jet) <=4 )] # 4 meaning 2 to construct dijet and 2 are the maximum number of additional jets
+        # cutflow["maximum two additional jets"] = len(events)
 
         #Object selections
         #ak4Jets
 
-        #Apply the basic cuts like pt and eta
+        #Apply pt and eta cut
         BasicCuts = PackedSelection()
-        BasicCuts.add("pt_cut", ak.all(events.Jet.pt > 30.0 , axis = 1))
-        BasicCuts.add("eta_cut", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
-        events = events[BasicCuts.all("pt_cut", "eta_cut")]
-        cutflow["Jets_eta_cut"] = len(events)
+        BasicCuts.add("pt > 30", ak.all(events.Jet.pt > 30.0 , axis = 1))
+        BasicCuts.add("abs(eta) < 2.5", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
+        for selection in BasicCuts.names :
+            events = events[BasicCuts.all(selection)]
+            cutflow[selection] = len(events)
         
         jets = events.Jet
-        cutflow["Number_of_jets"] = ak.sum(ak.num(jets))
 
         #Anti-QCD DeltaPhi selection
-        delta_phi = jets.delta_phi(events.MET)
-        jets = jets[abs(delta_phi) > 0.4]
-        cutflow["Number_of_jets_after_antiQCD"] = ak.sum(ak.num(jets))
+        delta_phi = events.Jet.delta_phi(events.MET)
+        events.Jet = events.Jet[abs(delta_phi) > 0.4]
+        events = events[ak.num(events.Jet) > 0]
+        cutflow["deltaphi(jets, MET) > 0.4"] = len(events)
 
         #Apply the btag 
         #2018
         btag_WP_medium = 0.3040 # Medium Working Point for 2018
         btag_WP_tight = 0.7476 # Tight Working Point for 2018
-        tight_bjets_selection = jets.btagDeepFlavB > btag_WP_tight 
-        jets = jets[tight_bjets_selection]
-        cutflow["ak4bJetsTight"] = ak.sum(ak.num(jets)) #No of ak4 tight bjets
+        tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP_tight 
+        events.Jet = events.Jet[tight_bjets_selection]
+        events = events[ak.num(events.Jet) >= 2] #at least 2 bjets
+        cutflow["At least two bjets"] = len(events)
 
         #Create Dijets
-        jets = jets[ak.num(jets)>1]
-        ljets_cut = jets[:,0].pt > 50.0 #Leading Jet pt cut
-        sjets_cut = jets[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
-        jets = jets[ljets_cut & sjets_cut]
-        leading_jets = jets[:,0]
-        subleadingjets = jets[:,1]
-        dijets = jets[:,0] + jets[:,1] #Leading jet + Subleading jet
+        ljets_cut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
+        sjets_cut = events.Jet[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
+        events.Jet = events.Jet[ljets_cut & sjets_cut] 
+        cutflow["bjet1 pt > 50 GeV and bjet2 pt > 30"] = len(events.Jet)
+
+        events = events[ak.num(events.Jet) <= 4] #Number of additional jets is 0, 1 or 2
+        cutflow["Additional Jets <= 2"] = len(events)
+        leading_jets = events.Jet[:,0]
+        subleadingjets = events.Jet[:,1]
+        dijets = events.Jet[:,0] + events.Jet[:,1] #Leading jet + Subleading jet
         dijets = dijets[( dijets.mass > 100.0 ) & ( dijets.mass < 150.0 ) ] #Dijet mass window cut
+        cutflow["dijet mass between 100 Gev to 150 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
         dijets = dijets[dijets.pt > 100.0 ] #Dijet pt cut
-        cutflow["bbDiJets"] = len(dijets) #No of bb Dijets
+        cutflow["dijet pt > 100 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
 
         #Fill the histogram
         #MET
-        met_pt_hist.fill()
+        met_pt_hist.fill(events.MET.pt)
+        met_phi_hist.fill(events.MET.phi)
         #Leading jets
         leadingjets_pt_hist.fill(ak.flatten(leading_jets.pt))
         leadingjets_eta_hist.fill(ak.flatten(leading_jets.eta))
-        leadingjets_eta_hist.fill(ak.flatten(leading_jets.eta))
-        leadingjets_eta_hist.fill(ak.flatten(leading_jets.eta))
+        leadingjets_phi_hist.fill(ak.flatten(leading_jets.phi))
+        leadingjets_mass_hist.fill(ak.flatten(leading_jets.mass))
         #Subleading jets
         subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
-        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
-        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
-        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
+        subleadingjets_eta_hist.fill(ak.flatten(subleadingjets.eta))
+        subleadingjets_phi_hist.fill(ak.flatten(subleadingjets.phi))
+        subleadingjets_mass_hist.fill(ak.flatten(subleadingjets.mass))
         #ak4bjet-ak4bjet dijets
         dijets_pt_hist.fill(dijets.pt)
         dijets_eta_hist.fill(dijets.eta)
@@ -413,11 +417,20 @@ class SignalSignature(processor.ProcessorABC):
             self.mode : {
                 "Cutflow": cutflow ,
                 "Histograms": {
+                    "met_pt_hist" : met_pt_hist ,
+                    "met_phi_hist" : met_phi_hist ,
+                    "leadingjets_pt_hist" : leadingjets_pt_hist ,
+                    "leadingjets_eta_hist" : leadingjets_eta_hist ,
+                    "leadingjets_phi_hist" : leadingjets_phi_hist ,
+                    "leadingjets_mass_hist" : leadingjets_mass_hist ,
+                    "subleadingjets_pt_hist" : subleadingjets_pt_hist ,
+                    "subleadingjets_eta_hist" : subleadingjets_eta_hist ,
+                    "subleadingjets_phi_hist" : subleadingjets_phi_hist ,
+                    "subleadingjets_mass_hist" : subleadingjets_mass_hist ,
                     "dijets_pt" : dijets_pt_hist ,
                     "dijets_eta" : dijets_eta_hist ,
                     "dijets_phi" : dijets_phi_hist ,
                     "dijets_mass" : dijets_mass_hist ,
-
                     },
                 "RunSet":self.run_set
                 }
