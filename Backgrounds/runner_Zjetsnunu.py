@@ -117,11 +117,11 @@ def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode =
             accept = np.arange(begin,end+1,1)
             print(accept)
             temp = {}
-            for key in fileset.keys() :
+            for key in runnerfileset.keys() :
                 temp[key] = []
-                for i in range(len(fileset[key])) :
+                for i in range(len(runnerfileset[key])) :
                     if index[key][i] in accept :
-                        temp[key].append(fileset[key][i])
+                        temp[key].append(runnerfileset[key][i])
             #outputfileset = {keymap : flat_list[keymap][(begin - 1) :end]}
             #outputfileset = {keymap : temp}
             outputfileset = temp
