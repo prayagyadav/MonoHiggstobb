@@ -43,10 +43,8 @@ with open("../monoHbbtools/Load/newfileset.json") as f:
 
 MCmaps = ["ZJets_NuNu"]
 
-if keymap == "MET_Run2018" :
-    runnerfileset = Load.buildFileset(fileset_dict["Data"][keymap],"fnal")
-elif keymap in MCmaps :
-    runnerfileset = Load.buildFileset(fileset_dict["MC"][keymap],"fnal")
+runnerfileset = Load.buildFileset(fileset_dict[keymap],"fnal")
+
 flat_list={}
 flat_list[keymap] = []
 
