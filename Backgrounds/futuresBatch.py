@@ -70,7 +70,7 @@ if inputs.skipchunks == 1:
 
 #generate chunks
 nchunks = nset
-split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks)]
+split_list = [full_list[i:i+nchunks] for i in range(0, len(full_list), nchunks+1)]
 print(split_list[:maxchunks])
 with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
     with open("log_futuresBatch_newrun.txt","w+") as newlogfile:
