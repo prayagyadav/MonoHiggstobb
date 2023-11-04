@@ -396,15 +396,15 @@ class SignalSignature(processor.ProcessorABC):
         met_pt_hist.fill(events.MET.pt)
         met_phi_hist.fill(events.MET.phi)
         #Leading jets
-        leadingjets_pt_hist.fill(ak.flatten(leading_jets.pt))
-        leadingjets_eta_hist.fill(ak.flatten(leading_jets.eta))
-        leadingjets_phi_hist.fill(ak.flatten(leading_jets.phi))
-        leadingjets_mass_hist.fill(ak.flatten(leading_jets.mass))
+        leadingjets_pt_hist.fill(leading_jets.pt)
+        leadingjets_eta_hist.fill(leading_jets.eta)
+        leadingjets_phi_hist.fill(leading_jets.phi)
+        leadingjets_mass_hist.fill(leading_jets.mass)
         #Subleading jets
-        subleadingjets_pt_hist.fill(ak.flatten(subleadingjets.pt))
-        subleadingjets_eta_hist.fill(ak.flatten(subleadingjets.eta))
-        subleadingjets_phi_hist.fill(ak.flatten(subleadingjets.phi))
-        subleadingjets_mass_hist.fill(ak.flatten(subleadingjets.mass))
+        subleadingjets_pt_hist.fill(subleadingjets.pt)
+        subleadingjets_eta_hist.fill(subleadingjets.eta)
+        subleadingjets_phi_hist.fill(subleadingjets.phi)
+        subleadingjets_mass_hist.fill(subleadingjets.mass)
         #ak4bjet-ak4bjet dijets
         dijets_pt_hist.fill(dijets.pt)
         dijets_eta_hist.fill(dijets.eta)
