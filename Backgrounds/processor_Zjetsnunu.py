@@ -334,14 +334,14 @@ class SignalSignature(processor.ProcessorABC):
         cutflow["MET > 200 GeV"] = len(events)
         
         #vetoes
-        veto = PackedSelection()
-        veto.add("no electrons", ak.num( loose_electrons(events) ) == 0 ) #no electron
-        veto.add("no muons", ak.num( loose_muons(events) ) == 0 ) #no 
-        veto.add("no photons", ak.num( loose_photons(events) ) == 0 )
-        veto.add("no taus", ak.num( taus(events) ) == 0 )
-        for selection in veto.names :
-            events = events[veto.all(selection)]
-            cutflow[selection] = len(events)
+        events = events[ak.num( loose_electrons(events) ) == 0] # no electrons
+        cutflow["no electrons"] = len(events)
+        events = events[ak.num( loose_muons(events) ) == 0] # no muons
+        cutflow["no muons"] = len(events)
+        events = events[ak.num( loose_photons(events) ) == 0] # no photons
+        cutflow["no photons"] = len(events)
+        events = events[ak.num( taus(events) ) == 0]
+        cutflow["no taus"] = len(events)
 
         # Least number of jets and additional Jets
         # events = events[ (ak.num(events.Jet) >= 2) & (ak.num(events.Jet) <=4 )] # 4 meaning 2 to construct dijet and 2 are the maximum number of additional jets
@@ -353,10 +353,11 @@ class SignalSignature(processor.ProcessorABC):
         #Apply pt and eta cut
         BasicCuts = PackedSelection()
         BasicCuts.add("pt > 30", ak.all(events.Jet.pt > 30.0 , axis = 1))
+        events = events[BasicCuts.all("pt > 30")]
+        cutflow["pt > 30"] = len(events)
         BasicCuts.add("abs(eta) < 2.5", ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1))
-        for selection in BasicCuts.names :
-            events = events[BasicCuts.all(selection)]
-            cutflow[selection] = len(events)
+        events = events[BasicCuts.all("abs(eta) < 2.5")]
+        cutflow["abs(eta) < 2.5"] = len(events)
         
         jets = events.Jet
 
