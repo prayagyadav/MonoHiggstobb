@@ -413,26 +413,33 @@ class SignalSignature(processor.ProcessorABC):
         
 
         #Prepare the output
+        key_list = ["MET_Run2018","ZJets_NuNu"]
+        for key in key_list :
+            if self.mode.startswith(key) :
+                self.key = key
+
         output = {
-            self.mode : {
-                "Cutflow": cutflow ,
-                "Histograms": {
-                    "met_pt_hist" : met_pt_hist ,
-                    "met_phi_hist" : met_phi_hist ,
-                    "leadingjets_pt_hist" : leadingjets_pt_hist ,
-                    "leadingjets_eta_hist" : leadingjets_eta_hist ,
-                    "leadingjets_phi_hist" : leadingjets_phi_hist ,
-                    "leadingjets_mass_hist" : leadingjets_mass_hist ,
-                    "subleadingjets_pt_hist" : subleadingjets_pt_hist ,
-                    "subleadingjets_eta_hist" : subleadingjets_eta_hist ,
-                    "subleadingjets_phi_hist" : subleadingjets_phi_hist ,
-                    "subleadingjets_mass_hist" : subleadingjets_mass_hist ,
-                    "dijets_pt" : dijets_pt_hist ,
-                    "dijets_eta" : dijets_eta_hist ,
-                    "dijets_phi" : dijets_phi_hist ,
-                    "dijets_mass" : dijets_mass_hist ,
-                    },
-                "RunSet":self.run_set
+            self.key : {
+                self.mode : {
+                    "Cutflow": cutflow ,
+                    "Histograms": {
+                        "met_pt_hist" : met_pt_hist ,
+                        "met_phi_hist" : met_phi_hist ,
+                        "leadingjets_pt_hist" : leadingjets_pt_hist ,
+                        "leadingjets_eta_hist" : leadingjets_eta_hist ,
+                        "leadingjets_phi_hist" : leadingjets_phi_hist ,
+                        "leadingjets_mass_hist" : leadingjets_mass_hist ,
+                        "subleadingjets_pt_hist" : subleadingjets_pt_hist ,
+                        "subleadingjets_eta_hist" : subleadingjets_eta_hist ,
+                        "subleadingjets_phi_hist" : subleadingjets_phi_hist ,
+                        "subleadingjets_mass_hist" : subleadingjets_mass_hist ,
+                        "dijets_pt" : dijets_pt_hist ,
+                        "dijets_eta" : dijets_eta_hist ,
+                        "dijets_phi" : dijets_phi_hist ,
+                        "dijets_mass" : dijets_mass_hist ,
+                        },
+                    "RunSet":self.run_set
+                    }
                 }
             }
         return output
