@@ -62,29 +62,33 @@ def get_plotting_essentials(Output, histogram_key, Sorted=True, Reverse=True) :
 def plot(Output, type = "dijets_mass"):
 
     #Dijet mass plot
-    for key in Output.keys() :
-        for subkey in Output[key].keys() :
-            h = Output[key][subkey]["Histograms"][type]
-            fig, ax = plt.subplots()
-            hep.histplot(
-                h,
-                histtype="fill",
-                color="#525FE1",
-                label="Dijet mass",
-                edgecolor="black",
-                lw=1,
-                ax=ax
-            )
-            hep.cms.label("Preliminary", data= key.startswith("MET"))
-            ax.set_ylabel("Events")
-            ax.set_xlabel("Mass (GeV)")
-            ax.set_title(f"{key} : Dijet mass",pad=35,  fontsize= "20")
-            fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
-            fig.legend(loc= (0.57,0.64))
-            plotname = f"Znunu_{key}_{subkey}_{type}.png"
-            fig.savefig(plotname, dpi=300)
-            fig.clear()
-            print(plotname , f" created at {os.getcwd()}")
+    for key in Output.keys() : #keys are MET_Run2018 , ZJets_NuNu etc
+        hlist = []
+        for subkey in Output[key].keys() : #subkeys are MET_Run2018A ,MET_Run2018B ...etc
+            hlist.append(Output[key][subkey]["Histograms"][type])
+        h = hlist[0]
+        for histo in hlist[1:] :
+            h += histo
+        fig, ax = plt.subplots()
+        hep.histplot(
+            h,
+            histtype="fill",
+            color="#525FE1",
+            label=type,
+            edgecolor="black",
+            lw=1,
+            ax=ax
+        )
+        hep.cms.label("Preliminary", data= key.startswith("MET"))
+        ax.set_ylabel("Events")
+        ax.set_xlabel("Mass (GeV)")
+        ax.set_title(f"{key} : {type}",pad=35,  fontsize= "20")
+        fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
+        fig.legend(loc= (0.57,0.64))
+        plotname = f"Znunu_{key}_{type}.png"
+        fig.savefig(plotname, dpi=300)
+        fig.clear()
+        print(plotname , f" created at {os.getcwd()}")
 
 def plotall(Output):
     type_list = Output["MET_Run2018"]["MET_Run2018A"]["Histograms"].keys()
@@ -155,15 +159,21 @@ def combined_plot(Output):
 def combined_plot_manual(Output,norm = False , xsec = False):
     
     #Access keys and make histogram dictionaries
+    Data_hists = {}
+    Zjets_hists = {}
     for key in Output.keys() :
         #Dijet Histogram
-        Data_hists = {}
-        Zjets_hists = {}
         if key.startswith("MET_Run2018") :
-            Data_hists[key] = Output[key]["Histograms"]["dijets_mass"]
+            for subkey in Output[key].keys():
+                Data_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                #print(Data_hists[subkey])
         elif key.startswith("ZJets_NuNu") :
-            Zjets_hists = Output[key]["Histograms"]["dijets_mass"]
+            for subkey in Output[key].keys():
+                Zjets_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
 
+
+    #print("data hists: " , Data_hists["MET_Run2018A"])
+    #print("Zjets hists", Zjets_hists)
     #Apply cross sections
     if xsec :
         match inputs.fulldataset :
@@ -173,33 +183,44 @@ def combined_plot_manual(Output,norm = False , xsec = False):
                 with open("lumi_lookup.json") as f :
                     lumijson = json.load(f)
                 lumi = lumijson["Sum"]["Recorded"]
-        print("Integrated Luminosity(pb): ", lumi)
+        #print("Integrated Luminosity(pb): ", lumi)
         xsec = {
-            "Z1Jets_NuNu_ZpT_50To150": crossSections.crossSections["Z1Jets_NuNu_ZpT_50To150_18"],
-            "Z1Jets_NuNu_ZpT_150To250": crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"],
-            "Z1Jets_NuNu_ZpT_250To400": crossSections.crossSections["Z1Jets_NuNu_ZpT_250To400_18"],
-            "Z1Jets_NuNu_ZpT_400Toinf": crossSections.crossSections["Z1Jets_NuNu_ZpT_400Toinf_18"],
-            "Z2Jets_NuNu_ZpT_50To150": crossSections.crossSections["Z2Jets_NuNu_ZpT_50To150_18"],
-            "Z2Jets_NuNu_ZpT_150To250": crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"],
-            "Z2Jets_NuNu_ZpT_250To400": crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"],
-            "Z2Jets_NuNu_ZpT_400Toinf": crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
+            "Z1Jets_NuNu_ZpT_50To150_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_50To150_18"],
+            "Z1Jets_NuNu_ZpT_150To250_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"],
+            "Z1Jets_NuNu_ZpT_250To400_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_250To400_18"],
+            "Z1Jets_NuNu_ZpT_400Toinf_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_400Toinf_18"],
+            "Z2Jets_NuNu_ZpT_50To150_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_50To150_18"],
+            "Z2Jets_NuNu_ZpT_150To250_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"],
+            "Z2Jets_NuNu_ZpT_250To400_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"],
+            "Z2Jets_NuNu_ZpT_400Toinf_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
         }
-        print("Zjets_NuNu cross sections :", xsec)
+        #print("Zjets_NuNu cross sections :", xsec)
         N_i = {}
         weight_factor = {}
-        for key in xsec.keys() :
-            N_i[key] = Output[key]["Cutflow"]["Total_Events"]
-            weight_factor[key] = ( lumi * xsec[key] )/N_i[key]
-        print("N_i: ", N_i)
-        print("weight_factor: ", weight_factor)
+        for subkey in xsec.keys() :
+            N_i[subkey] = Output["ZJets_NuNu"][subkey]["Cutflow"]["Total events"]
+            weight_factor[subkey] = ( lumi * xsec[subkey] )/N_i[subkey]
+        #print("N_i: ", N_i)
+        #print("weight_factor: ", weight_factor)
 
         #Simply add up the data histograms
+        Data_hists_list=[]
         for key in Data_hists.keys() :
+            Data_hists_list.append(Data_hists[key])
+
+        Data_hist = Data_hists_list[0]
+        for histogram in Data_hists_list[1:] :
             Data_hist += Data_hists[key]
 
         #individually apply cross section and then add up the MC histograms by key
+        Zjets_hists_list = []
         for key in Zjets_hists.keys() :
             Zjets_hists[key] *= weight_factor[key]
+            Zjets_hists_list.append(Zjets_hists[key])
+
+
+        Zjets_hist = Zjets_hists_list[0]
+        for histogram in Zjets_hists_list[1:] :
             Zjets_hist += Zjets_hists[key]
 
 
@@ -217,7 +238,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         color="black",
         #marker=[],
         label="MET_Run2018",
-        xerr = 25 ,
+        xerr = 1,
         yerr= 0,
         lw=1,
         ax=ax
@@ -235,12 +256,14 @@ def combined_plot_manual(Output,norm = False , xsec = False):
 
     hep.cms.label("Preliminary", data= False)
     ax.set_ylabel("Normalized")
+    plt.xlim([100.0,150.0])
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
-    plt.yscale("log")
+    #plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
-    fig.legend(loc= (0.57,0.64))
+    fig.legend(loc= (0.70,.91))
+    #fig.legend(loc=1)
     plotname = f"ZnunuCombined.png"
     fig.savefig(plotname, dpi=300)
     fig.clear()
@@ -264,7 +287,7 @@ match inputs.fulldataset :
         ZJets_NuNu = util.load("Zjetsnunu_ZJets_NuNu.coffea")
 master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu])
 util.save(master_dict, "BackgroundDijets.coffea")
-showinfo(master_dict)
-plotall(master_dict)
+#showinfo(master_dict)
+#plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
