@@ -37,7 +37,7 @@ def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers
         disk="1 GB",
         death_timeout = '60',
         job_extra_directives={
-            "+JobFlavour": '"tomorrow"',
+            "+JobFlavour": '"longlunch"',
             "log": "dask_job_output.$(PROCESS).$(CLUSTER).log",
             "output": "dask_job_output.$(PROCESS).$(CLUSTER).out",
             "error": "dask_job_output.$(PROCESS).$(CLUSTER).err",
