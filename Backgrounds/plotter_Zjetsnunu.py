@@ -40,8 +40,10 @@ inputs = parser.parse_args()
 def showinfo(Output):
     for key in Output.keys():
         rich.print(key, " :")
-        cutflow = Output[key]["Cutflow"]
-        rich.print(cutflow)
+        for subkey in Output[key] :
+            rich.print(subkey, " :")
+            cutflow = Output[key][subkey]["Cutflow"]
+            rich.print(cutflow)
 
 def get_plotting_essentials(Output, histogram_key, Sorted=True, Reverse=True) :
     color_list = ["#4E3636","#116D6E","#321E1E"]
@@ -57,32 +59,38 @@ def get_plotting_essentials(Output, histogram_key, Sorted=True, Reverse=True) :
     #     if output_labels[index] == "MET_Run2018" :
     return output_hists, output_labels, color_list 
 
-def plot(Output):
+def plot(Output, type = "dijets_mass"):
 
     #Dijet mass plot
     for key in Output.keys() :
-        h = Output[key]["Histograms"]["DiJet"]
-        fig, ax = plt.subplots()
-        hep.histplot(
-            h,
-            histtype="fill",
-            color="#525FE1",
-            label="Dijet mass",
-            edgecolor="black",
-            lw=1,
-            ax=ax
-        )
-        hep.cms.label("Preliminary", data= key.startswith("MET"))
-        ax.set_ylabel("Events")
-        ax.set_xlabel("Mass (GeV)")
-        ax.set_title(f"{key} : Dijet mass",pad=35,  fontsize= "20")
-        fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
-        fig.legend(loc= (0.57,0.64))
-        plotname = f"Znunu{key}.png"
-        fig.savefig(plotname, dpi=300)
-        fig.clear()
-        print(plotname , f" created at {os.getcwd()}")
+        for subkey in Output[key].keys() :
+            h = Output[key][subkey]["Histograms"][type]
+            fig, ax = plt.subplots()
+            hep.histplot(
+                h,
+                histtype="fill",
+                color="#525FE1",
+                label="Dijet mass",
+                edgecolor="black",
+                lw=1,
+                ax=ax
+            )
+            hep.cms.label("Preliminary", data= key.startswith("MET"))
+            ax.set_ylabel("Events")
+            ax.set_xlabel("Mass (GeV)")
+            ax.set_title(f"{key} : Dijet mass",pad=35,  fontsize= "20")
+            fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
+            fig.legend(loc= (0.57,0.64))
+            plotname = f"Znunu_{key}_{subkey}_{type}.png"
+            fig.savefig(plotname, dpi=300)
+            fig.clear()
+            print(plotname , f" created at {os.getcwd()}")
 
+def plotall(Output):
+    type_list = Output["MET_Run2018"]["MET_Run2018A"]["Histograms"].keys()
+    for type in type_list :
+        plot(Output,type)
+    pass
 
 def combined_plot(Output):
 
@@ -152,9 +160,9 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         Data_hists = {}
         Zjets_hists = {}
         if key.startswith("MET_Run2018") :
-            Data_hists[key] = Output[key]["Histograms"]["DiJet"]
+            Data_hists[key] = Output[key]["Histograms"]["dijets_mass"]
         elif key.startswith("ZJets_NuNu") :
-            Zjets_hists = Output[key]["Histograms"]["DiJet"]
+            Zjets_hists = Output[key]["Histograms"]["dijets_mass"]
 
     #Apply cross sections
     if xsec :
@@ -239,7 +247,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     print(plotname , f" created at {os.getcwd()}")
 
 def accum(key):
-    list_files = os.listdir("temp")
+    list_files = os.listdir()
     valid_list = []
     for file in list_files :
         if file.startswith(f"Zjetsnunu_{key}_from") :
@@ -257,6 +265,6 @@ match inputs.fulldataset :
 master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu])
 util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
-plot(master_dict)
+plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
