@@ -413,7 +413,7 @@ class SignalSignature(processor.ProcessorABC):
         
 
         #Prepare the output
-        key_list = ["MET_Run2018","ZJets_NuNu"]
+        key_list = ["MET_Run2018","MonoHTobb_ZpBaryonic"]
         for key in key_list :
             if self.mode.startswith("MET_Run2018") :
                 self.key = key
