@@ -10,7 +10,7 @@
     
     },
     "MC": {
-        "MonoHbbZpBaryonic" : [
+        "MonoHTobb_ZpBaryonic" : [
             "root://cmsxrootd.fnal.gov///store/mc/RunIIAutumn18NanoAODv7/MonoHTobb_ZpBaryonic_TuneCP2_13TeV_madgraph-pythia8/NANOAODSIM/Nano02Apr2020_rp_102X_upgrade2018_realistic_v21-v1/00000/1171A356-937B-D346-B31E-D7397CD17A9E.root",
             "root://cmsxrootd.fnal.gov///store/mc/RunIIAutumn18NanoAODv7/MonoHTobb_ZpBaryonic_TuneCP2_13TeV_madgraph-pythia8/NANOAODSIM/Nano02Apr2020_rp_102X_upgrade2018_realistic_v21-v1/00000/B92C3E7A-425A-2A40-812C-F733C1287C79.root",
             "root://cmsxrootd.fnal.gov///store/mc/RunIIAutumn18NanoAODv7/MonoHTobb_ZpBaryonic_TuneCP2_13TeV_madgraph-pythia8/NANOAODSIM/Nano02Apr2020_rp_102X_upgrade2018_realistic_v21-v1/00000/D53C3745-8D33-D34A-8FA2-2B42E1AB5FB4.root",
