@@ -91,10 +91,10 @@ def plot(Output, type = "dijets_mass"):
         print(plotname , f" created at {os.getcwd()}")
 
 def plotall(Output):
-    type_list = Output["MET_Run2018"]["MET_Run2018A"]["Histograms"].keys()
+    type_list = Output["MonoHTobb_ZpBaryonic"]["MonoHTobb_ZpBaryonic"]["Histograms"].keys()
     for type in type_list :
         plot(Output,type)
-    pass
+    
 
 def combined_plot(Output):
 
@@ -160,75 +160,76 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     
     #Access keys and make histogram dictionaries
     Data_hists = {}
-    Zjets_hists = {}
+    MonoHTobb_ZpBaryonic_hists = {}
     for key in Output.keys() :
         #Dijet Histogram
         if key.startswith("MET_Run2018") :
             for subkey in Output[key].keys():
                 Data_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
                 #print(Data_hists[subkey])
-        elif key.startswith("ZJets_NuNu") :
+        elif key.startswith("MonoHTobb_ZpBaryonic") :
             for subkey in Output[key].keys():
-                Zjets_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                MonoHTobb_ZpBaryonic_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
 
-
+    Data_hist = Data_hists["MET_Run2018A"]
+    MonoHTobb_ZpBaryonic_hist = MonoHTobb_ZpBaryonic_hists["MonoHTobb_ZpBaryonic"]
     #print("data hists: " , Data_hists["MET_Run2018A"])
-    #print("Zjets hists", Zjets_hists)
+    #print("MonoHTobb_ZpBaryonic hists", MonoHTobb_ZpBaryonic_hists)
     #Apply cross sections
-    if xsec :
-        match inputs.fulldataset :
-            case 1 :
-                lumi = crossSections.lumis[2018]
-            case 0 :
-                with open("lumi_lookup.json") as f :
-                    lumijson = json.load(f)
-                lumi = lumijson["Sum"]["Recorded"]
-        #print("Integrated Luminosity(pb): ", lumi)
-        xsec = {
-            "Z1Jets_NuNu_ZpT_50To150_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_50To150_18"],
-            "Z1Jets_NuNu_ZpT_150To250_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"],
-            "Z1Jets_NuNu_ZpT_250To400_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_250To400_18"],
-            "Z1Jets_NuNu_ZpT_400Toinf_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_400Toinf_18"],
-            "Z2Jets_NuNu_ZpT_50To150_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_50To150_18"],
-            "Z2Jets_NuNu_ZpT_150To250_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"],
-            "Z2Jets_NuNu_ZpT_250To400_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"],
-            "Z2Jets_NuNu_ZpT_400Toinf_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
-        }
-        #print("Zjets_NuNu cross sections :", xsec)
-        N_i = {}
-        weight_factor = {}
-        for subkey in xsec.keys() :
-            N_i[subkey] = Output["ZJets_NuNu"][subkey]["Cutflow"]["Total events"]
-            weight_factor[subkey] = ( lumi * xsec[subkey] )/N_i[subkey]
-        #print("N_i: ", N_i)
-        #print("weight_factor: ", weight_factor)
+    # if xsec :
+    #     match inputs.fulldataset :
+    #         case 1 :
+    #             lumi = crossSections.lumis[2018]
+    #         case 0 :
+    #             with open("lumi_lookup.json") as f :
+    #                 lumijson = json.load(f)
+    #             lumi = lumijson["Sum"]["Recorded"]
+    #     #print("Integrated Luminosity(pb): ", lumi)
+    #     xsec = {
+    #         "Z1Jets_NuNu_ZpT_50To150_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_50To150_18"],
+    #         "Z1Jets_NuNu_ZpT_150To250_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_150To250_18"],
+    #         "Z1Jets_NuNu_ZpT_250To400_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_250To400_18"],
+    #         "Z1Jets_NuNu_ZpT_400Toinf_18": crossSections.crossSections["Z1Jets_NuNu_ZpT_400Toinf_18"],
+    #         "Z2Jets_NuNu_ZpT_50To150_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_50To150_18"],
+    #         "Z2Jets_NuNu_ZpT_150To250_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_150To250_18"],
+    #         "Z2Jets_NuNu_ZpT_250To400_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_250To400_18"],
+    #         "Z2Jets_NuNu_ZpT_400Toinf_18": crossSections.crossSections["Z2Jets_NuNu_ZpT_400Toinf_18"]
+    #     }
+    #     #print("Zjets_NuNu cross sections :", xsec)
+    #     N_i = {}
+    #     weight_factor = {}
+    #     for subkey in xsec.keys() :
+    #         N_i[subkey] = Output["ZJets_NuNu"][subkey]["Cutflow"]["Total events"]
+    #         weight_factor[subkey] = ( lumi * xsec[subkey] )/N_i[subkey]
+    #     #print("N_i: ", N_i)
+    #     #print("weight_factor: ", weight_factor)
 
-        #Simply add up the data histograms
-        Data_hists_list=[]
-        for key in Data_hists.keys() :
-            Data_hists_list.append(Data_hists[key])
+    #     #Simply add up the data histograms
+    #     Data_hists_list=[]
+    #     for key in Data_hists.keys() :
+    #         Data_hists_list.append(Data_hists[key])
 
-        Data_hist = Data_hists_list[0]
-        for histogram in Data_hists_list[1:] :
-            Data_hist += Data_hists[key]
+    #     Data_hist = Data_hists_list[0]
+    #     for histogram in Data_hists_list[1:] :
+    #         Data_hist += Data_hists[key]
 
-        #individually apply cross section and then add up the MC histograms by key
-        Zjets_hists_list = []
-        for key in Zjets_hists.keys() :
-            Zjets_hists[key] *= weight_factor[key]
-            Zjets_hists_list.append(Zjets_hists[key])
+    #     #individually apply cross section and then add up the MC histograms by key
+    #     Zjets_hists_list = []
+    #     for key in Zjets_hists.keys() :
+    #         Zjets_hists[key] *= weight_factor[key]
+    #         Zjets_hists_list.append(Zjets_hists[key])
 
 
-        Zjets_hist = Zjets_hists_list[0]
-        for histogram in Zjets_hists_list[1:] :
-            Zjets_hist += Zjets_hists[key]
+    #     Zjets_hist = Zjets_hists_list[0]
+    #     for histogram in Zjets_hists_list[1:] :
+    #         Zjets_hist += Zjets_hists[key]
 
 
 
     #normalize
     norm_factor= 1.0
     if norm :
-        norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
+        norm_factor= 1.0 / ( Data_hist.sum() + MonoHTobb_ZpBaryonic_hist.sum())
 
 
     fig, ax = plt.subplots()
@@ -244,11 +245,11 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         ax=ax
         )
     hep.histplot(
-        norm_factor*Zjets_hist,
+        norm_factor*MonoHTobb_ZpBaryonic,
         histtype="fill",
         color="#525FE1",
         #marker=[],
-        label="ZJets_NuNu",
+        label="MonoHTobb_ZpBaryonic",
         edgecolor="black",
         lw=1,
         ax=ax
@@ -264,7 +265,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
     fig.legend(loc= (0.70,.91))
     #fig.legend(loc=1)
-    plotname = f"ZnunuCombined.png"
+    plotname = f"Combined.png"
     fig.savefig(plotname, dpi=300)
     fig.clear()
     print(plotname , f" created at {os.getcwd()}")
@@ -276,6 +277,7 @@ def accum(key):
         if file.startswith(f"Zjetsnunu_{key}_from") :
             valid_list.append(file)
     full = processor.accumulate([util.load(name) for name in valid_list])
+    print(full)
     return full
 
 match inputs.fulldataset :
@@ -290,4 +292,4 @@ util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
 plotall(master_dict)
 #combined_plot(master_dict)
-combined_plot_manual(master_dict,norm=False, xsec=True)
+combined_plot_manual(master_dict,norm=False, xsec=False)
