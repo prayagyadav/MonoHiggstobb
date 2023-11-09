@@ -140,7 +140,7 @@ class SignalSignature(processor.ProcessorABC):
         #MET
         met_pt_min = 0
         met_pt_max = 1000
-        met_pt_nbins = 50
+        met_pt_nbins = 25
         met_pt_hist = (
             hist.
             Hist.
@@ -150,7 +150,7 @@ class SignalSignature(processor.ProcessorABC):
         )
         met_phi_min = -3.14
         met_phi_max = 3.14
-        met_phi_nbins = 30
+        met_phi_nbins = 15
         met_phi_hist = (
             hist.
             Hist.
@@ -161,7 +161,7 @@ class SignalSignature(processor.ProcessorABC):
         #Leading ak4bjets
         leadingjets_pt_min = 0
         leadingjets_pt_max = 500
-        leadingjets_pt_nbins = 25
+        leadingjets_pt_nbins = 20
         leadingjets_pt_hist = (
             hist.
             Hist.
@@ -171,7 +171,7 @@ class SignalSignature(processor.ProcessorABC):
         )
         leadingjets_eta_min = -3.0
         leadingjets_eta_max = 3.0
-        leadingjets_eta_nbins = 30
+        leadingjets_eta_nbins = 15
         leadingjets_eta_hist = (
             hist.
             Hist.
@@ -181,7 +181,7 @@ class SignalSignature(processor.ProcessorABC):
         )
         leadingjets_phi_min = -3.14
         leadingjets_phi_max = 3.14
-        leadingjets_phi_nbins = 30
+        leadingjets_phi_nbins = 15
         leadingjets_phi_hist = (
             hist.
             Hist.
@@ -191,7 +191,7 @@ class SignalSignature(processor.ProcessorABC):
         )
         leadingjets_mass_min = 0
         leadingjets_mass_max = 500
-        leadingjets_mass_nbins = 25
+        leadingjets_mass_nbins = 20
         leadingjets_mass_hist = (
             hist.
             Hist.
@@ -202,7 +202,7 @@ class SignalSignature(processor.ProcessorABC):
         #Subleading ak4 bjets
         subleadingjets_pt_min = 0
         subleadingjets_pt_max = 500
-        subleadingjets_pt_nbins = 25
+        subleadingjets_pt_nbins = 20
         subleadingjets_pt_hist = (
             hist.
             Hist.
@@ -212,7 +212,7 @@ class SignalSignature(processor.ProcessorABC):
         )
         subleadingjets_eta_min = -3.0
         subleadingjets_eta_max = 3.0
-        subleadingjets_eta_nbins = 30
+        subleadingjets_eta_nbins = 15
         subleadingjets_eta_hist = (
             hist.
             Hist.
@@ -222,7 +222,7 @@ class SignalSignature(processor.ProcessorABC):
         )
         subleadingjets_phi_min = -3.14
         subleadingjets_phi_max = 3.14
-        subleadingjets_phi_nbins = 30
+        subleadingjets_phi_nbins = 15
         subleadingjets_phi_hist = (
             hist.
             Hist.
@@ -232,7 +232,7 @@ class SignalSignature(processor.ProcessorABC):
         )
         subleadingjets_mass_min = 0
         subleadingjets_mass_max = 500
-        subleadingjets_mass_nbins = 25
+        subleadingjets_mass_nbins = 20
         subleadingjets_mass_hist = (
             hist.
             Hist.
@@ -243,7 +243,7 @@ class SignalSignature(processor.ProcessorABC):
         #ak4bjet-ak4bjet dijets 
         dijets_pt_min = 0
         dijets_pt_max = 500
-        dijets_pt_nbins = 25
+        dijets_pt_nbins = 20
         dijets_pt_hist = (
             hist.
             Hist.
@@ -253,7 +253,7 @@ class SignalSignature(processor.ProcessorABC):
             )
         dijets_eta_min = -3.0
         dijets_eta_max = 3.0
-        dijets_eta_nbins = 30
+        dijets_eta_nbins = 15
         dijets_eta_hist = (
             hist.
             Hist.
@@ -263,7 +263,7 @@ class SignalSignature(processor.ProcessorABC):
             )
         dijets_phi_min = -3.14
         dijets_phi_max = 3.14
-        dijets_phi_nbins = 30
+        dijets_phi_nbins = 15
         dijets_phi_hist = (
             hist.
             Hist.
@@ -273,7 +273,7 @@ class SignalSignature(processor.ProcessorABC):
             )
         dijets_mass_min = 100
         dijets_mass_max = 150
-        dijets_mass_nbins = 25
+        dijets_mass_nbins = 20
         dijets_mass_hist = (
             hist.
             Hist.
@@ -424,7 +424,7 @@ class SignalSignature(processor.ProcessorABC):
                 self.key = key
 
         output = {
-            self.key : {
+            self.mode : {
                 self.mode : {
                     "Cutflow": cutflow ,
                     "Histograms": {

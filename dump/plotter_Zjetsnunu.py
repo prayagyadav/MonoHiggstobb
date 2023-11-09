@@ -62,9 +62,9 @@ def get_plotting_essentials(Output, histogram_key, Sorted=True, Reverse=True) :
 def plot(Output, type = "dijets_mass"):
 
     #Dijet mass plot
-    for key in Output.keys() : #keys are MET_Run2018 , ZJets_NuNu etc
+    for key in Output.keys() : #keys are MonoHTobb_ZpBaryonic , MonoHTobb_ZpBaryonic etc
         hlist = []
-        for subkey in Output[key].keys() : #subkeys are MET_Run2018A ,MET_Run2018B ...etc
+        for subkey in Output[key].keys() : #subkeys are MET_Run2018A ,MonoHTobb_ZpBaryonic ...etc
             hlist.append(Output[key][subkey]["Histograms"][type])
         h = hlist[0]
         for histo in hlist[1:] :
@@ -79,13 +79,13 @@ def plot(Output, type = "dijets_mass"):
             lw=1,
             ax=ax
         )
-        hep.cms.label("Preliminary", data= key.startswith("MET"))
+        hep.cms.label("Preliminary", data= subkey.startswith("MET"))
         ax.set_ylabel("Events")
         ax.set_xlabel("Mass (GeV)")
-        ax.set_title(f"{key} : {type}",pad=35,  fontsize= "20")
+        ax.set_title(f"{subkey} : {type}",pad=35,  fontsize= "20")
         fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
         fig.legend(loc= (0.57,0.64))
-        plotname = f"Znunu_{key}_{type}.png"
+        plotname = f"Znunu_{subkey}_{type}.png"
         fig.savefig(plotname, dpi=300)
         fig.clear()
         print(plotname , f" created at {os.getcwd()}")
