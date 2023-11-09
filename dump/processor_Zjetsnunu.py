@@ -340,7 +340,7 @@ class SignalSignature(processor.ProcessorABC):
         cutflow["no muons"] = len(events)
         events = events[ak.num( loose_photons(events) ) == 0] # no photons
         cutflow["no photons"] = len(events)
-        events = events[ak.num( taus(events) ) == 0]
+        events = events[ak.num( taus(events, version=7) ) == 0]
         cutflow["no taus"] = len(events)
 
         # Least number of jets and additional Jets
