@@ -85,6 +85,139 @@ def loose_photons(events):
     Id = events.Photon.cutBased >= 1 #__doc = 0: fail  1: loose    2: medium   3: tight
     return events.Photon[Pt & Eta & Id]
 
+def lumi(events,cutflow):
+    #Selecting use-able events
+    path = "../monoHbbtools/Load/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
+    lumimask = LumiMask(path)
+    events = events[lumimask(events.run, events.luminosityBlock)]
+    cutflow["lumimask"] = len(events)
+    return events , cutflow
+
+def met_trigger(events,cutflow):
+    #MET Triggers
+    trigger = PackedSelection()
+    trigger.add(
+        "noMuon",
+        events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 |
+        events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight |
+        events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight
+        )
+    trigger_cut = trigger.all("noMuon")
+    events = events[trigger_cut]
+    cutflow["MET trigger"] = len(events)
+    return events , cutflow
+
+def met_filter(events,cutflow):
+    #MET Filters
+    flags = PackedSelection()
+    flags.add("goodVertices", events.Flag.goodVertices)
+    flags.add("tightHalo", events.Flag.globalTightHalo2016Filter)
+    flags.add("hbheNoise", events.Flag.HBHENoiseFilter)
+    flags.add("hbheNoiseIso", events.Flag.HBHENoiseIsoFilter)
+    flags.add("eebadSC", events.Flag.eeBadScFilter)
+    flags.add("EcalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
+    flags.add("badPFmuon", events.Flag.BadPFMuonFilter )
+    flags.add("Ecalbadcalib",events.Flag.ecalBadCalibFilter )
+    flagcut = flags.all(
+        "goodVertices",
+        "tightHalo",
+        "hbheNoise",
+        "hbheNoiseIso",
+        "eebadSC",
+        "EcalDeadcell",
+        "badPFmuon",
+        "Ecalbadcalib"
+        )
+    events = events[flagcut]
+    cutflow["MET filters"] = len(events)
+    return events , cutflow
+
+def met_selection(events,cutflow):
+    #MET Selection
+    events = events[events.MET.pt > 200 ] #200 for resolved category and 250GeV for boosted category
+    cutflow["MET > 200 GeV"] = len(events)
+    return events , cutflow
+
+def no_electrons(events,cutflow):
+    #no electron veto
+    events = events[ak.num( loose_electrons(events) ) == 0] # no electrons
+    cutflow["no electrons"] = len(events)
+    return events , cutflow
+
+def no_muons(events,cutflow):
+    events = events[ak.num( loose_muons(events) ) == 0] # no muons
+    cutflow["no muons"] = len(events)
+    return events , cutflow
+
+def no_photons(events,cutflow):
+    events = events[ak.num( loose_photons(events) ) == 0] # no photons
+    cutflow["no photons"] = len(events)
+    return events,cutflow
+
+def no_taus(events,cutflow, version=9):
+    events = events[ak.num( taus(events, version=version) ) == 0]
+    cutflow["no taus"] = len(events)
+    return events , cutflow
+
+def anti_QCD(events,cutflow):
+    delta_phi = events.Jet.delta_phi(events.MET)
+    events.Jet = events.Jet[abs(delta_phi) > 0.4]
+    events = events[ak.num(events.Jet) > 0]
+    cutflow["deltaphi(jets, MET) > 0.4"] = len(events)
+    return events , cutflow
+
+def jet_pt(events,cutflow):
+    pt_cut = ak.all(events.Jet.pt > 30.0 , axis = 1)
+    events = events[pt_cut]
+    cutflow["jet pt > 30"] = len(events)
+    return events , cutflow
+
+def jet_eta(events,cutflow):
+    eta_cut = ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1)
+    events = events[eta_cut]
+    cutflow["jet abs(eta) < 2.5"] = len(events)
+    return events,cutflow
+
+def get_bjets(events):
+    #2018
+    btag_WP_medium = 0.3040 # Medium Working Point for 2018
+    btag_WP_tight = 0.7476 # Tight Working Point for 2018
+    tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP_tight 
+    return events.Jet[tight_bjets_selection]
+
+def at_least_two_bjets(events,cutflow):
+    bjets = get_bjets(events)
+    events = events[ak.num(bjets) >= 2] #at least 2 bjets
+    cutflow["At least two bjets"] = len(events)
+    return events,cutflow
+
+def leading_jet_pt(events,cutflow):
+    ljets_cut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
+    events = events[ljets_cut]
+    cutflow["bjet1 pt > 50 GeV "] = len(events)
+    return events,cutflow
+
+def subleading_jet_pt(events,cutflow):
+    sjets_cut = events.Jet[:,1].pt > 30.0 #Subleading Jet pt cut 
+    events = events[sjets_cut] 
+    cutflow["bjet2 pt > 30 GeV"] = len(events)
+    return events,cutflow
+
+def additional_jets(events, cutflow):
+    events = events[ak.num(events.Jet) <= 4] #Number of additional jets is 0, 1 or 2
+    cutflow["Additional Jets <= 2"] = len(events)
+    return events,cutflow
+
+def dijet_mass(dijets,cutflow):
+    dijets = dijets[( dijets.mass > 100.0 ) & ( dijets.mass < 150.0 ) ] #Dijet mass window cut
+    cutflow["dijet mass between 100 Gev to 150 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
+    return dijets, cutflow
+
+def dijet_pt(dijets, cutflow):
+    dijets = dijets[dijets.pt > 100.0 ] #Dijet pt cut
+    cutflow["dijet pt > 100 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
+    return dijets, cutflow
+
 #Begin the processor definition
 class SignalSignature(processor.ProcessorABC):
     """
@@ -284,115 +417,66 @@ class SignalSignature(processor.ProcessorABC):
 
         if (self.mode).startswith("MET") :
 
-            #Selecting use-able events
-            path = "../monoHbbtools/Load/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
-            lumimask = LumiMask(path)
-            events = events[lumimask(events.run, events.luminosityBlock)]
-            cutflow["lumimask"] = len(events)
+            #choosing certified good events
+            events, cutflow = lumi(events,cutflow)
 
             #Saving the event run
             for run in set(events.run):
                 self.run_set.add(run)
 
-            #MET Triggers
-            trigger = PackedSelection()
-            trigger.add(
-                "noMuon",
-                events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 |
-                events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight |
-                events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight
-                )
-            trigger_cut = trigger.all("noMuon")
-            events = events[trigger_cut]
-            cutflow["MET trigger"] = len(events)
+            #MET_Trigger
+            events, cutflow = met_trigger(events,cutflow)
 
-            #MET Filters
-            flags = PackedSelection()
-            flags.add("goodVertices", events.Flag.goodVertices)
-            flags.add("tightHalo", events.Flag.globalTightHalo2016Filter)
-            flags.add("hbheNoise", events.Flag.HBHENoiseFilter)
-            flags.add("hbheNoiseIso", events.Flag.HBHENoiseIsoFilter)
-            flags.add("eebadSC", events.Flag.eeBadScFilter)
-            flags.add("EcalDeadcell", events.Flag.EcalDeadCellTriggerPrimitiveFilter)
-            flags.add("badPFmuon", events.Flag.BadPFMuonFilter )
-            flags.add("Ecalbadcalib",events.Flag.ecalBadCalibFilter )
-            flagcut = flags.all(
-                "goodVertices",
-                "tightHalo",
-                "hbheNoise",
-                "hbheNoiseIso",
-                "eebadSC",
-                "EcalDeadcell",
-                "badPFmuon",
-                "Ecalbadcalib"
-                )
-            events = events[flagcut]
-            cutflow["MET filters"] = len(events)
+            #MET_Filters
+            events, cutflow = met_filter(events,cutflow)
+            
 
-        #MET Selection
-        events = events[events.MET.pt > 200 ] #200 for resolved category and 250GeV for boosted category
-        cutflow["MET > 200 GeV"] = len(events)
+        #MET_selection
+        events, cutflow = met_selection(events,cutflow)
         
         #vetoes
-        events = events[ak.num( loose_electrons(events) ) == 0] # no electrons
-        cutflow["no electrons"] = len(events)
-        events = events[ak.num( loose_muons(events) ) == 0] # no muons
-        cutflow["no muons"] = len(events)
-        events = events[ak.num( loose_photons(events) ) == 0] # no photons
-        cutflow["no photons"] = len(events)
+        events, cutflow = no_electrons(events,cutflow)
+        events, cutflow = no_muons(events,cutflow)
+        events, cutflow = no_photons(events,cutflow)
         if (self.mode).startswith("MonoHTobb_ZpBaryonic"):
-            events = events[ak.num( taus(events, version=7) ) == 0]
+            events, cutflow = no_taus(events,cutflow, version=7)
         else :
-            events = events[ak.num( taus(events, version=9) ) == 0]
-        cutflow["no taus"] = len(events)
-
-        # Least number of jets and additional Jets
-        # events = events[ (ak.num(events.Jet) >= 2) & (ak.num(events.Jet) <=4 )] # 4 meaning 2 to construct dijet and 2 are the maximum number of additional jets
-        # cutflow["maximum two additional jets"] = len(events)
+            events, cutflow = no_taus(events,cutflow, version=9)
 
         #Object selections
         #ak4Jets
 
         #Apply pt and eta cut
-        pt_cut = ak.all(events.Jet.pt > 30.0 , axis = 1)
-        events = events[pt_cut]
-        cutflow["jet pt > 30"] = len(events)
-        eta_cut = ak.all(abs( events.Jet.eta ) < 2.5 , axis = 1)
-        events = events[eta_cut]
-        cutflow["jet abs(eta) < 2.5"] = len(events)
-        
-        jets = events.Jet
+        events, cutflow = jet_pt(events,cutflow)
+        events, cutflow = jet_eta(events,cutflow)
 
         #Anti-QCD DeltaPhi selection
-        delta_phi = events.Jet.delta_phi(events.MET)
-        events.Jet = events.Jet[abs(delta_phi) > 0.4]
-        events = events[ak.num(events.Jet) > 0]
-        cutflow["deltaphi(jets, MET) > 0.4"] = len(events)
+        events, cutflow = anti_QCD(events,cutflow)
 
         #Apply the btag 
-        #2018
-        btag_WP_medium = 0.3040 # Medium Working Point for 2018
-        btag_WP_tight = 0.7476 # Tight Working Point for 2018
-        tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP_tight 
-        events.Jet = events.Jet[tight_bjets_selection]
-        events = events[ak.num(events.Jet) >= 2] #at least 2 bjets
-        cutflow["At least two bjets"] = len(events)
+        bjets = get_bjets(events)
+        
+        #At least two bjets
+        events, cutflow = at_least_two_bjets(events,cutflow)
 
         #Create Dijets
-        ljets_cut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
-        sjets_cut = events.Jet[:,1].pt > 30.0 #Subleading Jet pt cut (Redundant)
-        events.Jet = events.Jet[ljets_cut & sjets_cut] 
-        cutflow["bjet1 pt > 50 GeV and bjet2 pt > 30"] = len(events.Jet)
+        #leading bjet pt
+        events, cutflow = leading_jet_pt(events,cutflow)
+        #subleading bjet pt
+        events, cutflow = subleading_jet_pt(events,cutflow)
 
-        events = events[ak.num(events.Jet) <= 4] #Number of additional jets is 0, 1 or 2
-        cutflow["Additional Jets <= 2"] = len(events)
+        #At most 2 additional jets
+        events, cutflow = additional_jets(events, cutflow)
+
         leading_jets = events.Jet[:,0]
         subleadingjets = events.Jet[:,1]
         dijets = events.Jet[:,0] + events.Jet[:,1] #Leading jet + Subleading jet
-        dijets = dijets[( dijets.mass > 100.0 ) & ( dijets.mass < 150.0 ) ] #Dijet mass window cut
-        cutflow["dijet mass between 100 Gev to 150 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
-        dijets = dijets[dijets.pt > 100.0 ] #Dijet pt cut
-        cutflow["dijet pt > 100 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
+
+        #Dijet mass window
+        dijets , cutflow = dijet_mass(dijets,cutflow)
+
+        #Dijet pt
+        dijets, cutflow = dijet_pt(dijets,cutflow)
 
         #Fill the histogram
         #MET
