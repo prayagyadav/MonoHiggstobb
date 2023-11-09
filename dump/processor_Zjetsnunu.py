@@ -404,8 +404,8 @@ class SignalSignature(processor.ProcessorABC):
             Reg(dijets_phi_nbins,dijets_phi_min,dijets_phi_max).
             Double()
             )
-        dijets_mass_min = 100
-        dijets_mass_max = 150
+        dijets_mass_min = 0
+        dijets_mass_max = 500
         dijets_mass_nbins = 20
         dijets_mass_hist = (
             hist.
