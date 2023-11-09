@@ -417,7 +417,7 @@ class SignalSignature(processor.ProcessorABC):
         for key in key_list :
             if self.mode.startswith("MET_Run2018") :
                 self.key = key
-            if "Jets_NuNu" in self.mode :
+            if self.mode.startswith("MonoHTobb_ZpBaryonic") :
                 self.key = key
 
         output = {
