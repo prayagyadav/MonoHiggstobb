@@ -82,9 +82,10 @@ def plot(Output, type = "dijets_mass"):
         hep.cms.label("Preliminary", data= subkey.startswith("MET"))
         ax.set_ylabel("Events")
         ax.set_xlabel("Mass (GeV)")
-        ax.set_title(f"{subkey} : {type}",pad=35,  fontsize= "20")
+        ax.set_title(f"{subkey} : {type}",pad=70,  fontsize= "20")
         fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
-        fig.legend(loc= (0.57,0.64))
+        #fig.legend(loc= (0.57,0.64))
+        fig.legend(loc= (0.70,.91))
         plotname = f"Znunu_{subkey}_{type}.png"
         fig.savefig(plotname, dpi=300)
         fig.clear()
@@ -124,7 +125,8 @@ def combined_plot(Output):
     ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
-    fig.legend(loc= (0.57,0.64))
+    #fig.legend(loc= (0.57,0.64))
+    fig.legend(loc= (0.70,.91))
     plotname = f"ZnunuCombined.png"
     fig.savefig(plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
