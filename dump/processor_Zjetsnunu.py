@@ -435,13 +435,13 @@ class SignalSignature(processor.ProcessorABC):
         events, cutflow = met_selection(events,cutflow)
         
         #vetoes
-        events, cutflow = no_electrons(events,cutflow)
-        events, cutflow = no_muons(events,cutflow)
-        events, cutflow = no_photons(events,cutflow)
-        if (self.mode).startswith("MonoHTobb_ZpBaryonic"):
-            events, cutflow = no_taus(events,cutflow, version=7)
-        else :
-            events, cutflow = no_taus(events,cutflow, version=9)
+        # events, cutflow = no_electrons(events,cutflow)
+        # events, cutflow = no_muons(events,cutflow)
+        # events, cutflow = no_photons(events,cutflow)
+        # if (self.mode).startswith("MonoHTobb_ZpBaryonic"):
+        #     events, cutflow = no_taus(events,cutflow, version=7)
+        # else :
+        #     events, cutflow = no_taus(events,cutflow, version=9)
 
         #Object selections
         #ak4Jets
@@ -451,7 +451,7 @@ class SignalSignature(processor.ProcessorABC):
         events, cutflow = jet_eta(events,cutflow)
 
         #Anti-QCD DeltaPhi selection
-        events, cutflow = anti_QCD(events,cutflow)
+        # events, cutflow = anti_QCD(events,cutflow)
 
         #Apply the btag 
         bjets = get_bjets(events)
@@ -461,22 +461,22 @@ class SignalSignature(processor.ProcessorABC):
 
         #Create Dijets
         #leading bjet pt
-        events, cutflow = leading_jet_pt(events,cutflow)
-        #subleading bjet pt
-        events, cutflow = subleading_jet_pt(events,cutflow)
+        # events, cutflow = leading_jet_pt(events,cutflow)
+        # #subleading bjet pt
+        # events, cutflow = subleading_jet_pt(events,cutflow)
 
         #At most 2 additional jets
-        events, cutflow = additional_jets(events, cutflow)
+        # events, cutflow = additional_jets(events, cutflow)
 
         leading_jets = events.Jet[:,0]
         subleadingjets = events.Jet[:,1]
         dijets = events.Jet[:,0] + events.Jet[:,1] #Leading jet + Subleading jet
 
         #Dijet mass window
-        dijets , cutflow = dijet_mass(dijets,cutflow)
+        # dijets , cutflow = dijet_mass(dijets,cutflow)
 
         #Dijet pt
-        dijets, cutflow = dijet_pt(dijets,cutflow)
+        # dijets, cutflow = dijet_pt(dijets,cutflow)
 
         #Fill the histogram
         #MET
