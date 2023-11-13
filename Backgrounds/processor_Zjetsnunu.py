@@ -311,6 +311,13 @@ class SignalSignature(processor.ProcessorABC):
             if "Jets_NuNu" in self.mode :
                 self.key = key
 
+        mode = self.mode
+        if mode.startswith("MET_Run2018"):
+            key = "MET_Run2018"
+        elif "Jets_NuNu" in mode :
+            key = "ZJets_NuNu"
+        
+
         output = {
             self.key : {
                 self.mode : {
