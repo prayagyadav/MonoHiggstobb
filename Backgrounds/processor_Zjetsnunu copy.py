@@ -414,11 +414,13 @@ class SignalSignature(processor.ProcessorABC):
 
         #Prepare the output
         key_list = ["MET_Run2018","ZJets_NuNu"]
-        for key in key_list :
-            if self.mode.startswith("MET_Run2018") :
-                self.key = key
-            if "Jets_NuNu" in self.mode :
-                self.key = key
+        if self.mode.startswith("MET_Run2018") :
+            self.key = key_list[0]
+        elif "Jets_NuNu" in self.mode :
+            self.key = key_list[1]
+        else :
+            print("Unidentified dataset ", self.mode)
+            raise KeyError
 
         output = {
             self.key : {
