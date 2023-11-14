@@ -88,7 +88,7 @@ with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
                         flag = False
                 if flag :
                     print("processing-->",chunk)
-                    command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 2000000 -w 8 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk)-1)
+                    command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 500000 -w 8 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk)-1)
                     subprocess.run(command, shell=True ,executable="/bin/bash")
                     newlogfile.write(str(chunk)+"\n")
                     print("waiting...")
