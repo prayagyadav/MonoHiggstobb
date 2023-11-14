@@ -281,7 +281,9 @@ def accum(key):
 match inputs.fulldataset :
     case 1 :
         MET_Run2018 = accum("MET_Run2018")
+        showinfo(MET_Run2018)
         ZJets_NuNu = accum("ZJets_NuNu")
+        showinfo(ZJets_NuNu)
     case 0 :
         MET_Run2018 = util.load("Zjetsnunu_MET_Run2018.coffea")
         ZJets_NuNu = util.load("Zjetsnunu_ZJets_NuNu.coffea")
