@@ -13,6 +13,7 @@ This script studies the Z--> \nu + \nu + jets background .
 import argparse
 import awkward as ak 
 from coffea import util, processor
+import hist
 import json
 import matplotlib.pyplot as plt
 import mplhep as hep
@@ -269,6 +270,67 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     fig.clear()
     print(plotname , f" created at {os.getcwd()}")
 
+def combinecutflow(parent):
+    out = {}
+    for key in parent:
+        out[key] = {}
+        for subkey in parent[key]:
+            for subsubkey in parent[key][subkey]["Cutflow"]:
+                out[key][subsubkey] = 0
+    for key in parent:
+        for subkey in parent[key]:
+            for subsubkey in parent[key][subkey]["Cutflow"]:
+                out[key][subsubkey] += parent[key][subkey]["Cutflow"][subsubkey]
+    #print(out)
+    return out
+
+def plotcutflow(parent):
+    combined = combinecutflow(parent)
+    for key in combined.keys() :
+        nbins = len(combined[key].keys())
+
+        histogram = hist.Hist.new.Reg(nbins,1,nbins+1).Double()
+
+        weights = []
+        n = 1 
+        for item in combined[key].keys():
+            weights.append(combined[key][item])
+            print(n, " : ", item , " : ", combined[key][item])
+            n += 1
+        #print(f"{key} : ", weights)
+
+        for i in range(nbins):
+            histogram.fill(i+1, weight=weights[i])
+        #print(histogram)
+
+        fig, ax = plt.subplots()
+        hep.histplot(
+            histogram,
+            histtype='fill',
+            color="#192655",
+            #marker=[],
+            label=key,
+            lw=1,
+            ax=ax
+            )
+
+        hep.cms.label("Preliminary", data= key.startswith("MET_Run"))
+        ax.set_ylabel("Events")
+        ax.set_xlabel("Cutflow order")
+        plt.xlim([1,nbins+1])
+        plt.xticks(np.arange(1,nbins+1,1))
+        ax.set_title(f"{key} cutflow",pad=35,  fontsize= "20", color="#192655")
+        fig.legend(loc= (0.57,0.64))
+        #plt.yscale("log")
+        fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
+        fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
+        #fig.legend(loc= (0.70,.91))
+        #fig.legend(loc=1)
+        plotname = f"Znunu_{key}_cutflow.png"
+        fig.savefig(plotname, dpi=300)
+        fig.clear()
+        print(plotname , f" created at {os.getcwd()}")
+
 def accum(key):
     list_files = os.listdir()
     valid_list = []
@@ -281,15 +343,16 @@ def accum(key):
 match inputs.fulldataset :
     case 1 :
         MET_Run2018 = accum("MET_Run2018")
-        showinfo(MET_Run2018)
+        #showinfo(MET_Run2018)
         ZJets_NuNu = accum("ZJets_NuNu")
-        showinfo(ZJets_NuNu)
+        #showinfo(ZJets_NuNu)
     case 0 :
         MET_Run2018 = util.load("Zjetsnunu_MET_Run2018.coffea")
         ZJets_NuNu = util.load("Zjetsnunu_ZJets_NuNu.coffea")
 master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu])
 util.save(master_dict, "BackgroundDijets.coffea")
-showinfo(master_dict)
-plotall(master_dict)
+#showinfo(master_dict)
+#plotall(master_dict)
 #combined_plot(master_dict)
-combined_plot_manual(master_dict,norm=False, xsec=True)
+#combined_plot_manual(master_dict,norm=False, xsec=True)
+plotcutflow(master_dict)
