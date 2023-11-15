@@ -1,6 +1,6 @@
 """ 
 ~~~~~~~~~~~~~~~~~~~~~~~PROCESSOR SCRIPT~~~~~~~~~~~~~~~~~~~~
-This script studies the Z--> \nu + \nu + jets background .
+This script studies the background .
 
 /Author/: Prayag Yadav
 /Created/: 11 Oct 2023
@@ -304,11 +304,35 @@ class SignalSignature(processor.ProcessorABC):
         
 
         #Prepare the output
-        key_list = ["MET_Run2018","ZJets_NuNu"]
+        key_list = [
+        "MET_Run2018",
+        "ZJets_NuNu",
+        "TTToSemiLeptonic",
+        "TTTo2L2Nu",
+        "WJets_LNu",
+        "DYJets_LL",
+        "VV",
+        "QCD",
+        "ST"
+        ]
         if self.mode.startswith("MET_Run2018") :
             self.key = key_list[0]
         elif "Jets_NuNu" in self.mode :
             self.key = key_list[1]
+        elif self.mode.startswith("TTToSemiLeptonic"):
+            self.key = key_list[2]
+        elif self.mode.startswith("TTTo2L2Nu"):
+            self.key = key_list[3]
+        elif self.mode.startswith("WJets_LNu"):
+            self.key = key_list[4]
+        elif self.mode.startswith("DYJets_LL"):
+            self.key = key_list[5]
+        elif self.mode.startswith("VV"):
+            self.key = key_list[6]
+        elif self.mode.startswith("QCD"):
+            self.key = key_list[7]
+        elif self.mode.startswith("ST"):
+            self.key = key_list[8]
         else :
             print("Unidentified dataset ", self.mode)
             raise KeyError

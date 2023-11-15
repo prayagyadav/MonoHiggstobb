@@ -1,6 +1,6 @@
 """ 
 ~~~~~~~~~~~~~~~~~~~~~~RUNNER SCRIPT~~~~~~~~~~~~~~~~~~~~~~~~
-This script studies the Z--> \nu + \nu + jets background .
+This script studies the background .
 
 /Author/: Prayag Yadav
 /Created/: 11 Oct 2023
@@ -19,7 +19,7 @@ import logging
 from monoHbbtools import Load
 from monoHbbtools.Utilities import condor
 import numpy as np
-from processor_Zjetsnunu import SignalSignature
+from processor_SR_Resolved_Backgrounds import SignalSignature
 import json
 
 ##############################
@@ -38,7 +38,17 @@ parser.add_argument(
 parser.add_argument(
     "-k",
     "--keymap",
-    choices=["MET_Run2018","ZJets_NuNu"],
+    choices=[
+        "MET_Run2018",
+        "ZJets_NuNu",
+        "TTToSemiLeptonic",
+        "TTTo2L2Nu",
+        "WJets_LNu",
+        "DYJets_LL",
+        "VV",
+        "QCD",
+        "ST"
+        ],
     help="Enter which dataset to run: example MET_Run2018 , ZJets_Nu_Nu etc.",
     type=str
 )
@@ -91,7 +101,17 @@ def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode =
         fileset_dict = fileset.getraw()
     else :
         fileset_dict = dict
-    MCmaps = ["ZJets_NuNu"]
+    MCmaps = [
+        "MET_Run2018",
+        "ZJets_NuNu",
+        "TTToSemiLeptonic",
+        "TTTo2L2Nu",
+        "WJets_LNu",
+        "DYJets_LL",
+        "VV",
+        "QCD",
+        "ST"
+        ]
 
     
     runnerfileset = Load.buildFileset(fileset_dict[keymap],"fnal")
@@ -225,10 +245,10 @@ elif inputs.executor == "condor" :
 #################################
 
 try :
-    output_file = f"Zjetsnunu_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
+    output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
     pass
 except :
-    output_file = f"Zjetsnunu_{inputs.keymap}.coffea"
+    output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}.coffea"
 print("Saving the output to : " , output_file)
 util.save(output= Output, filename=output_file)
 print(f"File {output_file} saved.")

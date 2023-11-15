@@ -6,7 +6,17 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "-k",
     "--keymap",
-    choices=["MET_Run2018","ZJets_NuNu"],
+    choices=[
+        "MET_Run2018",
+        "ZJets_NuNu",
+        "TTToSemiLeptonic",
+        "TTTo2L2Nu",
+        "WJets_LNu",
+        "DYJets_LL",
+        "VV",
+        "QCD",
+        "ST"
+        ],
     help="Enter which dataset to run: example MET_Run2018 , ZJets_Nu_Nu etc.",
     type=str
 )
@@ -41,7 +51,16 @@ maxchunks = inputs.max_chunks
 with open("../monoHbbtools/Load/newfileset.json") as f:
         fileset_dict = json.load(f)
 
-MCmaps = ["ZJets_NuNu"]
+MCmaps = [
+        "ZJets_NuNu",
+        "TTToSemiLeptonic",
+        "TTTo2L2Nu",
+        "WJets_LNu",
+        "DYJets_LL",
+        "VV",
+        "QCD",
+        "ST"
+        ]
 
 runnerfileset = Load.buildFileset(fileset_dict[keymap],"fnal")
 
@@ -62,7 +81,7 @@ if inputs.skipchunks == 1:
     print("Current working directory : ", os.getcwd())
     files = os.listdir()
     for filename in files :
-        if filename.startswith(f"Zjetsnunu_{keymap}_from") :
+        if filename.startswith(f"SR_Resolved_Backgrounds_{keymap}_from") :
             temp = filename.split("_")
             from_number = temp[4]
             to_number = temp[6].strip(".coffea")
@@ -84,11 +103,11 @@ with open("log_futuresBatch_oldrun.txt","r+") as oldlogfile:
                 for index_tuple in skiplist :
                     b , e = index_tuple
                     if (fileindex == int(b)) & (fileindex+len(chunk)-1 == int(e)) :
-                        print("Skipped file: ", f"Zjetsnunu_{keymap}_from_{b}_to_{e}.coffea" )
+                        print("Skipped file: ", f"SR_Resolved_Backgrounds_{keymap}_from_{b}_to_{e}.coffea" )
                         flag = False
                 if flag :
                     print("processing-->",chunk)
-                    command = "python runner_Zjetsnunu.py -k "+keymap+" -e futures -c 500000 -w 8 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk)-1)
+                    command = "python runner_SR_Resolved_Backgrounds.py -k "+keymap+" -e futures -c 500000 -w 8 --begin "+str(fileindex)+" --end "+str(fileindex + len(chunk)-1)
                     subprocess.run(command, shell=True ,executable="/bin/bash")
                     newlogfile.write(str(chunk)+"\n")
                     print("waiting...")
