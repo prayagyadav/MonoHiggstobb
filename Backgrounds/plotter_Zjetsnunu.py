@@ -227,7 +227,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
 
 
     #normalize
-    norm_factor= 1.0
+    norm_factor = 1.0
     if norm :
         norm_factor= 1.0 / ( Data_hist.sum() + Zjets_hist.sum())
 
@@ -315,15 +315,15 @@ def plotcutflow(parent):
             )
 
         hep.cms.label("Preliminary", data= key.startswith("MET_Run"))
-        ax.set_ylabel("Events")
+        ax.set_ylabel("log(Events)")
         ax.set_xlabel("Cutflow order")
         plt.xlim([1,nbins+1])
         plt.xticks(np.arange(1,nbins+1,1))
         ax.set_title(f"{key} cutflow",pad=35,  fontsize= "20", color="#192655")
         fig.legend(loc= (0.57,0.64))
-        #plt.yscale("log")
+        plt.yscale("log")
         fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
-        fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
+        #fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
         #fig.legend(loc= (0.70,.91))
         #fig.legend(loc=1)
         plotname = f"Znunu_{key}_cutflow.png"
@@ -354,5 +354,5 @@ util.save(master_dict, "BackgroundDijets.coffea")
 #showinfo(master_dict)
 #plotall(master_dict)
 #combined_plot(master_dict)
-#combined_plot_manual(master_dict,norm=False, xsec=True)
+combined_plot_manual(master_dict,norm=False, xsec=True)
 plotcutflow(master_dict)
