@@ -1,0 +1,1 @@
+FATAL:   While checking container encryption: could not open image /cvmfs/unpacked.cern.ch/registry.hub.docker.com/ping: failed to retrieve path for /cvmfs/unpacked.cern.ch/registry.hub.docker.com/ping: lstat /cvmfs/unpacked.cern.ch/registry.hub.docker.com/ping: no such file or directory
