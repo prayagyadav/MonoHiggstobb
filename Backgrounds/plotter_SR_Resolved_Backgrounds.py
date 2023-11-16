@@ -152,26 +152,25 @@ def combined_plot_manual(Output,norm = False , xsec = False):
                 ZJets_NuNu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("TTToSemiLeptonic"):
             for subkey in Output[key].keys():
-                TTToSemiLeptonic_hists[key] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                TTToSemiLeptonic_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("TTTo2L2Nu"):
             for subkey in Output[key].keys():
-                TTTo2L2Nu_hists[key] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                TTTo2L2Nu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("WJets_LNu"):
             for subkey in Output[key].keys():
-                WJets_LNu_hists[key] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                WJets_LNu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("DYJets_LL"):
             for subkey in Output[key].keys():
-                DYJets_LL_hists[key] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                DYJets_LL_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("VV"):
             for subkey in Output[key].keys():
-                VV_hists[key] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                VV_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("QCD"):
             for subkey in Output[key].keys():
-                QCD_hists[key] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                QCD_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("ST"):
             for subkey in Output[key].keys():
-                ST_hists[key] = Output[key][subkey]["Histograms"]["dijets_mass"]
-
+                ST_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
     #cross sections
     if xsec :
         match inputs.fulldataset :
@@ -215,7 +214,6 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             N_i[subkey] = Output["TTToSemiLeptonic"][subkey]["Cutflow"]["Total events"]
             TTToSemiLeptonic_weight_factor[subkey] = ( lumi * TTToSemiLeptonic_xsec[subkey] )/N_i[subkey]
         
-
         #Simply add up the data histograms
         MET_Run2018_hists_list=[]
         for key in MET_Run2018_hists.keys() :
@@ -228,6 +226,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         #individually apply cross section and then add up the MC histograms by key
         def hist_xsec(key_hists, key_weight_factor):
             key_hists_list = []
+            #print(key_hists.keys())
             for key in key_hists.keys() :
                 key_hists[key] *= key_weight_factor[key]
                 key_hists_list.append(key_hists[key])
@@ -271,25 +270,26 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         ax=ax
         )
     hep.histplot(
-        norm_factor*ZJets_NuNu_hist,
+        [norm_factor*ZJets_NuNu_hist, norm_factor*TTToSemiLeptonic_hist],
         histtype="fill",
-        color="#525FE1",
+        color=["#525FE1","red"],
         #marker=[],
-        label="ZJets_NuNu",
+        label=["ZJets_NuNu","TTToSemiLeptonic"],
         edgecolor="black",
+        stack=True,
         lw=1,
         ax=ax
         )
-    hep.histplot(
-        norm_factor*TTToSemiLeptonic_hist,
-        histtype="fill",
-        color="red",
-        #marker=[],
-        label="TTToSemiLeptonic",
-        edgecolor="black",
-        lw=1,
-        ax=ax
-        )
+    # hep.histplot(
+    #     norm_factor*TTToSemiLeptonic_hist,
+    #     histtype="fill",
+    #     color="red",
+    #     #marker=[],
+    #     label="TTToSemiLeptonic",
+    #     edgecolor="black",
+    #     lw=1,
+    #     ax=ax
+    #     )
 
     hep.cms.label("Preliminary",data = False)
     ax.set_ylabel("Normalized")
@@ -299,7 +299,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     #plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
-    fig.legend(loc= (0.70,.91))
+    fig.legend(loc= (0.63,.71))
     #fig.legend(loc=1)
     plotname = f"SR_Resolved_Backgrounds_dijet_mass_Combined.png"
     fig.savefig(plotname, dpi=300)
