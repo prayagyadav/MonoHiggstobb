@@ -392,7 +392,7 @@ match inputs.fulldataset :
 master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu,TTToSemiLeptonic])
 util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
-#plotall(master_dict)
+plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
 plotcutflow(master_dict)
