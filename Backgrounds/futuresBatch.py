@@ -85,8 +85,12 @@ if inputs.skipchunks == 1:
     for filename in files :
         if filename.startswith(f"SR_Resolved_Backgrounds_{keymap}_from") :
             temp = filename.split("_")
-            from_number = temp[6]
-            to_number = temp[8].strip(".coffea")
+            if len(keymap.split("_")) == 2 :
+                from_number = temp[6]
+                to_number = temp[8].strip(".coffea")
+            elif len(keymap.split("_")) == 1 :
+                from_number = temp[5]
+                to_number = temp[7].strip(".coffea")
             skiplist.append((from_number,to_number))
 
 #generate chunks
