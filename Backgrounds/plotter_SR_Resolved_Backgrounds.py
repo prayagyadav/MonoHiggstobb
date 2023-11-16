@@ -371,7 +371,7 @@ def accum(key):
     list_files = os.listdir()
     valid_list = []
     for file in list_files :
-        if file.startswith(f"Zjetsnunu_{key}_from") :
+        if file.startswith(f"SR_Resolved_Backgrounds_{key}_from") :
             valid_list.append(file)
     full = processor.accumulate([util.load(name) for name in valid_list])
     return full

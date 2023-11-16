@@ -88,6 +88,11 @@ parser.add_argument(
     help="End Sequential execution from file number 'int'",
     type=int
 )
+parser.add_argument(
+    "--short",
+    help="Use the short fileset",
+    type=int
+)
 inputs = parser.parse_args()
 
 #################################
@@ -97,7 +102,10 @@ inputs = parser.parse_args()
 def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode = "sequential"):
     #Warning : Never use 'files' with 'begin' and 'end'
     if load :
-        fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
+        if inputs.short == 1 :
+            fileset = Load.Loadfileset("../monoHbbtools/Load/shortfileset.json")
+        else :
+            fileset = Load.Loadfileset("../monoHbbtools/Load/newfileset.json")
         fileset_dict = fileset.getraw()
     else :
         fileset_dict = dict
@@ -192,9 +200,14 @@ elif inputs.executor == "dask" :
     cluster = LocalCluster()
     client = Client(cluster)
     cluster.scale(inputs.workers)
-    client.upload_file("../monoHbbtools/Load/newfileset.json")
-    with open("newfileset.json") as f: #load the fileset
-        files = json.load(f)
+    if input.short == 1 :
+        client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        with open("shortfileset.json") as f: #load the fileset
+            files = json.load(f)
+    else:
+        client.upload_file("../monoHbbtools/Load/newfileset.json")
+        with open("newfileset.json") as f: #load the fileset
+            files = json.load(f)
     files = {"MET": files["Data"]["MET_Run2018"]["MET_Run2018A"][:inputs.files]}
     dask_run = processor.Runner(
         executor = processor.DaskExecutor(client=client),
@@ -218,12 +231,23 @@ elif inputs.executor == "condor" :
     )
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
-    client.upload_file("../monoHbbtools/Load/newfileset.json")
-    with open("../monoHbbtools/Load/newfileset.json") as f:
-        filedict = json.load(f)
-    #files = {"MET": files["Data"]["MET"]["MET_Run2018A"][:inputs.files]}
-    #files = getDataset(inputs.keymap, inputs.files)
-    files = getDataset(keymap=inputs.keymap,load=False ,dict=filedict, mode="sequential", begin=inputs.begin, end=inputs.end)
+    if inputs.short == 1 :
+        client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        with open("../monoHbbtools/Load/shortfileset.json") as f: #load the fileset
+            filedict = json.load(f)
+    else:
+        client.upload_file("../monoHbbtools/Load/newfileset.json")
+        with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
+            filedict = json.load(f)
+
+    files = getDataset(
+        keymap=inputs.keymap,
+        load=False ,
+        dict=filedict,
+        mode="sequential",
+        begin=inputs.begin,
+        end=inputs.end
+        )
     #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
 
     runner = processor.Runner(
