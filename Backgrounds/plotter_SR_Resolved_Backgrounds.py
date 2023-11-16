@@ -299,7 +299,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     #plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Stacked", fontsize = "10")
-    fig.legend(loc= (0.63,.71))
+    fig.legend(prop={"size":20}, loc= (0.50,0.50))
     #fig.legend(loc=1)
     plotname = f"SR_Resolved_Backgrounds_dijet_mass_Combined.png"
     fig.savefig(plotname, dpi=300)
@@ -356,7 +356,7 @@ def plotcutflow(parent):
         plt.xlim([1,nbins+1])
         plt.xticks(np.arange(1,nbins+1,1))
         ax.set_title(f"{key} cutflow",pad=35,  fontsize= "20", color="#192655")
-        fig.legend(loc= (0.57,0.64))
+        fig.legend(prop={"size":20},loc= (0.57,0.64) )
         plt.yscale("log")
         fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
         #fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
