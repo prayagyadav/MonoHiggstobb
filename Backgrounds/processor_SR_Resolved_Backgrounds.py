@@ -309,6 +309,7 @@ class SignalSignature(processor.ProcessorABC):
         "ZJets_NuNu",
         "TTToSemiLeptonic",
         "TTTo2L2Nu",
+        "TTToHadronic",
         "WJets_LNu",
         "DYJets_LL",
         "VV",
@@ -323,16 +324,18 @@ class SignalSignature(processor.ProcessorABC):
             self.key = key_list[2]
         elif self.mode.startswith("TTTo2L2Nu"):
             self.key = key_list[3]
-        elif self.mode.startswith("WJets_LNu"):
+        elif self.mode.startswith("TTToHadronic"):
             self.key = key_list[4]
-        elif self.mode.startswith("DYJets_LL"):
+        elif self.mode.startswith("WJets_LNu"):
             self.key = key_list[5]
-        elif self.mode.startswith("VV"):
+        elif self.mode.startswith("DYJets_LL"):
             self.key = key_list[6]
-        elif self.mode.startswith("QCD"):
+        elif self.mode.startswith("VV"):
             self.key = key_list[7]
-        elif self.mode.startswith("ST"):
+        elif self.mode.startswith("QCD"):
             self.key = key_list[8]
+        elif self.mode.startswith("ST"):
+            self.key = key_list[9]
         else :
             print("Unidentified dataset ", self.mode)
             raise KeyError
