@@ -124,7 +124,7 @@ def getDataset(keymap,load=True, dict = None, files=None, begin=0, end=0, mode =
         ]
 
     
-    runnerfileset = Load.buildFileset(fileset_dict[keymap],"infn")
+    runnerfileset = Load.buildFileset(fileset_dict[keymap],"fnal")
     flat_list={}
     flat_list[keymap] = []
 
