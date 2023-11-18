@@ -1,0 +1,3186 @@
+#LyX file created by tex2lyx 2.3
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin /home/prayag/Analysis/Coffea/MonoHiggstobb/Presentation/
+\textclass beamer
+\begin_preamble
+\usetheme[progressbar=frametitle]{metropolis}
+%\usepackage[usenames,dvipsnames]{xcolor}
+%\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage{datetime}
+\usepackage{datetime2}
+\usepackage{color}
+\usepackage[scale=2]{ccicons}
+
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+
+
+\definecolor{maroon}{RGB}{175,50,53} % Define a custom maroon color
+
+\usepackage{pdfpages}
+\setbeamercolor{section title}{fg=maroon,bg=maroon}
+\setbeamercolor*{structure}{bg=maroon!20,fg=maroon}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor{progress bar}{fg=black, bg=gray}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{My Progress}
+\subtitle{MonoHiggs to $b \bar{b}$}
+\author{Prayag Yadav}
+\institute{University of Hyderabad}
+\date{Last updated: \DTMnow{}}
+\titlegraphic{\hfill\includegraphics[height=1.5cm]{uoh_logo.jpg}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end_preamble
+\options xcolor=dvipsnames
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+maketitle
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+Table of contents
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+setbeamertemplate
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+section in toc
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+[sections numbered] 
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+\begin_inset Argument 2
+status collapsed
+
+
+\begin_layout Standard
+Basic kinematic plots 
+\end_layout
+
+\end_inset
+
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Thu, 
+\begin_inset Formula $5^{th}$
+\end_inset
+
+ October 2023 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+ Basic kinematic plots 
+\size tiny
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+(Without any scale factors or corrections)
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+BTag Scores : MC
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/TagMC.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "TagMC"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+BTag score for signal MC sample
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Btagger used : 
+\family typewriter
+btagDeepFlavB
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Sample used: 
+\family typewriter
+MonoHTobb_ZpBaryonic
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Lots of bjets in Signal MC 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+BTag Scores : Data
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/TagData.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "TagData"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+BTag score for Data samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Btagger used : 
+\family typewriter
+btagDeepFlavB
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Sample used: 
+\family typewriter
+Run2018A/MET
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Less number of bjets in Data 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+Jet 
+\begin_inset Formula $p_t$
+\end_inset
+
+ : MC
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/JetsMC.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "JetMC"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Jet 
+\begin_inset Formula $p_t$
+\end_inset
+
+ of signal MC samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Basic selections : 
+\begin_inset Formula $p_t > 25 GeV $
+\end_inset
+
+ and 
+\begin_inset Formula $|\eta | < 2.5 $
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Btagger used : 
+\family typewriter
+btagDeepFlavB
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Sample used: 
+\family typewriter
+MonoHTobb_ZpBaryonic
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Medium Weight Parameter used for ak4bjets : 0.3040 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+Jet 
+\begin_inset Formula $p_t$
+\end_inset
+
+ : Data
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/JetsData.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "JetData"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Jet 
+\begin_inset Formula $p_t$
+\end_inset
+
+ of Data samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Basic selections : 
+\begin_inset Formula $p_t > 25 GeV $
+\end_inset
+
+ and 
+\begin_inset Formula $|\eta | < 2.5 $
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Btagger used : 
+\family typewriter
+btagDeepFlavB
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Sample used: 
+\family typewriter
+Run2018A/MET
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Medium Weight Parameter used for ak4bjets : 0.3040 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Not as predictable as signal MC 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+DiJet mass : MC
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/DiJetsMC.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "DiJetMC"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+DiJet mass of signal MC samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Basic selections : 
+\begin_inset Formula $p_t > 25 GeV $
+\end_inset
+
+ and 
+\begin_inset Formula $|\eta | < 2.5 $
+\end_inset
+
+ for each jet 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Btagger used : 
+\family typewriter
+btagDeepFlavB
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Sample used: 
+\family typewriter
+MonoHTobb_ZpBaryonic
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Medium Weight Parameter used for ak4bjets selection : 0.3040 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Peaks around SM Higgs mass 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+DiJet mass : Data
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/DiJetsData.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "DiJetData"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+DiJet mass of Data samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Basic selections : 
+\begin_inset Formula $p_t > 25 GeV $
+\end_inset
+
+ and 
+\begin_inset Formula $|\eta | < 2.5 $
+\end_inset
+
+ for each jet 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Btagger used : 
+\family typewriter
+btagDeepFlavB
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Sample used: 
+\family typewriter
+Run2018A/MET
+\family default
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Medium Weight Parameter used for ak4bjets selection : 0.3040 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Lot of noise, no clear structure 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ : MC
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/METMC.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "METMC"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ for signal MC samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+No filters or Trigger applied 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ : Data
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/METData.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "METData"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ for Data samples
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+No filters or Trigger applied 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+Looks similar to the Jet data 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+\begin_inset Argument 2
+status collapsed
+
+
+\begin_layout Standard
+MET Filters 
+\end_layout
+
+\end_inset
+
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+Thu, 
+\begin_inset Formula $26^{th}$
+\end_inset
+
+ October 2023 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+ MET Filters / MET Flags
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ : MET2018A
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/DataptMETflags.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "METDataflagpt"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ for MET2018A
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Compared how the MET pt looks with and without MET triggers on Data 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+. 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+MET 
+\begin_inset Formula $\phi$
+\end_inset
+
+ : MET2018A
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/DataphiMETflags.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "METDataflagphi"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+MET 
+\begin_inset Formula $\phi$
+\end_inset
+
+ for MET2018A
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Compared how the MET 
+\begin_inset Formula $\phi$
+\end_inset
+
+ looks with and without MET triggers 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+.jf 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ : MonoHtobb_ZpBaryonic
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/MCptMETflags.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "METMCflagpt"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ for MonoHtobb_ZpBaryonic
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Compared how the MET 
+\begin_inset Formula $p_t$
+\end_inset
+
+ looks with and without MET triggers on Signal MC 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+.jf 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset Separator plain
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+MET 
+\begin_inset Formula $\phi$
+\end_inset
+
+ : MonoHTobb_ZpBaryonic
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../Archive/KinemPlots/MCphiMETflags.png 
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "METData"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+MET 
+\begin_inset Formula $\phi$
+\end_inset
+
+ for MC
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+Compared how the MET 
+\begin_inset Formula $\phi$
+\end_inset
+
+ looks with and without MET triggers on Signal MC 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+. 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% 
+\backslash
+section[Backgrounds ]{
+\backslash
+small{Thu, $26^{th}$ October 2023 } 
+\backslash
+
+\backslash
+ Backgrounds}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+\begin_inset Argument 2
+status collapsed
+
+
+\begin_layout Standard
+Section label
+\end_layout
+
+\end_inset
+
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Newline newline
+\end_inset
+
+ Thu, 
+\begin_inset Formula $5^{th}$
+\end_inset
+
+ October 2023 
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+fragile
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+Frame title
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Columns
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.58
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Columns
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename uoh_logo.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset CommandInset label
+LatexCommand label
+name "plot label"
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Your caption
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Column
+0.38
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+textwidth
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_deeper
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+ 
+\size small
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+point 1
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\size small
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+{
+\end_layout
+
+\end_inset
+
+point 2
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\start_of_appendix
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+%dummy comment inserted by tex2lyx to ensure that this paragraph is not empty
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% 
+\backslash
+begin{frame}[fragile]{Backup slides}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+% 
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset Argument 3
+status collapsed
+
+
+\begin_layout Standard
+allowframebreaks
+\end_layout
+
+\end_inset
+
+
+\begin_inset Argument 4
+status collapsed
+
+
+\begin_layout Standard
+References
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "references"
+options ""
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+bibliographystyle{abbrv}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
