@@ -137,6 +137,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     ZJets_NuNu_hists = {}
     TTToSemiLeptonic_hists = {}
     TTTo2L2Nu_hists = {}
+    TTToHadronic_hists = {}
     WJets_LNu_hists = {}
     DYJets_LL_hists = {}
     VV_hists = {}
@@ -156,6 +157,9 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         elif key.startswith("TTTo2L2Nu"):
             for subkey in Output[key].keys():
                 TTTo2L2Nu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+        elif key.startswith("TTToHadronic"):
+            for subkey in Output[key].keys():
+                TTToHadronic_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("WJets_LNu"):
             for subkey in Output[key].keys():
                 WJets_LNu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
@@ -235,11 +239,11 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             TTTo2L2Nu_weight_factor[subkey] = ( lumi * TTTo2L2Nu_xsec[subkey] )/N_i[subkey]
 
         #compute weight_factor for TTToHadronic
-        # N_i = {}
-        # TTToHadronic_weight_factor = {}
-        # for subkey in TTToHadronic_xsec.keys() :
-        #     N_i[subkey] = Output["TTToHadronic"][subkey]["Cutflow"]["Total events"]
-        #     TTToHadronic_weight_factor[subkey] = ( lumi * TTToHadronic_xsec[subkey] )/N_i[subkey]
+        N_i = {}
+        TTToHadronic_weight_factor = {}
+        for subkey in TTToHadronic_xsec.keys() :
+            N_i[subkey] = Output["TTToHadronic"][subkey]["Cutflow"]["Total events"]
+            TTToHadronic_weight_factor[subkey] = ( lumi * TTToHadronic_xsec[subkey] )/N_i[subkey]
 
         #compute weight_factor for WJets_LNu
         N_i = {}
@@ -272,7 +276,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         ZJets_NuNu_hist = hist_xsec(ZJets_NuNu_hists , ZJets_NuNu_weight_factor)
         TTToSemiLeptonic_hist = hist_xsec(TTToSemiLeptonic_hists, TTToSemiLeptonic_weight_factor)
         TTTo2L2Nu_hist = hist_xsec(TTTo2L2Nu_hists, TTTo2L2Nu_weight_factor)
-        #TTToHadronic_hist = hist_xsec(TTToHadronic_hists, TTToHadronic_weight_factor)
+        TTToHadronic_hist = hist_xsec(TTToHadronic_hists, TTToHadronic_weight_factor)
         WJets_LNu_hist = hist_xsec(WJets_LNu_hists, WJets_LNu_weight_factor)
 
         # Zjets_hists_list = []
@@ -291,7 +295,9 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         norm_factor= 1.0 / (
             MET_Run2018_hist.sum()+
             ZJets_NuNu_hist.sum()+
-            TTToSemiLeptonic_hist.sum()
+            TTToSemiLeptonic_hist.sum()+
+            TTTo2L2Nu_hist.sum()+
+            TTToHadronic_hist.sum()
             )
 
     fig, ax = plt.subplots()
@@ -311,12 +317,13 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             norm_factor*ZJets_NuNu_hist,
             norm_factor*TTToSemiLeptonic_hist,
             norm_factor*WJets_LNu_hist,
-            norm_factor*TTTo2L2Nu_hist
+            norm_factor*TTTo2L2Nu_hist,
+            norm_factor*TTToHadronic_hist
             ],
         histtype="fill",
-        color=["#525FE1","red","green","purple"],
+        color=["#525FE1","red","green","purple","pink"],
         #marker=[],
-        label=["ZJets_NuNu","TTToSemiLeptonic","WJets_LNu","TTTo2L2Nu"],
+        label=["ZJets_NuNu","TTToSemiLeptonic","WJets_LNu","TTTo2L2Nu","TTToHadronic"],
         edgecolor="black",
         stack=True,
         lw=1,
@@ -426,10 +433,13 @@ match inputs.fulldataset :
         #showinfo(ZJets_NuNu)
         TTToSemiLeptonic = accum("TTToSemiLeptonic")
         #showinfo(TTToSemiLeptonic)
-        WJets_LNu = accum("WJets_LNu")
-        #showinfo(WJets_LNu)
         TTTo2L2Nu = accum("TTTo2L2Nu")
         #showinfo(TTTo2L2Nu)
+        TTToHadronic = accum("TTToHadronic")
+        #showinfo(TTToHadronic)
+        WJets_LNu = accum("WJets_LNu")
+        #showinfo(WJets_LNu)
+        
         
     case 0 :
         MET_Run2018 = util.load("SR_Resolved_Backgrounds_MET_Run2018.coffea")
@@ -437,7 +447,8 @@ match inputs.fulldataset :
         TTToSemiLeptonic = util.load("SR_Resolved_Backgrounds_TTToSemiLeptonic.coffea")
         WJets_LNu = util.load("SR_Resolved_Backgrounds_WJets_LNu.coffea")
         TTTo2L2Nu = util.load("SR_Resolved_Backgrounds_TTTo2L2Nu.coffea")
-master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu,TTToSemiLeptonic,WJets_LNu,TTTo2L2Nu])
+        TTToHadronic = util.load("SR_Resolved_Backgrounds_TTToHadronic.coffea")
+master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu,TTToSemiLeptonic,WJets_LNu,TTTo2L2Nu,TTToHadronic])
 util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
 plotall(master_dict)
