@@ -330,7 +330,7 @@ class SignalSignature(processor.ProcessorABC):
             self.key = key_list[5]
         elif self.mode.startswith("DYJets_LL"):
             self.key = key_list[6]
-        elif self.mode.startswith("VV"):
+        elif ( self.mode.startswith("WW") | self.mode.startswith("WZ") | self.mode.startswith("ZZ") ) :
             self.key = key_list[7]
         elif self.mode.startswith("QCD"):
             self.key = key_list[8]
