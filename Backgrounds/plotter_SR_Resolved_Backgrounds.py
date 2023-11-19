@@ -314,16 +314,16 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         )
     hep.histplot(
         [
-            norm_factor*ZJets_NuNu_hist,
-            norm_factor*TTToSemiLeptonic_hist,
+            norm_factor*TTToHadronic_hist,
             norm_factor*WJets_LNu_hist,
             norm_factor*TTTo2L2Nu_hist,
-            norm_factor*TTToHadronic_hist
+            norm_factor*ZJets_NuNu_hist,
+            norm_factor*TTToSemiLeptonic_hist,
             ],
         histtype="fill",
-        color=["#525FE1","red","green","purple","pink"],
+        color=["maroon","teal","magenta","blue","red"],
         #marker=[],
-        label=["ZJets_NuNu","TTToSemiLeptonic","WJets_LNu","TTTo2L2Nu","TTToHadronic"],
+        label=["TTToHadronic_hist","WJets_LNu_hist","TTTo2L2Nu_hist","ZJets_NuNu_hist","TTToSemiLeptonic_hist"],
         edgecolor="black",
         stack=True,
         lw=1,
@@ -348,7 +348,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     #plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Stacked", fontsize = "10")
-    fig.legend(prop={"size":20}, loc= (0.50,0.50))
+    fig.legend(prop={"size":12}, loc= (0.40,0.40),frameon=1)
     #fig.legend(loc=1)
     plotname = f"SR_Resolved_Backgrounds_dijet_mass_Combined.png"
     fig.savefig(plotname, dpi=300)
@@ -451,7 +451,7 @@ match inputs.fulldataset :
 master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu,TTToSemiLeptonic,WJets_LNu,TTTo2L2Nu,TTToHadronic])
 util.save(master_dict, "BackgroundDijets.coffea")
 showinfo(master_dict)
-plotall(master_dict)
+#plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
 plotcutflow(master_dict)
