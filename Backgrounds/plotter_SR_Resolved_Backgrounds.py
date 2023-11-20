@@ -166,6 +166,9 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         elif key.startswith("DYJets_LL"):
             for subkey in Output[key].keys():
                 DYJets_LL_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+        # elif ( key.startswith("WW") | key.startswith("WZ") | key.startswith("ZZ") ) :
+        #     for subkey in Output[key].keys():
+        #         VV_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
         elif key.startswith("VV"):
             for subkey in Output[key].keys():
                 VV_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
@@ -217,6 +220,31 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             "WJets_LNu_WPt_400To600_18": crossSections.crossSections["WJets_LNu_WPt_400To600_18"],
             "WJets_LNu_WPt_600Toinf_18": crossSections.crossSections["WJets_LNu_WPt_600Toinf_18"],
         }
+
+        DYJets_LL_xsec = {
+            "DYJets_LL_HT_70To100_18": crossSections.crossSections["DYJets_LL_HT_70To100_18"],
+            "DYJets_LL_HT_100To200_18": crossSections.crossSections["DYJets_LL_HT_100To200_18"],
+            "DYJets_LL_HT_200To400_18": crossSections.crossSections["DYJets_LL_HT_200To400_18"],
+            "DYJets_LL_HT_400To600_18": crossSections.crossSections["DYJets_LL_HT_400To600_18"],
+            "DYJets_LL_HT_600To800_18": crossSections.crossSections["DYJets_LL_HT_600To800_18"],
+            "DYJets_LL_HT_800To1200_18": crossSections.crossSections["DYJets_LL_HT_800To1200_18"],
+            "DYJets_LL_HT_1200To2500_18": crossSections.crossSections["DYJets_LL_HT_1200To2500_18"],
+            "DYJets_LL_HT_2500ToInf_18": crossSections.crossSections["DYJets_LL_HT_2500ToInf_18"]
+        }
+
+        VV_xsec = {
+            "WZ_1L1Nu2Q_18": crossSections.crossSections["WZ_1L1Nu2Q_18"],
+            "WZ_2L2Q_18": crossSections.crossSections["WZ_2L2Q_18"],
+            #"WZ_2Q2Nu_18": crossSections.crossSections["WZ_2Q2Nu_18"],
+            "WZ_3L1Nu_18" : crossSections.crossSections["WZ_3L1Nu_18"],
+            "ZZ_2L2Nu_18": crossSections.crossSections["ZZ_2L2Nu_18"],
+            "ZZ_2L2Q_18": crossSections.crossSections["ZZ_2L2Q_18"],
+            "ZZ_2Q2Nu_18": crossSections.crossSections["ZZ_2Q2Nu_18"],
+            "ZZ_4L_18": crossSections.crossSections["ZZ_4L_18"],
+            "WW_2L2Nu_18": crossSections.crossSections["WW_2L2Nu_18"],
+            "WW_1L1Nu2Q_18": crossSections.crossSections["WW_1L1Nu2Q_18"],
+        }
+
         #compute weight_factor for ZJets_NuNu 
         N_i = {}
         ZJets_NuNu_weight_factor = {}
@@ -251,6 +279,13 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         for subkey in WJets_LNu_xsec.keys() :
             N_i[subkey] = Output["WJets_LNu"][subkey]["Cutflow"]["Total events"]
             WJets_LNu_weight_factor[subkey] = ( lumi * WJets_LNu_xsec[subkey] )/N_i[subkey]
+
+        #compute weight_factor for VV
+        N_i = {}
+        VV_weight_factor = {}
+        for subkey in VV_xsec.keys() :
+            N_i[subkey] = Output["VV"][subkey]["Cutflow"]["Total events"]
+            VV_weight_factor[subkey] = ( lumi * VV_xsec[subkey] )/N_i[subkey]
         
         #Simply add up the data histograms
         MET_Run2018_hists_list=[]
@@ -268,9 +303,12 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             for key in key_hists.keys() :
                 key_hists[key] *= key_weight_factor[key]
                 key_hists_list.append(key_hists[key])
+            #print(key_hists_list)
             key_hist = key_hists_list[0]
             for histogram in key_hists_list[1:] :
-                key_hist += key_hists[key]
+                key_hist += histogram
+                #key_hist += key_hists[key]
+                print(key_hist)
             return key_hist
         
         ZJets_NuNu_hist = hist_xsec(ZJets_NuNu_hists , ZJets_NuNu_weight_factor)
@@ -278,6 +316,10 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         TTTo2L2Nu_hist = hist_xsec(TTTo2L2Nu_hists, TTTo2L2Nu_weight_factor)
         TTToHadronic_hist = hist_xsec(TTToHadronic_hists, TTToHadronic_weight_factor)
         WJets_LNu_hist = hist_xsec(WJets_LNu_hists, WJets_LNu_weight_factor)
+        VV_hist = hist_xsec(VV_hists, VV_weight_factor)
+        print("VV_hists",VV_hists)
+        print("VV_weight_factor",VV_weight_factor)
+        print("VV_hist",VV_hist.values())
 
         # Zjets_hists_list = []
         # for key in ZJets_NuNu_hists.keys() :
@@ -297,7 +339,9 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             ZJets_NuNu_hist.sum()+
             TTToSemiLeptonic_hist.sum()+
             TTTo2L2Nu_hist.sum()+
-            TTToHadronic_hist.sum()
+            TTToHadronic_hist.sum()+
+            WJets_LNu_hist.sum()+
+            VV_hist.sum()
             )
 
     fig, ax = plt.subplots()
@@ -307,11 +351,12 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         color="black",
         #marker=[],
         label="MET_Run2018",
-        xerr = 1,
-        yerr= 0,
+        xerr = 5,
+        yerr=0,
         lw=1,
         ax=ax
         )
+    #print(VV_hist)
     hep.histplot(
         [
             norm_factor*TTToHadronic_hist,
@@ -319,11 +364,12 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             norm_factor*TTTo2L2Nu_hist,
             norm_factor*ZJets_NuNu_hist,
             norm_factor*TTToSemiLeptonic_hist,
+            norm_factor*VV_hist
             ],
         histtype="fill",
-        color=["maroon","teal","magenta","blue","red"],
+        color=["maroon","teal","magenta","blue","red","yellow"],
         #marker=[],
-        label=["TTToHadronic_hist","WJets_LNu_hist","TTTo2L2Nu_hist","ZJets_NuNu_hist","TTToSemiLeptonic_hist"],
+        label=["TTToHadronic_hist","WJets_LNu_hist","TTTo2L2Nu_hist","ZJets_NuNu_hist","TTToSemiLeptonic_hist","VV"],
         edgecolor="black",
         stack=True,
         lw=1,
@@ -439,6 +485,8 @@ match inputs.fulldataset :
         #showinfo(TTToHadronic)
         WJets_LNu = accum("WJets_LNu")
         #showinfo(WJets_LNu)
+        VV = accum("VV")
+        #showinfo (VV)
         
         
     case 0 :
@@ -448,10 +496,11 @@ match inputs.fulldataset :
         WJets_LNu = util.load("SR_Resolved_Backgrounds_WJets_LNu.coffea")
         TTTo2L2Nu = util.load("SR_Resolved_Backgrounds_TTTo2L2Nu.coffea")
         TTToHadronic = util.load("SR_Resolved_Backgrounds_TTToHadronic.coffea")
-master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu,TTToSemiLeptonic,WJets_LNu,TTTo2L2Nu,TTToHadronic])
+        VV = util.load("SR_Resolved_Backgrounds_VV.coffea")
+master_dict = processor.accumulate([MET_Run2018,ZJets_NuNu,TTToSemiLeptonic,WJets_LNu,TTTo2L2Nu,TTToHadronic,VV])
 util.save(master_dict, "BackgroundDijets.coffea")
-showinfo(master_dict)
+#showinfo(master_dict)
 #plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
-plotcutflow(master_dict)
+#plotcutflow(master_dict)
