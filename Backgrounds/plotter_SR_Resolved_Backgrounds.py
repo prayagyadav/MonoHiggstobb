@@ -343,7 +343,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         #marker=[],
         label="MET_Run2018",
         xerr = 5,
-        yerr=0,
+        yerr=5,
         lw=1,
         ax=ax
         )
@@ -351,42 +351,42 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     hep.histplot(
         [
             norm_factor*TTToHadronic_hist,
+            norm_factor*DYJets_LL_hist,
+            norm_factor*VV_hist,
             norm_factor*WJets_LNu_hist,
             norm_factor*TTTo2L2Nu_hist,
             norm_factor*ZJets_NuNu_hist,
             norm_factor*TTToSemiLeptonic_hist,
-            norm_factor*DYJets_LL_hist,
-            norm_factor*VV_hist
             ],
         histtype="fill",
-        color=["maroon","teal","magenta","blue","red","purple","yellow"],
+        color=["maroon","purple","yellow","teal","magenta","blue","red"],
         #marker=[],
-        label=["TTToHadronic","WJets_LNu","TTTo2L2Nu","ZJets_NuNu","TTToSemiLeptonic","DYJets_LL","VV"],
+        label=["TTToHadronic","DYJets_LL","VV","WJets_LNu","TTTo2L2Nu","ZJets_NuNu","TTToSemiLeptonic"],
         edgecolor="black",
         stack=True,
         lw=1,
         ax=ax
         )
     # hep.histplot(
-    #     norm_factor*TTToSemiLeptonic_hist,
+    #     norm_factor*DYJets_LL_hist,
     #     histtype="fill",
-    #     color="red",
+    #     color="purple",
     #     #marker=[],
-    #     label="TTToSemiLeptonic",
+    #     label="DYJets_LL",
     #     edgecolor="black",
     #     lw=1,
     #     ax=ax
     #     )
 
     hep.cms.label("Preliminary",data = False)
-    ax.set_ylabel("Events")
+    ax.set_ylabel("Arbitrary Scale")
     plt.xlim([100.0,150.0])
     ax.set_xlabel("Mass (GeV)")
     ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
     #plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Stacked", fontsize = "10")
-    fig.legend(prop={"size":12}, loc= (0.40,0.40),frameon=1)
+    fig.legend(prop={"size":12}, loc= (0.40,0.40),frameon=1, reverse = True)
     #fig.legend(loc=1)
     plotname = f"SR_Resolved_Backgrounds_dijet_mass_Combined.png"
     fig.savefig(plotname, dpi=300)
@@ -477,10 +477,10 @@ match inputs.fulldataset :
         #showinfo(TTToHadronic)
         WJets_LNu = accum("WJets_LNu")
         #showinfo(WJets_LNu)
-        VV = accum("VV")
-        #showinfo (VV)
         DYJets_LL = accum("DYJets_LL")
         #showinfo (DYJets_LL)
+        VV = accum("VV")
+        #showinfo (VV)
         
         
     case 0 :
@@ -504,8 +504,8 @@ master_dict = processor.accumulate([
     VV
     ])
 util.save(master_dict, "BackgroundDijets.coffea")
-showinfo(master_dict)
+#showinfo(master_dict)
 #plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
-plotcutflow(master_dict)
+#plotcutflow(master_dict)
