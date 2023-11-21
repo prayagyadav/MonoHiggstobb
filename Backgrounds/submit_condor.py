@@ -6,6 +6,7 @@ import awkward as ak
 import hist
 from matplotlib import pyplot as plt
 import mplhep as hep
+import logging
 import numpy as np
 
 # events = NanoEventsFactory.from_root(
@@ -42,18 +43,33 @@ class JetKinem(processor.ProcessorABC):
     def postprocess(self,events):
         pass
 
-executor = "futures"
+executor = "condor"
 
+<<<<<<< HEAD
 
 #For futures execution
 if executor == "futures" :
     files = {
+=======
+files = {
+    "MET_Run2018": {
+>>>>>>> origin
         "MET_Run2018A": [
             "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root",
             "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/10C73E73-0C15-2F4B-9E0B-E3DE1C54A597.root",
             "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/1E8B7F5A-4B29-8F46-B2E1-549805E5CBB2.root",
+<<<<<<< HEAD
         ]
     }
+=======
+            ]
+        }
+    }
+
+#For futures execution
+if executor == "futures" :
+    
+>>>>>>> origin
     #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=4),
@@ -68,8 +84,27 @@ if executor == "futures" :
         processor_instance=JetKinem()
     )
 
+elif executor == "condor" :
+    #Create a console log in case of a warning 
+    logging.basicConfig(
+        format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
+        level=logging.WARNING,
+    )
+    print("Preparing to run at condor...\n")
+    executor , client = condor.runCondor()
 
-# Output_class = JetKinem()
-# Output = Output_class.process(events)
+    runner = processor.Runner(
+        executor=executor,
+        schema=NanoAODSchema,
+        chunksize=500000,
+        maxchunks=None,
+        xrootdtimeout=300,
+    )
+    print("Starting the workers...\n")
+    Output = runner(
+        files,
+        treename="Events",
+        processor_instance=JetKinem()
+    )
 
 print(Output)
