@@ -45,9 +45,6 @@ class JetKinem(processor.ProcessorABC):
 
 executor = "condor"
 
-#For futures execution
-if executor == "futures" :
-
 files = {
     "MET_Run2018": {
         "MET_Run2018A": [
