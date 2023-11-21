@@ -43,7 +43,7 @@ class JetKinem(processor.ProcessorABC):
     def postprocess(self):
         pass
 
-executor = "futures"
+executor = "condor"
 
 files = {
     "MET_Run2018": {
