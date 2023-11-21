@@ -276,5 +276,5 @@ try :
 except :
     output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}.coffea"
 print("Saving the output to : " , output_file)
-util.save(output= Output, filename=output_file)
+util.save(output= Output, filename="coffea_files/"+output_file)
 print(f"File {output_file} saved.")
