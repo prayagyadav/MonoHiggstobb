@@ -45,31 +45,21 @@ class JetKinem(processor.ProcessorABC):
 
 executor = "condor"
 
-<<<<<<< HEAD
-
 #For futures execution
 if executor == "futures" :
-    files = {
-=======
+
 files = {
     "MET_Run2018": {
->>>>>>> origin
         "MET_Run2018A": [
             "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root",
             "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/10C73E73-0C15-2F4B-9E0B-E3DE1C54A597.root",
             "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/1E8B7F5A-4B29-8F46-B2E1-549805E5CBB2.root",
-<<<<<<< HEAD
         ]
     }
-=======
-            ]
-        }
-    }
-
+}
 #For futures execution
 if executor == "futures" :
     
->>>>>>> origin
     #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=4),
