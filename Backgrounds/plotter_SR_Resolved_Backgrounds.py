@@ -87,7 +87,7 @@ def plot(Output, type = "dijets_mass"):
         fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
         fig.legend(loc= (0.57,0.64))
         plotname = f"Znunu_{key}_{type}.png"
-        fig.savefig(plotname, dpi=300)
+        fig.savefig("plots/"+plotname, dpi=300)
         fig.clear()
         print(plotname , f" created at {os.getcwd()}")
 
@@ -127,7 +127,7 @@ def combined_plot(Output):
     fig.text(0.87,0.01," Mode: Overlayed", fontsize = "10")
     fig.legend(loc= (0.57,0.64))
     plotname = f"SR_Resolved_Backgrounds_dijet_mass_combined.png"
-    fig.savefig(plotname, dpi=300)
+    fig.savefig("plots/"+plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
 def combined_plot_manual(Output,norm = False , xsec = False):
@@ -240,6 +240,24 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             "WW_1L1Nu2Q_18": crossSections.crossSections["WW_1L1Nu2Q_18"],
         }
 
+        QCD_xsec = {
+            #"QCD_HT100To200_18": crossSections.crossSections["QCD_HT100To200_18"],
+            "QCD_HT200To300_18": crossSections.crossSections["QCD_HT200To300_18"],
+            "QCD_HT300To500_18": crossSections.crossSections["QCD_HT300To500_18"],
+            "QCD_HT500To700_18": crossSections.crossSections["QCD_HT500To700_18"],
+            "QCD_HT700To1000_18": crossSections.crossSections["QCD_HT700To1000_18"],
+            "QCD_HT1000To1500_18": crossSections.crossSections["QCD_HT1000To1500_18"],
+            "QCD_HT1500To2000_18": crossSections.crossSections["QCD_HT1500To2000_18"],
+            "QCD_HT2000Toinf_18": crossSections.crossSections["QCD_HT2000Toinf_18"],
+        }
+
+        ST_xsec = {
+            "ST_tchannel_top_18": crossSections.crossSections["ST_tchannel_top_18"],
+            "ST_tchannel_antitop_18": crossSections.crossSections["ST_tchannel_antitop_18"],
+            "ST_tW_top_18": crossSections.crossSections["ST_tW_top_18"],
+            "ST_tW_antitop_18": crossSections.crossSections["ST_tW_antitop_18"]
+        }
+
         #compute weight_factor for ZJets_NuNu 
         N_i = {}
         ZJets_NuNu_weight_factor = {}
@@ -288,6 +306,20 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         for subkey in VV_xsec.keys() :
             N_i[subkey] = Output["VV"][subkey]["Cutflow"]["Total events"]
             VV_weight_factor[subkey] = ( lumi * VV_xsec[subkey] )/N_i[subkey]
+
+        #compute weight_factor for VV
+        N_i = {}
+        QCD_weight_factor = {}
+        for subkey in QCD_xsec.keys() :
+            N_i[subkey] = Output["QCD"][subkey]["Cutflow"]["Total events"]
+            QCD_weight_factor[subkey] = ( lumi * QCD_xsec[subkey] )/N_i[subkey]
+
+        #compute weight_factor for VV
+        N_i = {}
+        ST_weight_factor = {}
+        for subkey in ST_xsec.keys() :
+            N_i[subkey] = Output["ST"][subkey]["Cutflow"]["Total events"]
+            ST_weight_factor[subkey] = ( lumi * ST_xsec[subkey] )/N_i[subkey]
         
         #Simply add up the data histograms
         MET_Run2018_hists_list=[]
@@ -320,6 +352,8 @@ def combined_plot_manual(Output,norm = False , xsec = False):
         WJets_LNu_hist = hist_xsec(WJets_LNu_hists, WJets_LNu_weight_factor)
         DYJets_LL_hist = hist_xsec(DYJets_LL_hists, DYJets_LL_weight_factor)
         VV_hist = hist_xsec(VV_hists, VV_weight_factor)
+        QCD_hist = hist_xsec(QCD_hists, QCD_weight_factor)
+        ST_hist = hist_xsec(ST_hists, ST_weight_factor)
 
     #normalize
     norm_factor = 1.0
@@ -332,7 +366,9 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             TTToHadronic_hist.sum()+
             WJets_LNu_hist.sum()+
             DYJets_LL_hist.sum()+
-            VV_hist.sum()
+            VV_hist.sum()+
+            QCD_hist.sum()+
+            ST_hist.sum()
             )
 
     fig, ax = plt.subplots()
@@ -350,18 +386,22 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     #print(VV_hist)
     hep.histplot(
         [
+            norm_factor*QCD_hist,
             norm_factor*TTToHadronic_hist,
             norm_factor*DYJets_LL_hist,
             norm_factor*VV_hist,
+            norm_factor*ST_hist,
             norm_factor*WJets_LNu_hist,
             norm_factor*TTTo2L2Nu_hist,
             norm_factor*ZJets_NuNu_hist,
             norm_factor*TTToSemiLeptonic_hist,
+            
+            
             ],
         histtype="fill",
-        color=["maroon","purple","yellow","teal","magenta","blue","red"],
+        color=["grey","maroon","purple","yellow","orange","teal","magenta","blue","red"],
         #marker=[],
-        label=["TTToHadronic","DYJets_LL","VV","WJets_LNu","TTTo2L2Nu","ZJets_NuNu","TTToSemiLeptonic"],
+        label=["QCD","TTToHadronic","DYJets_LL","VV","ST","WJets_LNu","TTTo2L2Nu","ZJets_NuNu","TTToSemiLeptonic"],
         edgecolor="black",
         stack=True,
         lw=1,
@@ -389,7 +429,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     fig.legend(prop={"size":12}, loc= (0.40,0.40),frameon=1, reverse = True)
     #fig.legend(loc=1)
     plotname = f"SR_Resolved_Backgrounds_dijet_mass_Combined.png"
-    fig.savefig(plotname, dpi=300)
+    fig.savefig("plots/"+plotname, dpi=300)
     fig.clear()
     print(plotname , f" created at {os.getcwd()}")
 
@@ -450,17 +490,19 @@ def plotcutflow(parent):
         #fig.legend(loc= (0.70,.91))
         #fig.legend(loc=1)
         plotname = f"Znunu_{key}_cutflow.png"
-        fig.savefig(plotname, dpi=300)
+        fig.savefig("plots/"+plotname, dpi=300)
         fig.clear()
         print(plotname , f" created at {os.getcwd()}")
 
 def accum(key):
+    os.chdir("./coffea_files")
     list_files = os.listdir()
     valid_list = []
     for file in list_files :
         if file.startswith(f"SR_Resolved_Backgrounds_{key}_from") :
             valid_list.append(file)
     full = processor.accumulate([util.load(name) for name in valid_list])
+    os.chdir("../")
     return full
 
 match inputs.fulldataset :
@@ -481,17 +523,23 @@ match inputs.fulldataset :
         #showinfo (DYJets_LL)
         VV = accum("VV")
         #showinfo (VV)
+        QCD = accum("QCD")
+        #showinfo (QCD)
+        ST = accum("ST")
+        #showinfo (ST)
         
         
     case 0 :
-        MET_Run2018 = util.load("SR_Resolved_Backgrounds_MET_Run2018.coffea")
-        ZJets_NuNu = util.load("SR_Resolved_Backgrounds_ZJets_NuNu.coffea")
-        TTToSemiLeptonic = util.load("SR_Resolved_Backgrounds_TTToSemiLeptonic.coffea")
-        WJets_LNu = util.load("SR_Resolved_Backgrounds_WJets_LNu.coffea")
-        TTTo2L2Nu = util.load("SR_Resolved_Backgrounds_TTTo2L2Nu.coffea")
-        TTToHadronic = util.load("SR_Resolved_Backgrounds_TTToHadronic.coffea")
-        DYJets_LL = util.load("SR_Resolved_Backgrounds_DYJets_LL.coffea")
-        VV = util.load("SR_Resolved_Backgrounds_VV.coffea")
+        MET_Run2018 = util.load("coffea_files/SR_Resolved_Backgrounds_MET_Run2018.coffea")
+        ZJets_NuNu = util.load("coffea_files/SR_Resolved_Backgrounds_ZJets_NuNu.coffea")
+        TTToSemiLeptonic = util.load("coffea_files/SR_Resolved_Backgrounds_TTToSemiLeptonic.coffea")
+        WJets_LNu = util.load("coffea_files/SR_Resolved_Backgrounds_WJets_LNu.coffea")
+        TTTo2L2Nu = util.load("coffea_files/SR_Resolved_Backgrounds_TTTo2L2Nu.coffea")
+        TTToHadronic = util.load("coffea_files/SR_Resolved_Backgrounds_TTToHadronic.coffea")
+        DYJets_LL = util.load("coffea_files/SR_Resolved_Backgrounds_DYJets_LL.coffea")
+        VV = util.load("coffea_files/SR_Resolved_Backgrounds_VV.coffea")
+        QCD = util.load("coffea_files/SR_Resolved_Backgrounds_QCD.coffea")
+        ST = util.load("coffea_files/SR_Resolved_Backgrounds_ST.coffea")
 
 master_dict = processor.accumulate([
     MET_Run2018,
@@ -501,10 +549,12 @@ master_dict = processor.accumulate([
     TTTo2L2Nu,
     TTToHadronic,
     DYJets_LL,
-    VV
+    VV,
+    QCD,
+    ST
     ])
-util.save(master_dict, "BackgroundDijets.coffea")
-#showinfo(master_dict)
+util.save(master_dict, "coffea_files/BackgroundDijets.coffea")
+showinfo(master_dict)
 #plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
