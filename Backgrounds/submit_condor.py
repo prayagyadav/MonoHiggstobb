@@ -8,11 +8,11 @@ from matplotlib import pyplot as plt
 import mplhep as hep
 import numpy as np
 
-events = NanoEventsFactory.from_root(
-    "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root",
-    schemaclass=NanoAODSchema.v7,
-    metadata={"Dataset":"MET_Run2018"}
-    ).events()
+# events = NanoEventsFactory.from_root(
+#     "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root",
+#     schemaclass=NanoAODSchema.v7,
+#     metadata={"Dataset":"MET_Run2018"}
+#     ).events()
 
 class JetKinem(processor.ProcessorABC):
     def __init__(self):
@@ -42,7 +42,36 @@ class JetKinem(processor.ProcessorABC):
     def postprocess(self):
         pass
 
-Output_class = JetKinem()
-Output = Output_class.process(events)
+executor = "futures"
+
+
+#For futures execution
+if executor == "futures" :
+    files = {
+    "MET_Run2018": {
+        "MET_Run2018A": [
+            "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root",
+            "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/10C73E73-0C15-2F4B-9E0B-E3DE1C54A597.root",
+            "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/1E8B7F5A-4B29-8F46-B2E1-549805E5CBB2.root",
+        ]
+    }
+    }
+    #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
+    futures_run = processor.Runner(
+        executor = processor.FuturesExecutor(workers=4),
+        schema=NanoAODSchema,
+        chunksize= 500000 ,
+        maxchunks= None,
+        xrootdtimeout=120
+    )
+    Output = futures_run(
+        files,
+        "Events",
+        processor_instance=JetKinem()
+    )
+
+
+# Output_class = JetKinem()
+# Output = Output_class.process(events)
 
 print(Output)
