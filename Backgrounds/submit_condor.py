@@ -76,7 +76,8 @@ class JetKinem(processor.ProcessorABC):
     def postprocess(self):
         pass
 
-Output = JetKinem(events)
+Output_class = JetKinem()
+Output_class.process(events)
 
 #######################
 # Plot the histograms #
