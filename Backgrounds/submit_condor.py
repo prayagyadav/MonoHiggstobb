@@ -34,7 +34,6 @@ class JetKinem(processor.ProcessorABC):
 
         #Prepare the output
         output = {
-            "Cutflow": self.cutflow ,
             "Histograms": {
                 "Jetpt" : JetHist
             }
