@@ -73,6 +73,8 @@ class JetKinem(processor.ProcessorABC):
             }
         }
         return output
+    def postprocess(self):
+        pass
 
 Output = JetKinem(events)
 
