@@ -3,7 +3,7 @@
 #################################
 
 import argparse
-from coffea.analysis_tools import util
+from coffea import util
 import matplotlib.pyplot as plt
 import mplhep as hep
 import numpy as np

@@ -4,7 +4,7 @@
 #################################
 
 import argparse
-from coffea.analysis_tools import util
+from coffea import util
 from coffea.nanoevents import NanoAODSchema #,NanoEventsFactory 
 from coffea import processor
 import condor
