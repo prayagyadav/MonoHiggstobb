@@ -25,7 +25,7 @@ def move_X509():
     return os.path.basename(_x509_localpath)
 
 def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers=4):
-    from dask.distributed import Client
+    from distributed import Client
     from dask_jobqueue import HTCondorCluster
 
     os.environ["CONDOR_CONFIG"] = "/etc/condor/condor_config"
