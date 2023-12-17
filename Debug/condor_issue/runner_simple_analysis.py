@@ -110,5 +110,5 @@ elif inputs.executor == "condor" :
 
 output_file = f"Debug.coffea"
 print("Saving the output to : " , output_file)
-util.save(output= Output, filename="coffea_files/"+output_file)
+util.save(output= Output, filename=output_file)
 print(f"File {output_file} saved.")
