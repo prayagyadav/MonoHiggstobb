@@ -23,10 +23,10 @@ if exec == "futures" :
     with open("fileset.json") as f: #load the fileset
         files = {"MET_Run2018": {"MET_Run2018A": [filename]}}
     futures_run = processor.Runner(
-        executor = processor.FuturesExecutor(workers=2),
+        executor = processor.FuturesExecutor(workers=1),
         schema=NanoAODSchema,
         chunksize= 100000,
-        maxchunks= 2,
+        maxchunks= 1,
     )
     Output = futures_run(
         files[Mode],
