@@ -20,8 +20,7 @@ Mode = "MET_Run2018"
 
 #For local execution
 if exec == "futures" :
-    with open("fileset.json") as f: #load the fileset
-        files = {"MET_Run2018": {"MET_Run2018A": [filename]}}
+    files = {"MET_Run2018": {"MET_Run2018A": [filename]}}
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=1),
         schema=NanoAODSchema,
@@ -38,10 +37,7 @@ if exec == "futures" :
 elif exec == "condor" :
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
-    client.upload_file("fileset.json")
-    with open("fileset.json") as f:
-        files = {"MET_Rum2018":{"MET_Run2018A": [filename]}}
-
+    files = {"MET_Rum2018":{"MET_Run2018A": [filename]}}
     runner = processor.Runner(
         executor=executor,
         schema=NanoAODSchema,
