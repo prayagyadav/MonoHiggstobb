@@ -22,7 +22,7 @@ events = NanoEventsFactory.from_root(
 ).events()
 
 p = barebones()
-a = barebones.process(events)
+a = p.process(events)
 
 print(a)
 
