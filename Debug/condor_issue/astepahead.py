@@ -9,7 +9,7 @@ class barebones(processor.ProcessorABC):
     def __init__(self):
         pass
     def process(self, events):
-        output = events.Jet.pt
+        output = {"Jetpt": events.Jet.pt }
         print(output)
         return output
     def postprocess(self, accumulator):
