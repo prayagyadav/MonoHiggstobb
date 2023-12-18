@@ -2,7 +2,6 @@ from coffea import processor
 from coffea.nanoevents import NanoAODSchema , NanoEventsFactory
 import awkward as ak
 import condor 
-import uproot
 
 print("Stage 1")
 
@@ -32,12 +31,12 @@ if exec == "futures" :
         maxchunks= 1,
     )
 
+    Files = {"MET_Run2018":{"MET_Run2018A":[filename,]}}
+
     print("Stage 4")
 
-    File = uproot.open(filename)
-
     Output = futures_run(
-        File,
+        Files[Mode],
         "Events",
         processor_instance=barebones()
     )
@@ -54,13 +53,13 @@ elif exec == "condor" :
         xrootdtimeout=300,
     )
 
-    print("Stage 4")
+    Files = {"MET_Run2018":{"MET_Run2018A":[filename,]}}
 
-    File = uproot.open(filename)
+    print("Stage 4")
 
     print("Running...\n")
     Output = runner(
-        File,
+        Files[Mode],
         treename="Events",
         processor_instance=barebones(),
     )
