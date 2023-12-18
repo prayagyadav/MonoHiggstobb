@@ -10,6 +10,7 @@ class barebones(processor.ProcessorABC):
         pass
     def process(self, events):
         output = events.Jet.pt
+        print(output)
         return output
     def postprocess(self, accumulator):
         pass
