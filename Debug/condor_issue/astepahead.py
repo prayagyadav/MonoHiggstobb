@@ -16,12 +16,12 @@ class barebones(processor.ProcessorABC):
 
 filename = "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root"
 exec = "futures"
-Mode = "MET_Run2018A"
+Mode = "MET_Run2018"
 
 #For local execution
 if exec == "futures" :
     with open("fileset.json") as f: #load the fileset
-        files = {"MET_Run2018A": [filename]}
+        files = {"MET_Run2018": {"MET_Run2018A": [filename]}}
     futures_run = processor.Runner(
         executor = processor.FuturesExecutor(workers=2),
         schema=NanoAODSchema,
@@ -40,7 +40,7 @@ elif exec == "condor" :
     executor , client = condor.runCondor()
     client.upload_file("fileset.json")
     with open("fileset.json") as f:
-        files = {"MET_Run2018A": [filename]}
+        files = {"MET_Rum2018":{"MET_Run2018A": [filename]}}
 
     runner = processor.Runner(
         executor=executor,
