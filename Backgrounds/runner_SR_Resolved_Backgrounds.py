@@ -234,12 +234,20 @@ elif inputs.executor == "condor" :
     print("Preparing to run at condor...\n")
     executor , client = condor.runCondor()
     if inputs.short == 1 :
-        client.upload_file("../monoHbbtools/Load/shortfileset.json")
-        with open("../monoHbbtools/Load/shortfileset.json") as f: #load the fileset
+        import shutil
+        shutil.make_archive("monoHbbtools", "zip", base_dir="monoHbbtools")
+        client.upload_file("monoHbbtools.zip")
+        #client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        client.upload_file("processor_SR_Resolved_Backgrounds.py")
+        with open("monoHbbtools/Load/shortfileset.json") as f: #load the fileset
             filedict = json.load(f)
     else:
-        client.upload_file("../monoHbbtools/Load/newfileset.json")
-        with open("../monoHbbtools/Load/newfileset.json") as f: #load the fileset
+        import shutil
+        shutil.make_archive("monoHbbtools", "zip", base_dir="monoHbbtools")
+        client.upload_file("monoHbbtools.zip")
+        #client.upload_file("../monoHbbtools/Load/newfileset.json")
+        client.upload_file("processor_SR_Resolved_Backgrounds.py")
+        with open("monoHbbtools/Load/newfileset.json") as f: #load the fileset
             filedict = json.load(f)
 
     files = getDataset(

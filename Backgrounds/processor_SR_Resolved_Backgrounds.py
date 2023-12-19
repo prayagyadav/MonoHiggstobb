@@ -222,7 +222,10 @@ class SignalSignature(processor.ProcessorABC):
         if (self.mode).startswith("MET") :
 
             #choosing certified good events
-            events, cutflow = lumi(events,cutflow)
+            #figure out how to implement condor folder transfers and fix this, in the meantime ignore for condor runs
+            ignore = True
+            if ignore :
+                events, cutflow = lumi(events,cutflow)
 
             #Saving the event run
             for run in set(events.run):
