@@ -18,7 +18,8 @@ class barebones(processor.ProcessorABC):
 print("Stage 2")
 
 filename = "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root"
-exec = "futures"
+#exec = "futures"
+exec = "condor"
 Mode = "MET_Run2018"
 
 print("Stage 3")
