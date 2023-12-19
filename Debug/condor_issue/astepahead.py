@@ -9,9 +9,9 @@ class barebones(processor.ProcessorABC):
     def __init__(self):
         pass
     def process(self, events):
-        jets = events.Jet.pt
-        output = {"Jetpt": jets }
-        return output
+        njets = ak.num(events.Jet.pt , axis=0)
+        out = {"nJets": njets }
+        return out
     def postprocess(self, accumulator):
         pass
 
@@ -26,10 +26,10 @@ print("Stage 3")
 #For local execution
 if exec == "futures" :
     futures_run = processor.Runner(
-        executor = processor.FuturesExecutor(workers=1),
+        executor = processor.FuturesExecutor(workers=2),
         schema=NanoAODSchema,
         chunksize= 100000,
-        maxchunks= 1,
+        maxchunks= 2,
     )
 
     Files = {"MET_Run2018":{"MET_Run2018A":[filename,]}}
