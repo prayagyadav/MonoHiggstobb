@@ -5,3 +5,6 @@ step 3 : './shell coffeateam/coffea-dask:latest-py3.8' (3.8 works in the wiscons
 step 4 : 'exit'
 step 5 : './shell'
 Enjoy!
+
+
+Note: Use the older python3.8 image only while bootstrapping. After that, use the coffea-dask-cc7:latest image by simply calling ./shell
