@@ -1,0 +1,7 @@
+Note: Follow these steps exactly:
+step 1 : To be safe remove any older installations by 'rm -rf shell .bashrc .env'
+step 2 : 'bash bootstrap'
+step 3 : './shell coffeateam/coffea-dask:latest-py3.8' (3.8 works in the wisconsin machines)
+step 4 : 'exit'
+step 5 : './shell'
+Enjoy!
