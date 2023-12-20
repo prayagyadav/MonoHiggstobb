@@ -223,8 +223,8 @@ class SignalSignature(processor.ProcessorABC):
 
             #choosing certified good events
             #figure out how to implement condor folder transfers and fix this, in the meantime ignore for condor runs
-            ignore = True
-            if ignore :
+            should_lumi = False
+            if should_lumi :
                 events, cutflow = lumi(events,cutflow)
 
             #Saving the event run
