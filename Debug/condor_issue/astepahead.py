@@ -11,6 +11,7 @@ import json
 import rich
 import numpy as np
 import os
+import logging
 
 def move_X509():
     try:
@@ -63,7 +64,6 @@ def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers
     cluster.adapt(minimum=1, maximum=workers)
     executor = processor.DaskExecutor(client=Client(cluster))
     return executor, Client(cluster)
-
 
 class Loadfileset():
     def __init__(self, jsonfilename) :
@@ -297,66 +297,15 @@ parser.add_argument(
 inputs = parser.parse_args()
 
 
-class barebones(processor.ProcessorABC):
-    def __init__(self):
-        pass
-    def process(self, events):
-        njets = ak.num(events.Jet.pt , axis=0)
-        out = {"nJets": njets }
-        return out
-    def postprocess(self, accumulator):
-        pass
-
-print("Stage 2")
-
-filename = "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root"
-#exec = "futures"
-exec = "condor"
-Mode = "MET_Run2018"
-
-print("Stage 3")
-
-#For local execution
-if exec == "futures" :
-    futures_run = processor.Runner(
-        executor = processor.FuturesExecutor(workers=2),
-        schema=NanoAODSchema,
-        chunksize= 100000,
-        maxchunks= 2,
-    )
-
-    Files = {"MET_Run2018":{"MET_Run2018A":[filename,]}}
-
-    print("Stage 4")
-
-    Output = futures_run(
-        Files[Mode],
-        "Events",
-        processor_instance=barebones()
-    )
-
-#For condor execution
-elif exec == "condor" :
-    print("Preparing to run at condor...\n")
-    executor , client = condor.runCondor()
-    runner = processor.Runner(
-        executor=executor,
-        schema=NanoAODSchema,
-        chunksize=100000,
-        maxchunks=2,
-        xrootdtimeout=300,
-    )
-
-    Files = {"MET_Run2018":{"MET_Run2018A":[filename,]}}
-
-    print("Stage 4")
-
-    print("Running...\n")
-    Out = runner(
-        Files[Mode],
-        treename="Events",
-        processor_instance=barebones(),
-    )
+# class barebones(processor.ProcessorABC):
+#     def __init__(self):
+#         pass
+#     def process(self, events):
+#         njets = ak.num(events.Jet.pt , axis=0)
+#         out = {"nJets": njets }
+#         return out
+#     def postprocess(self, accumulator):
+#         pass
 
 #Begin the processor definition
 class SignalSignature(processor.ProcessorABC):
@@ -709,11 +658,126 @@ class SignalSignature(processor.ProcessorABC):
     def postprocess(self, accumulator):
         pass
 
+print("Stage 2")
 
+# filename = "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root"
+# #exec = "futures"
+# exec = "condor"
+# Mode = "MET_Run2018"
+
+print("Stage 3")
+
+#For futures execution
+if inputs.executor == "futures" :
+    files = getDataset(keymap=inputs.keymap,load=True, mode="sequential", begin=inputs.begin, end=inputs.end)
+    #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
+    futures_run = processor.Runner(
+        executor = processor.FuturesExecutor(workers=inputs.workers),
+        schema=NanoAODSchema,
+        chunksize= inputs.chunk_size ,
+        maxchunks= inputs.max_chunks,
+        xrootdtimeout=120
+    )
+    Output = futures_run(
+        files,
+        "Events",
+        processor_instance=SignalSignature()
+    )
+
+#For dask execution
+elif inputs.executor == "dask" :
+    print("WARNING: This feature is still in development!\nAttemping to run nevertheless ...")
+    from dask.distributed import Client , LocalCluster
+    cluster = LocalCluster()
+    client = Client(cluster)
+    cluster.scale(inputs.workers)
+    if input.short == 1 :
+        client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        with open("shortfileset.json") as f: #load the fileset
+            files = json.load(f)
+    else:
+        client.upload_file("../monoHbbtools/Load/newfileset.json")
+        with open("newfileset.json") as f: #load the fileset
+            files = json.load(f)
+    files = {"MET": files["Data"]["MET_Run2018"]["MET_Run2018A"][:inputs.files]}
+    dask_run = processor.Runner(
+        executor = processor.DaskExecutor(client=client),
+        schema=NanoAODSchema,
+        chunksize= inputs.chunk_size ,
+        maxchunks= inputs.max_chunks,
+        xrootdtimeout=120
+    )
+    Output = dask_run(
+        files,
+        "Events",
+        processor_instance=SignalSignature()
+    )
+
+#For condor execution
+elif inputs.executor == "condor" :
+    #Create a console log in case of a warning 
+    logging.basicConfig(
+        format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
+        level=logging.WARNING,
+    )
+    print("Preparing to run at condor...\n")
+    executor , client = condor.runCondor()
+    print("Executor and Client Obtained")
+    if inputs.short == 1 :
+        # import shutil
+        # shutil.make_archive("monoHbbtools", "zip", base_dir="monoHbbtools")
+        # client.upload_file("monoHbbtools.zip")
+        # client.upload_file("processor_SR_Resolved_Backgrounds.py")
+        # client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        client.upload_file("shortfileset.json")
+        client.upload_file("Snip.py")
+        with open("shortfileset.json") as f: #load the fileset
+            filedict = json.load(f)
+    else:
+        # import shutil
+        # shutil.make_archive("monoHbbtools", "zip", base_dir="monoHbbtools")
+        # client.upload_file("monoHbbtools.zip")
+        # client.upload_file("processor_SR_Resolved_Backgrounds.py")
+        # client.upload_file("../monoHbbtools/Load/newfileset.json")
+        client.upload_file("newfileset.json")
+        client.upload_file("Snip.py")
+        with open("newfileset.json") as f: #load the fileset
+            filedict = json.load(f)
+
+    files = getDataset(
+        keymap=inputs.keymap,
+        load=False ,
+        dict=filedict,
+        mode="sequential",
+        begin=inputs.begin,
+        end=inputs.end
+        )
+    #files = getDataset(keymap=inputs.keymap, mode="divide", files=inputs.files)
+
+    runner = processor.Runner(
+        executor=executor,
+        schema=NanoAODSchema,
+        chunksize=inputs.chunk_size,
+        maxchunks=inputs.max_chunks,
+        xrootdtimeout=300,
+    )
+    print("Starting the workers...\n")
+    Output = runner(
+        files,
+        treename="Events",
+        processor_instance=SignalSignature()
+    )
+
+#################################
+# Create the output file #
+#################################
 print("stage 5")
-
-file_name= "outfile_astepahead.coffea"
-util.save(output=Out , filename= file_name)
-print(f"File {file_name} saved.")
-
+try :
+    output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
+    pass
+except :
+    output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}.coffea"
+print("Saving the output to : " , output_file)
+util.save(output= Output, filename="coffea_files/"+output_file)
+print(f"File {output_file} saved.")
 print("Stage 6")
