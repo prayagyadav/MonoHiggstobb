@@ -149,7 +149,7 @@ def buildFileset(dict , redirector):
             raise KeyError
     return output
 
-def getDataset(keymap, dict = None, files=None, begin=0, end=0, mode = "sequential"):
+def getDataset(keymap,load=True , dict = None, files=None, begin=0, end=0, mode = "sequential"):
     #Warning : Never use 'files' with 'begin' and 'end'
     fileset = Loadfileset("newfileset.json")
     fileset_dict = fileset.getraw()
