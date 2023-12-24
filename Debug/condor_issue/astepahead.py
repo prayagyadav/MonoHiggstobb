@@ -105,7 +105,8 @@ class Loadfileset():
                 redirector_string = "root://xrootd-cms.infn.it//"
             case "wisc" | 3 :
                 redirector_string = "root://pubxrootd.hep.wisc.edu//"
-
+            case "hdfs" | 4 :
+                redirector_string = "/hdfs"
         raw_fileset = self.handler[mode][superkey][key] 
         requested_fileset = {superkey : [redirector_string+filename for filename in raw_fileset]}
         return requested_fileset
@@ -123,7 +124,8 @@ def buildFileset(dict , redirector):
     redirectors = {
         "fnal": "root://cmsxrootd.fnal.gov//",
         "infn": "root://xrootd-cms.infn.it//",
-        "wisc": "root://pubxrootd.hep.wisc.edu//"
+        "wisc": "root://pubxrootd.hep.wisc.edu//",
+        "hdfs": "/hdfs"
 
     }
     match redirector :
@@ -133,7 +135,8 @@ def buildFileset(dict , redirector):
             redirector_string = redirectors["infn"]
         case "wisc" | 3 :
             redirector_string = redirectors["wisc"]
-
+        case "hdfs" | 4 :
+            redirector_string = redirectors["hdfs"]
     temp = dict 
     output = {}
     for key in temp.keys() :
@@ -167,7 +170,7 @@ def getDataset(keymap,load=True , dict = None, files=None, begin=0, end=0, mode 
         ]
 
     
-    runnerfileset = buildFileset(fileset_dict[keymap],"fnal")
+    runnerfileset = buildFileset(fileset_dict[keymap],"hdfs")
     flat_list={}
     flat_list[keymap] = []
 
