@@ -2,8 +2,9 @@ from coffea import processor
 import argparse
 from coffea import util
 from coffea.nanoevents import NanoAODSchema , NanoEventsFactory
+from coffea.lumi_tools import LumiMask
 import awkward as ak
-import condor 
+import condor
 import numba
 import hist
 from Snip import *
@@ -11,59 +12,8 @@ import json
 import rich
 import numpy as np
 import os
+import shutil
 import logging
-
-def move_X509():
-    try:
-        _x509_localpath = (
-            [
-                line
-                for line in os.popen("voms-proxy-info").read().split("\n")
-                if line.startswith("path")
-            ][0]
-            .split(":")[-1]
-            .strip()
-        )
-    except Exception as err:
-        raise RuntimeError(
-            "x509 proxy could not be parsed, try creating it with 'voms-proxy-init'"
-        ) from err
-    _x509_path = f'/scratch/{os.environ["USER"]}/{_x509_localpath.split("/")[-1]}'
-    os.system(f"cp {_x509_localpath} {_x509_path}")
-    return os.path.basename(_x509_localpath)
-
-def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers=4):
-    from distributed import Client
-    from dask_jobqueue import HTCondorCluster
-
-    os.environ["CONDOR_CONFIG"] = "/etc/condor/condor_config"
-    _x509_path = move_X509()
-
-    cluster = HTCondorCluster(
-        cores=1,
-        memory="2 GB",
-        disk="1 GB",
-        job_extra_directives={
-            "+JobFlavour": '"longlunch"',
-            "log": "dask_job_output.$(PROCESS).$(CLUSTER).log",
-            "output": "dask_job_output.$(PROCESS).$(CLUSTER).out",
-            "error": "dask_job_output.$(PROCESS).$(CLUSTER).err",
-            "should_transfer_files": "yes",
-            "when_to_transfer_output": "ON_EXIT_OR_EVICT",
-            "+SingularityImage": '"/cvmfs/unpacked.cern.ch/registry.hub.docker.com/coffeateam/coffea-dask-cc7:latest"',
-            "Requirements": "HasSingularityJobStart",
-            "request_GPUs" : "1",
-            "InitialDir": f'/scratch/{os.environ["USER"]}',
-            "transfer_input_files": f'{_x509_path},{os.environ["EXTERNAL_BIND"]}'
-        },
-        job_script_prologue=[
-            "export XRD_RUNFORKHANDLER=1",
-            f"export X509_USER_PROXY={_x509_path}",
-        ]
-    )
-    cluster.adapt(minimum=1, maximum=workers)
-    executor = processor.DaskExecutor(client=Client(cluster))
-    return executor, Client(cluster)
 
 class Loadfileset():
     def __init__(self, jsonfilename) :
@@ -72,19 +22,18 @@ class Loadfileset():
 
     
     def Show(self , verbosity=1):
-        match verbosity :
-            case 1 :
-                for key, value in self.handler.items() :
+        if verbosity==1 :
+            for key, value in self.handler.items() :
                     rich.print(key+" : ", list(value.keys()))
-            case 2 :
-                for key, value in self.handler.items() :
+        elif verbosity==2 :
+            for key, value in self.handler.items() :
                     rich.print(key+" : ", list(value.keys()), "\n")
                     for subkey , subvalue in value.items() :
                         rich.print("\t"+subkey+" : ")
                         for file in subvalue :
                             rich.print("\t", file)
-            case 3 :
-                for key, value in self.handler.items() :
+        elif verbosity==3 :
+            for key, value in self.handler.items() :
                     rich.print(key+" : ", list(value.keys()), "\n")
                     for subkey , subvalue in value.items() :
                         rich.print("\t"+subkey+" : ")
@@ -97,16 +46,13 @@ class Loadfileset():
     
     @numba.jit(forceobj=True)
     def getFileset(self, mode ,superkey, key, redirector ) :
-        # Construct with desired redirector
-        match redirector :
-            case "fnal" | 1 :
-                redirector_string = "root://cmsxrootd.fnal.gov//"
-            case "infn" | 2 :
-                redirector_string = "root://xrootd-cms.infn.it//"
-            case "wisc" | 3 :
-                redirector_string = "root://pubxrootd.hep.wisc.edu//"
-            case "hdfs" | 4 :
-                redirector_string = "/hdfs"
+        if redirector=="fnal":
+            redirector_string = "root://cmsxrootd.fnal.gov//"
+        elif redirector=="infn":
+            redirector_string = "root://xrootd-cms.infn.it//"
+        elif redirector=="wisc":
+            redirector_string = "root://pubxrootd.hep.wisc.edu//"
+
         raw_fileset = self.handler[mode][superkey][key] 
         requested_fileset = {superkey : [redirector_string+filename for filename in raw_fileset]}
         return requested_fileset
@@ -128,15 +74,16 @@ def buildFileset(dict , redirector):
         "hdfs": "/hdfs"
 
     }
-    match redirector :
-        case "fnal" | 1 :
-            redirector_string = redirectors["fnal"]
-        case "infn" | 2 :
-            redirector_string = redirectors["infn"]
-        case "wisc" | 3 :
-            redirector_string = redirectors["wisc"]
-        case "hdfs" | 4 :
-            redirector_string = redirectors["hdfs"]
+
+    if (redirector=="fnal") | (redirector==1) :
+        redirector_string = redirectors["fnal"]
+    elif (redirector=="infn") | (redirector==2) :
+        redirector_string = redirectors["infn"]
+    elif (redirector=="wisc") | (redirector==3):
+        redirector_string = redirectors["wisc"]
+    elif (redirector=="hdfs") | (redirector==4):
+        redirector_string = redirectors["hdfs"]
+
     temp = dict 
     output = {}
     for key in temp.keys() :
@@ -152,7 +99,7 @@ def buildFileset(dict , redirector):
             raise KeyError
     return output
 
-def getDataset(keymap,load=True , dict = None, files=None, begin=0, end=0, mode = "sequential"):
+def getDataset(keymap, load=True, dict = None, files=None, begin=0, end=0, mode = "sequential"):
     #Warning : Never use 'files' with 'begin' and 'end'
     fileset = Loadfileset("newfileset.json")
     fileset_dict = fileset.getraw()
@@ -170,7 +117,7 @@ def getDataset(keymap,load=True , dict = None, files=None, begin=0, end=0, mode 
         ]
 
     
-    runnerfileset = buildFileset(fileset_dict[keymap],"hdfs")
+    runnerfileset = buildFileset(fileset_dict[keymap],"fnal")
     flat_list={}
     flat_list[keymap] = []
 
@@ -224,6 +171,24 @@ def getDataset(keymap,load=True , dict = None, files=None, begin=0, end=0, mode 
     return outputfileset
 
 print("Stage 1")
+
+def get_lumiobject():
+    path = "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt" 
+    return LumiMask(path)
+
+lumimaskobject = get_lumiobject()
+
+def lumi(events,cutflow,path="",lumiobject=None):
+    #Selecting use-able events
+    if lumiobject==None :
+        #path_of_file = path+"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.json"
+        path_of_file = path+"golden.json"
+        lumimask = LumiMask(path_of_file)
+    else :
+        lumimask = lumiobject
+    events = events[lumimask(events.run, events.luminosityBlock)]
+    cutflow["lumimask"] = len(events)
+    return events , cutflow
 
 ##############################
 # Define the terminal inputs #
@@ -299,17 +264,6 @@ parser.add_argument(
 )
 inputs = parser.parse_args()
 
-
-# class barebones(processor.ProcessorABC):
-#     def __init__(self):
-#         pass
-#     def process(self, events):
-#         njets = ak.num(events.Jet.pt , axis=0)
-#         out = {"nJets": njets }
-#         return out
-#     def postprocess(self, accumulator):
-#         pass
-
 #Begin the processor definition
 class SignalSignature(processor.ProcessorABC):
     """
@@ -350,8 +304,10 @@ class SignalSignature(processor.ProcessorABC):
     """
 
 
-    def __init__(self):
+    def __init__(self,helper_objects = [] ):
         # Initialize the cutflow dictionary
+        if len(helper_objects) > 0 :
+            self.lumiobject = helper_objects[0] 
         self.cutflow = {}
         self.run_set = set({})
 
@@ -511,9 +467,9 @@ class SignalSignature(processor.ProcessorABC):
 
             #choosing certified good events
             #figure out how to implement condor folder transfers and fix this, in the meantime ignore for condor runs
-            should_lumi = False
+            should_lumi = True
             if should_lumi :
-                events, cutflow = lumi(events,cutflow)
+                events, cutflow = lumi(events, cutflow, lumiobject=self.lumiobject)
 
             #Saving the event run
             for run in set(events.run):
@@ -663,12 +619,14 @@ class SignalSignature(processor.ProcessorABC):
 
 print("Stage 2")
 
-# filename = "root://cmsxrootd.fnal.gov///store/data/Run2018A/MET/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/110000/0F8C0C8C-63E4-1D4E-A8DF-506BDB55BD43.root"
-# #exec = "futures"
-# exec = "condor"
-# Mode = "MET_Run2018"
-
-print("Stage 3")
+def zip_files(list_of_files):
+    os.makedirs("temp_folder")
+    for file in list_of_files :
+        shutil.copy(file,"temp_folder")
+    archive_name = "helper_files"
+    shutil.make_archive(archive_name,"zip","temp_folder")
+    shutil.rmtree("temp_folder")
+    return archive_name+".zip"
 
 #For futures execution
 if inputs.executor == "futures" :
@@ -718,21 +676,20 @@ elif inputs.executor == "dask" :
 
 #For condor execution
 elif inputs.executor == "condor" :
-    #Create a console log in case of a warning 
+    #Create a console log for easy debugging 
     logging.basicConfig(
         format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
         level=logging.WARNING,
     )
     print("Preparing to run at condor...\n")
-    executor , client = condor.runCondor()
+    executor , client = condor.runCondor(workers=inputs.workers)
     print("Executor and Client Obtained")
     if inputs.short == 1 :
         # import shutil
         # shutil.make_archive("monoHbbtools", "zip", base_dir="monoHbbtools")
         # client.upload_file("monoHbbtools.zip")
-        # client.upload_file("processor_SR_Resolved_Backgrounds.py")
-        # client.upload_file("../monoHbbtools/Load/shortfileset.json")
-        client.upload_file("shortfileset.json")
+
+        client.upload_file("./Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
         client.upload_file("Snip.py")
         with open("shortfileset.json") as f: #load the fileset
             filedict = json.load(f)
@@ -740,10 +697,18 @@ elif inputs.executor == "condor" :
         # import shutil
         # shutil.make_archive("monoHbbtools", "zip", base_dir="monoHbbtools")
         # client.upload_file("monoHbbtools.zip")
-        # client.upload_file("processor_SR_Resolved_Backgrounds.py")
-        # client.upload_file("../monoHbbtools/Load/newfileset.json")
-        client.upload_file("newfileset.json")
-        client.upload_file("Snip.py")
+        
+        #client.wait_for_workers(1)
+        #client.upload_file("Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
+        #client.upload_file("Snip.py")
+        client.upload_file(
+                zip_files(
+                    [
+                        "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+                        "Snip.py"
+                        ]
+                    )
+                )
         with open("newfileset.json") as f: #load the fileset
             filedict = json.load(f)
 
@@ -768,13 +733,13 @@ elif inputs.executor == "condor" :
     Output = runner(
         files,
         treename="Events",
-        processor_instance=SignalSignature()
+        processor_instance=SignalSignature([lumimaskobject])
     )
 
 #################################
 # Create the output file #
 #################################
-print("stage 5")
+print("stage 3")
 try :
     output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
     pass
@@ -783,4 +748,4 @@ except :
 print("Saving the output to : " , output_file)
 util.save(output= Output, filename="coffea_files/"+output_file)
 print(f"File {output_file} saved.")
-print("Stage 6")
+print("Stage 4")
