@@ -146,8 +146,9 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     for key in Output.keys() :
         #Dijet Histogram
         if key.startswith("MET_Run2018") :
-            for subkey in Output[key].keys():
-                MET_Run2018_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+            # for subkey in Output[key].keys():
+            #     MET_Run2018_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+            pass
         elif key.startswith("ZJets_NuNu") :
             for subkey in Output[key].keys():
                 ZJets_NuNu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
@@ -321,14 +322,14 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             N_i[subkey] = Output["ST"][subkey]["Cutflow"]["Total events"]
             ST_weight_factor[subkey] = ( lumi * ST_xsec[subkey] )/N_i[subkey]
         
-        #Simply add up the data histograms
-        MET_Run2018_hists_list=[]
-        for key in MET_Run2018_hists.keys() :
-            MET_Run2018_hists_list.append(MET_Run2018_hists[key])
+        # #Simply add up the data histograms
+        # MET_Run2018_hists_list=[]
+        # for key in MET_Run2018_hists.keys() :
+        #     MET_Run2018_hists_list.append(MET_Run2018_hists[key])
 
-        MET_Run2018_hist = MET_Run2018_hists_list[0]
-        for histogram in MET_Run2018_hists_list[1:] :
-            MET_Run2018_hist += MET_Run2018_hists[key]
+        # MET_Run2018_hist = MET_Run2018_hists_list[0]
+        # for histogram in MET_Run2018_hists_list[1:] :
+        #     MET_Run2018_hist += MET_Run2018_hists[key]
 
         #individually apply cross section and then add up the MC histograms by key
         def hist_xsec(key_hists, key_weight_factor):
@@ -359,7 +360,7 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     norm_factor = 1.0
     if norm :
         norm_factor= 1.0 / (
-            MET_Run2018_hist.sum()+
+            # MET_Run2018_hist.sum()+
             ZJets_NuNu_hist.sum()+
             TTToSemiLeptonic_hist.sum()+
             TTTo2L2Nu_hist.sum()+
@@ -372,17 +373,17 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             )
 
     fig, ax = plt.subplots()
-    hep.histplot(
-        norm_factor*MET_Run2018_hist ,
-        histtype='errorbar',
-        color="black",
-        #marker=[],
-        label="MET_Run2018",
-        xerr = 5,
-        yerr=5,
-        lw=1,
-        ax=ax
-        )
+    # hep.histplot(
+    #     norm_factor*MET_Run2018_hist ,
+    #     histtype='errorbar',
+    #     color="black",
+    #     #marker=[],
+    #     label="MET_Run2018",
+    #     xerr = 5,
+    #     yerr=5,
+    #     lw=1,
+    #     ax=ax
+    #     )
     #print(VV_hist)
     hep.histplot(
         [
@@ -507,7 +508,7 @@ def accum(key):
 
 match inputs.fulldataset :
     case 1 :
-        MET_Run2018 = accum("MET_Run2018")
+        #MET_Run2018 = accum("MET_Run2018")
         #showinfo(MET_Run2018)
         ZJets_NuNu = accum("ZJets_NuNu")
         #showinfo(ZJets_NuNu)
@@ -530,7 +531,7 @@ match inputs.fulldataset :
         
         
     case 0 :
-        MET_Run2018 = util.load("coffea_files/SR_Resolved_Backgrounds_MET_Run2018.coffea")
+        #MET_Run2018 = util.load("coffea_files/SR_Resolved_Backgrounds_MET_Run2018.coffea")
         ZJets_NuNu = util.load("coffea_files/SR_Resolved_Backgrounds_ZJets_NuNu.coffea")
         TTToSemiLeptonic = util.load("coffea_files/SR_Resolved_Backgrounds_TTToSemiLeptonic.coffea")
         WJets_LNu = util.load("coffea_files/SR_Resolved_Backgrounds_WJets_LNu.coffea")
@@ -542,7 +543,7 @@ match inputs.fulldataset :
         ST = util.load("coffea_files/SR_Resolved_Backgrounds_ST.coffea")
 
 master_dict = processor.accumulate([
-    MET_Run2018,
+    #MET_Run2018,
     ZJets_NuNu,
     TTToSemiLeptonic,
     WJets_LNu,
@@ -555,7 +556,7 @@ master_dict = processor.accumulate([
     ])
 util.save(master_dict, "coffea_files/BackgroundDijets.coffea")
 showinfo(master_dict)
-plotall(master_dict)
+#plotall(master_dict)
 #combined_plot(master_dict)
 combined_plot_manual(master_dict,norm=False, xsec=True)
-plotcutflow(master_dict)
+#plotcutflow(master_dict)

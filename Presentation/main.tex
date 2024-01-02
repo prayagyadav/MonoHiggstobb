@@ -305,33 +305,76 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section[Contribution of various backgrounds]{\small{\today} \\ Tue, $2^{nd}$ January 2024 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section[Section label]{\small{\today} \\ Thu, $5^{th}$ October 2023  }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-     \begin{frame}[fragile]{Frame title}
+     \begin{frame}[fragile]{Contribution of various backgrounds: Resolved b$ \bar{b} $ bar in 2018}
       \begin{columns}
         \column{0.58\textwidth}
         \begin{figure}
           \centering
-          \includegraphics[width=1\textwidth]{uoh_logo.png}
-          \label{plot label}
-          \caption{Your caption}
+          \includegraphics[width=1\textwidth]{../Backgrounds/plots/SR_Resolved_Backgrounds_dijet_mass_Combined.png}
+          \label{contribution}
+          \caption{Simulated contribution of various backgrounds to the signal in the resolved b$ \bar{b} $ bar case for 2018}
         \end{figure}
         \column{0.38\textwidth}
+        Selections Applied: 
+        Event Selections:
         \begin{itemize}
           \raggedright 
-          \small
-          \item {point 1}
-          \item {point 2}
+          \tiny
+          \item {MET > 200 GeV}
+          \item {no leptons}
+          \item {no photons}
+        \end{itemize}
+        Object Selections:
+        \begin{itemize}
+          \raggedright 
+          \tiny
+          \item {jet $p_t > 30 $ GeV}
+          \item {jet $| \eta | < 2.5 $}
+          \item {$\Delta \phi (Jet, \ MET)$}
+          \item {at least 2 tight bjets (algorithm:DeepFlavB)}
+          \item {leading bjet $p_t > 50 $ GeV}
+          \item {subleading bjet $p_t > 30 $ GeV}
+          \item {atmost 2 additional jets}
+          \item {dijet = leading bjet + subleading bjet}
+          \item {dijet mass between (100 GeV,150 GeV)}
+          \item {dijet $p_t > 100 $ GeV}
         \end{itemize}
       \end{columns}
     \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section[Section label]{\small{\today} \\ Thu, $5^{th}$ October 2023  }
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%      \begin{frame}[fragile]{Frame title}
+%       \begin{columns}
+%         \column{0.58\textwidth}
+%         \begin{figure}
+%           \centering
+%           \includegraphics[width=1\textwidth]{uoh_logo.png}
+%           \label{plot label}
+%           \caption{Your caption}
+%         \end{figure}
+%         \column{0.38\textwidth}
+%         \begin{itemize}
+%           \raggedright 
+%           \small
+%           \item {point 1}
+%           \item {point 2}
+%         \end{itemize}
+%       \end{columns}
+%     \end{frame}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \appendix
 
