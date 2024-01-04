@@ -130,7 +130,7 @@ def combined_plot(Output):
     fig.savefig("plots/"+plotname, dpi=300)
     print(plotname , f" created at {os.getcwd()}")
 
-def combined_plot_manual(Output,norm = False , xsec = False):
+def combined_plot_manual(Output,norm = False , xsec = False , property = "dijets_mass"):
     
     #Access keys and make histogram dictionaries
     MET_Run2018_hists = {}
@@ -151,31 +151,31 @@ def combined_plot_manual(Output,norm = False , xsec = False):
             pass
         elif key.startswith("ZJets_NuNu") :
             for subkey in Output[key].keys():
-                ZJets_NuNu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                ZJets_NuNu_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("TTToSemiLeptonic"):
             for subkey in Output[key].keys():
-                TTToSemiLeptonic_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                TTToSemiLeptonic_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("TTTo2L2Nu"):
             for subkey in Output[key].keys():
-                TTTo2L2Nu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                TTTo2L2Nu_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("TTToHadronic"):
             for subkey in Output[key].keys():
-                TTToHadronic_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                TTToHadronic_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("WJets_LNu"):
             for subkey in Output[key].keys():
-                WJets_LNu_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                WJets_LNu_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("DYJets_LL"):
             for subkey in Output[key].keys():
-                DYJets_LL_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                DYJets_LL_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("VV"):
             for subkey in Output[key].keys():
-                VV_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                VV_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("QCD"):
             for subkey in Output[key].keys():
-                QCD_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                QCD_hists[subkey] = Output[key][subkey]["Histograms"][property]
         elif key.startswith("ST"):
             for subkey in Output[key].keys():
-                ST_hists[subkey] = Output[key][subkey]["Histograms"]["dijets_mass"]
+                ST_hists[subkey] = Output[key][subkey]["Histograms"][property]
     #cross sections
     if xsec :
         match inputs.fulldataset :
@@ -419,17 +419,53 @@ def combined_plot_manual(Output,norm = False , xsec = False):
     #     ax=ax
     #     )
 
-    hep.cms.label("Preliminary",data = False)
-    ax.set_ylabel("Arbitrary Scale")
-    plt.xlim([100.0,150.0])
-    ax.set_xlabel("Mass (GeV)")
-    ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
-    #plt.yscale("log")
+    if property == "dijets_mass":
+        hep.cms.label("Preliminary",data = False)
+        ax.set_ylabel("Arbitrary Scale")
+        plt.xlim([100.0,150.0])
+        ax.set_xlabel("Mass (GeV)")
+        ax.set_title(r"ak4 $b \bar{b}$ mass",pad=40, color="#192655")
+        #plt.yscale("log")
+    elif property == "dijets_pt":
+        hep.cms.label("Preliminary",data = False)
+        ax.set_ylabel("Arbitrary Scale")
+        plt.xlim([0.0,1000.0])
+        ax.set_xlabel(r"$p_t$ (GeV)")
+        ax.set_title(r"ak4 $b \bar{b}$ $p_t$",pad=40, color="#192655")
+        #plt.yscale("log")
+    elif property == "dijets_eta":
+        hep.cms.label("Preliminary",data = False)
+        ax.set_ylabel("Arbitrary Scale")
+        plt.xlim([-2.5,2.5])
+        ax.set_xlabel(r"$ \eta $")
+        ax.set_title(r"ak4 $b \bar{b}$ $\eta $",pad=40, color="#192655")
+        #plt.yscale("log")
+    elif property == "dijets_phi":
+        hep.cms.label("Preliminary",data = False)
+        ax.set_ylabel("Arbitrary Scale")
+        plt.xlim([-3.14,3.14])
+        ax.set_xlabel(r"$\phi $")
+        ax.set_title(r"ak4 $b \bar{b}$ $\phi $",pad=40, color="#192655")
+        #plt.yscale("log")
+    elif property == "met_pt_hist":
+        hep.cms.label("Preliminary",data = False)
+        ax.set_ylabel("Arbitrary Scale")
+        plt.xlim([0.0,1000.0])
+        ax.set_xlabel(r"$p_t$ (GeV)")
+        ax.set_title(r"ak4 $b \bar{b}$ $p^{miss}_t$",pad=40, color="#192655")
+        #plt.yscale("log")
+    elif property == "met_phi_hist":
+        hep.cms.label("Preliminary",data = False)
+        ax.set_ylabel("Arbitrary Scale")
+        plt.xlim([-3.14,3.14])
+        ax.set_xlabel(r"$\phi $")
+        ax.set_title(r"ak4 $b \bar{b}$ $\phi $ of $ p^{miss}_t $",pad=40, color="#192655")
+        #plt.yscale("log")
     fig.text(0.01,0.01,"Generated : "+get_timestamp(), fontsize = "10")
     fig.text(0.87,0.01," Mode: Stacked", fontsize = "10")
     fig.legend(prop={"size":12}, loc= (0.40,0.40),frameon=1, reverse = True)
     #fig.legend(loc=1)
-    plotname = f"SR_Resolved_Backgrounds_dijet_mass_Combined.png"
+    plotname = f"SR_Resolved_Backgrounds_{property}_Combined.png"
     fig.savefig("plots/"+plotname, dpi=300)
     fig.clear()
     print(plotname , f" created at {os.getcwd()}")
@@ -558,5 +594,10 @@ util.save(master_dict, "coffea_files/BackgroundDijets.coffea")
 showinfo(master_dict)
 #plotall(master_dict)
 #combined_plot(master_dict)
-combined_plot_manual(master_dict,norm=False, xsec=True)
+combined_plot_manual(master_dict,norm=False, xsec=True , property="dijets_mass")
+combined_plot_manual(master_dict,norm=False, xsec=True , property="dijets_pt")
+combined_plot_manual(master_dict,norm=False, xsec=True , property="dijets_eta")
+combined_plot_manual(master_dict,norm=False, xsec=True , property="dijets_phi")
+combined_plot_manual(master_dict,norm=False, xsec=True , property="met_pt_hist")
+combined_plot_manual(master_dict,norm=False, xsec=True , property="met_phi_hist")
 #plotcutflow(master_dict)
