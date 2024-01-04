@@ -71,7 +71,8 @@ def buildFileset(dict , redirector):
         "fnal": "root://cmsxrootd.fnal.gov//",
         "infn": "root://xrootd-cms.infn.it//",
         "wisc": "root://pubxrootd.hep.wisc.edu//",
-        "hdfs": "/hdfs"
+        "hdfs": "/hdfs",
+        "commonfs": "/commonfs"
 
     }
 
@@ -83,6 +84,8 @@ def buildFileset(dict , redirector):
         redirector_string = redirectors["wisc"]
     elif (redirector=="hdfs") | (redirector==4):
         redirector_string = redirectors["hdfs"]
+    elif (redirector=="commonfs") | (redirector==5):
+        redirector_string = redirectors["commonfs"]
 
     temp = dict 
     output = {}
@@ -117,7 +120,7 @@ def getDataset(keymap, load=True, dict = None, files=None, begin=0, end=0, mode 
         ]
 
     
-    runnerfileset = buildFileset(fileset_dict[keymap],"fnal")
+    runnerfileset = buildFileset(fileset_dict[keymap],"commonfs")
     flat_list={}
     flat_list[keymap] = []
 
