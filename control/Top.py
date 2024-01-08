@@ -645,7 +645,7 @@ if inputs.executor == "futures" :
     Output = futures_run(
         files,
         "Events",
-        processor_instance=SignalSignature()
+        processor_instance=SignalSignature([lumimaskobject])
     )
 
 #For dask execution

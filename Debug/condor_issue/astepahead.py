@@ -645,22 +645,29 @@ if inputs.executor == "futures" :
     Output = futures_run(
         files,
         "Events",
-        processor_instance=SignalSignature()
+        processor_instance=SignalSignature([lumimaskobject])
     )
 
 #For dask execution
 elif inputs.executor == "dask" :
     print("WARNING: This feature is still in development!\nAttemping to run nevertheless ...")
+    #Create a console log for easy debugging 
+    logging.basicConfig(
+        format="%(asctime)s %(name)s:%(levelname)s:%(message)s",
+        level=logging.WARNING,
+    )
     from dask.distributed import Client , LocalCluster
     cluster = LocalCluster()
     client = Client(cluster)
     cluster.scale(inputs.workers)
     if input.short == 1 :
-        client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        #client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        client.upload_file("Snip.py")
         with open("shortfileset.json") as f: #load the fileset
             files = json.load(f)
     else:
-        client.upload_file("../monoHbbtools/Load/newfileset.json")
+        #client.upload_file("../monoHbbtools/Load/newfileset.json")
+        client.upload_file("Snip.py")
         with open("newfileset.json") as f: #load the fileset
             files = json.load(f)
     files = {"MET": files["Data"]["MET_Run2018"]["MET_Run2018A"][:inputs.files]}
@@ -674,7 +681,7 @@ elif inputs.executor == "dask" :
     Output = dask_run(
         files,
         "Events",
-        processor_instance=SignalSignature()
+        processor_instance=SignalSignature([lumimaskobject])
     )
 
 #For condor execution

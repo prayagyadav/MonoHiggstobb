@@ -1,0 +1,1 @@
+singularity shell -B /commonfs/ /commonfs/singularity_images/coffeateam/coffea-dask_latest-py3.10.sif

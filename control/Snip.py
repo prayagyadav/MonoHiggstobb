@@ -65,10 +65,22 @@ def loose_photons(events):
     Id = events.Photon.cutBased >= 1 #__doc = 0: fail  1: loose    2: medium   3: tight
     return events.Photon[Pt & Eta & Id]
 
-def lumi(events,cutflow):
+# def lumi(events,cutflow):
+#     #Selecting use-able events
+#     path = "../monoHbbtools/Load/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
+#     lumimask = LumiMask(path)
+#     events = events[lumimask(events.run, events.luminosityBlock)]
+#     cutflow["lumimask"] = len(events)
+#     return events , cutflow
+
+def lumi(events,cutflow,path="",lumiobject=None):
     #Selecting use-able events
-    path = "../monoHbbtools/Load/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
-    lumimask = LumiMask(path)
+    if lumiobject==None :
+        #path_of_file = path+"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.json"
+        path_of_file = path+"golden.json"
+        lumimask = LumiMask(path_of_file)
+    else :
+        lumimask = lumiobject
     events = events[lumimask(events.run, events.luminosityBlock)]
     cutflow["lumimask"] = len(events)
     return events , cutflow
