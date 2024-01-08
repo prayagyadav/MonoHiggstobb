@@ -471,7 +471,7 @@ if __name__=="__main__":
 
                 #choosing certified good events
                 #figure out how to implement condor folder transfers and fix this, in the meantime ignore for condor runs
-                should_lumi = True
+                should_lumi = False
                 if should_lumi :
                     events, cutflow = lumi(events, cutflow, lumiobject=self.lumiobject)
 
@@ -656,17 +656,10 @@ if __name__=="__main__":
         from dask.distributed import Client , LocalCluster
         cluster = LocalCluster()
         client = Client(cluster)
-        cluster.scale(inputs.workers)
+        #cluster.scale(inputs.workers)
+        
         #client.upload_file("../monoHbbtools/Load/newfileset.json")
-
-        client.upload_file(zip_files(
-            [
-                "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                "Snip.py"
-                ]
-            )
-            )
-        #client.upload_file("Snip.py")
+        client.upload_file("Snip.py")
         with open("newfileset.json") as f: #load the fileset
             filedict = json.load(f)
         #files = {"MET": files["Data"]["MET_Run2018"]["MET_Run2018A"][:inputs.files]}
