@@ -699,7 +699,7 @@ elif inputs.executor == "dask" :
     Output = dask_run(
         files,
         "Events",
-        processor_instance=SignalSignature()
+        processor_instance=SignalSignature([lumimaskobject])
     )
 
 #For condor execution
