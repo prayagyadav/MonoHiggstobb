@@ -656,14 +656,39 @@ elif inputs.executor == "dask" :
     client = Client(cluster)
     cluster.scale(inputs.workers)
     if input.short == 1 :
-        client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        #client.upload_file("../monoHbbtools/Load/shortfileset.json")
+        client.upload_file(
+                zip_files(
+                    [
+                        "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+                        "Snip.py"
+                        ]
+                    )
+                )
         with open("shortfileset.json") as f: #load the fileset
-            files = json.load(f)
+            filedict = json.load(f)
     else:
-        client.upload_file("../monoHbbtools/Load/newfileset.json")
+        #client.upload_file("../monoHbbtools/Load/newfileset.json")
+        client.upload_file(
+                zip_files(
+                    [
+                        "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+                        "Snip.py"
+                        ]
+                    )
+                )
         with open("newfileset.json") as f: #load the fileset
-            files = json.load(f)
-    files = {"MET": files["Data"]["MET_Run2018"]["MET_Run2018A"][:inputs.files]}
+            filedict = json.load(f)
+    #files = {"MET": files["Data"]["MET_Run2018"]["MET_Run2018A"][:inputs.files]}
+    files = getDataset(
+        keymap=inputs.keymap,
+        load=False ,
+        dict=filedict,
+        mode="sequential",
+        begin=inputs.begin,
+        end=inputs.end
+        )
+    #files 
     dask_run = processor.Runner(
         executor = processor.DaskExecutor(client=client),
         schema=NanoAODSchema,
