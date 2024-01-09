@@ -1,1 +1,1 @@
-singularity shell -B /commonfs/ /commonfs/singularity_images/coffeateam/coffea-dask_latest-py3.10.sif
+singularity shell -B /hdfs/ -B /scratch/ /cvmfs/unpacked.cern.ch/registry.hub.docker.com/coffeateam/coffea-dask-cc7:latest-py3.10
