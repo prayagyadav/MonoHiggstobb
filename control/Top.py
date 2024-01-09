@@ -266,6 +266,12 @@ if __name__=="__main__":
         help="Use the short fileset",
         type=int
     )
+    parser.add_argument(
+        "-cat",
+        help="category : resolved or boosted",
+        choices=["resolved","boosted"],
+        type=str
+    )
     inputs = parser.parse_args()
     
 
@@ -295,7 +301,7 @@ if __name__=="__main__":
         Output = futures_run(
             files,
             "Events",
-            processor_instance=Top_mu(category="resolved",helper_objects=[lumimaskobject])
+            processor_instance=Top_mu(category=inputs.cat,helper_objects=[lumimaskobject])
         )
     
     #For dask execution
@@ -337,7 +343,7 @@ if __name__=="__main__":
         Output = dask_run(
             files,
             "Events",
-            processor_instance=Top_mu(category="resolved",helper_objects=[lumimaskobject])
+            processor_instance=Top_mu(category=inputs.cat,helper_objects=[lumimaskobject])
         )
     
     #For condor execution
@@ -399,7 +405,7 @@ if __name__=="__main__":
         Output = runner(
             files,
             treename="Events",
-            processor_instance=Top_mu(category="resolved",helper_objects=[lumimaskobject])
+            processor_instance=Top_mu(category=inputs.cat,helper_objects=[lumimaskobject])
         )
 
     #################################
