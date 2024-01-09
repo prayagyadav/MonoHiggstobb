@@ -2,7 +2,7 @@ from coffea import processor
 import hist 
 from Snip import *
 #Begin the processor definition
-class SignalSignature(processor.ProcessorABC):
+class Top_mu(processor.ProcessorABC):
     """
     Flow of Data:
 
