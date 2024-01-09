@@ -25,13 +25,19 @@ def loose_muons(events):
     Id = events.Muon.looseId 
     return events.Muon[PFCand & RelIso & Eta & Pt & Id]
 
-def tight_muons(events):
+def tight_muons(events, cutflow): ####
     PFCand = events.Muon.isPFcand
     RelIso = events.Muon.pfRelIso04_all < 0.15
     Eta = abs(events.Muon.eta) < 2.4
     Pt = events.Muon.pt > 30.0
     Id = events.Muon.tightId 
-    return events.Muon[PFCand & RelIso & Eta & Pt & Id]
+
+    final_cut = PFCand & RelIso & Eta & Pt & Id
+    tightmuons = events.Muon[final_cut]
+    events = events[ak.num(tightmuons) == 1]
+    muonarray = events.Muon
+    cutflow["one_tight_muon"] = len(events)
+    return events , cutflow
 
 def taus(events, version = 9):
     match version :
@@ -65,14 +71,6 @@ def loose_photons(events):
     Id = events.Photon.cutBased >= 1 #__doc = 0: fail  1: loose    2: medium   3: tight
     return events.Photon[Pt & Eta & Id]
 
-# def lumi(events,cutflow):
-#     #Selecting use-able events
-#     path = "../monoHbbtools/Load/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"
-#     lumimask = LumiMask(path)
-#     events = events[lumimask(events.run, events.luminosityBlock)]
-#     cutflow["lumimask"] = len(events)
-#     return events , cutflow
-
 def lumi(events,cutflow,path="",lumiobject=None):
     #Selecting use-able events
     if lumiobject==None :
@@ -85,16 +83,22 @@ def lumi(events,cutflow,path="",lumiobject=None):
     cutflow["lumimask"] = len(events)
     return events , cutflow
 
-def met_trigger(events,cutflow):
+def met_trigger(events,cutflow,era): ####
     #MET Triggers
     trigger = PackedSelection()
-    trigger.add(
-        "noMuon",
-        events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 |
-        events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight |
-        events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight
+    if era == 2018:
+        trigger.add(
+            "noMuonEnergyInJet",
+            events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 |
+            events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight |
+            events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight 
+            )
+    elif era == 2017 :
+        trigger.add(
+            "noMuonEnergyInJet",
+            events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight
         )
-    trigger_cut = trigger.all("noMuon")
+    trigger_cut = trigger.all("noMuonEnergyInJet")
     events = events[trigger_cut]
     cutflow["MET trigger"] = len(events)
     return events , cutflow
@@ -124,10 +128,10 @@ def met_filter(events,cutflow):
     cutflow["MET filters"] = len(events)
     return events , cutflow
 
-def met_selection(events,cutflow):
+def met_selection(events,cutflow,GeV):
     #MET Selection
-    events = events[events.MET.pt > 200 ] #200 for resolved category and 250GeV for boosted category
-    cutflow["MET > 200 GeV"] = len(events)
+    events = events[events.MET.pt > GeV ] #200 for resolved category and 250GeV for boosted category
+    cutflow[f"MET > {GeV} GeV"] = len(events)
     return events , cutflow
 
 def no_electrons(events,cutflow):
@@ -195,9 +199,14 @@ def subleading_jet_pt(events,cutflow):
     cutflow["bjet2 pt > 30 GeV"] = len(events)
     return events,cutflow
 
-def additional_jets(events, cutflow):
-    events = events[ak.num(events.Jet) <= 4] #Number of additional jets is 0, 1 or 2
-    cutflow["Additional Jets <= 2"] = len(events)
+def additional_jets(events, cutflow , comparator="equal_to", number = 1):
+    if comparator=="equal_to" :
+        events = events[ak.num(events.Jet) == number]
+    elif comparator=="greater_than_or_equal_to":
+        events = events[ak.num(events.Jet) >= number]
+    elif comparator=="less_than_or_equal_to":
+        events = events[ak.num(events.Jet) <= number]
+    cutflow[f"Additional Jets {comparator} {number}"] = len(events)
     return events,cutflow
 
 def dijet_mass(dijets,cutflow):

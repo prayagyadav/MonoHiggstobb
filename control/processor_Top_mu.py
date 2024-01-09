@@ -41,10 +41,11 @@ class Top_mu(processor.ProcessorABC):
     """
 
 
-    def __init__(self,helper_objects = [] ):
+    def __init__(self,category,helper_objects = [] ):
         # Initialize the cutflow dictionary
         if len(helper_objects) > 0 :
             self.lumiobject = helper_objects[0] 
+        self.category = category
         self.cutflow = {}
         self.run_set = set({})
 
@@ -213,18 +214,17 @@ class Top_mu(processor.ProcessorABC):
                 self.run_set.add(run)
 
             #MET_Trigger
-            events, cutflow = met_trigger(events,cutflow)
+            events, cutflow = met_trigger(events,cutflow,era=2018)
 
             #MET_Filters
             events, cutflow = met_filter(events,cutflow)
         
 
         #MET_selection
-        events, cutflow = met_selection(events,cutflow)
+        events, cutflow = met_selection(events,cutflow,GeV=50.0)
     
         #vetoes
         events, cutflow = no_electrons(events,cutflow)
-        events, cutflow = no_muons(events,cutflow)
         events, cutflow = no_photons(events,cutflow)
         if (self.mode).startswith("MonoHTobb_ZpBaryonic"):
             events, cutflow = no_taus(events,cutflow, version=7)
@@ -232,6 +232,17 @@ class Top_mu(processor.ProcessorABC):
             events, cutflow = no_taus(events,cutflow, version=9)
 
         #Object selections
+            
+        #Exactly one tight muon
+        events, cutflow = tight_muons(events,cutflow)
+
+        #Hadronic Recoil
+        events.HET = events.MET - events.Muon.pt
+        if self.category == "boosted" :
+            events = events[events.HET > 250.0 ]
+        elif self.category == "resolved" :
+            events = events[events.HET > 200.0 ]
+        cutflow["Hadronic Recoil"] = len(events)
         #ak4Jets
 
         #Apply pt and eta cut
