@@ -184,7 +184,8 @@ def subleading_jet_pt(events,cutflow):
     return events,cutflow
 
 def additional_jets(events, cutflow):
-    events = events[ak.num(events.Jet) <= 4] #Number of additional jets is 0, 1 or 2
+    essential_number = 2
+    events = events[ak.num(events.Jet) <= (essential_number+2)] #Number of additional jets is 0, 1 or 2
     cutflow["Additional Jets <= 2"] = len(events)
     return events,cutflow
 
