@@ -32,7 +32,7 @@ class SignalSignature(processor.ProcessorABC):
         |
         |
         v
-    OBJECT SELECTION
+    EVENT SELECTION AND OBJECT SELECTION
         |
         |
         |
