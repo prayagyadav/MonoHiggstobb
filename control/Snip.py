@@ -33,9 +33,11 @@ def tight_muons(events, cutflow): ####
     Id = events.Muon.tightId 
 
     final_cut = PFCand & RelIso & Eta & Pt & Id
+    print(events)
     tightmuons = events.Muon[final_cut]
+    print(tight_muons)
     events = events[ak.num(tightmuons) == 1]
-    muonarray = events.Muon
+    print(events)
     cutflow["one_tight_muon"] = len(events)
     return events , cutflow
 
