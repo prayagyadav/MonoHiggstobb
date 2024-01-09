@@ -14,7 +14,7 @@ if __name__=="__main__":
     import os
     import shutil
     import logging
-    from processor_SignalSignature import SignalSignature
+    from processor_Top_mu import Top_mu
     
     class Loadfileset():
         def __init__(self, jsonfilename) :
@@ -295,7 +295,7 @@ if __name__=="__main__":
         Output = futures_run(
             files,
             "Events",
-            processor_instance=SignalSignature([lumimaskobject])
+            processor_instance=Top_mu(category="resolved",helper_objects=[lumimaskobject])
         )
     
     #For dask execution
@@ -337,7 +337,7 @@ if __name__=="__main__":
         Output = dask_run(
             files,
             "Events",
-            processor_instance=SignalSignature([lumimaskobject])
+            processor_instance=Top_mu(category="resolved",helper_objects=[lumimaskobject])
         )
     
     #For condor execution
@@ -399,7 +399,7 @@ if __name__=="__main__":
         Output = runner(
             files,
             treename="Events",
-            processor_instance=SignalSignature([lumimaskobject])
+            processor_instance=Top_mu(category="resolved",helper_objects=[lumimaskobject])
         )
 
     #################################
