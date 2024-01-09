@@ -243,39 +243,35 @@ class Top_mu(processor.ProcessorABC):
         elif self.category == "resolved" :
             events = events[events.HET > 200.0 ]
         cutflow["Hadronic Recoil"] = len(events)
-        #ak4Jets
 
-        #Apply pt and eta cut
+        #ak4Jets
+        #Apply general pt and eta cut to jets
         events, cutflow = jet_pt(events,cutflow)
         events, cutflow = jet_eta(events,cutflow)
-
-        #Anti-QCD DeltaPhi selection
-        events, cutflow = anti_QCD(events,cutflow)
-
-        #Apply the btag 
-        bjets = get_bjets(events)
     
-        #At least two bjets
+        #Apply the btag and choose at least two bjet events
         events, cutflow = at_least_two_bjets(events,cutflow)
 
-        #Create Dijets
         # leading bjet pt
         events, cutflow = leading_jet_pt(events,cutflow)
         #subleading bjet pt
         events, cutflow = subleading_jet_pt(events,cutflow)
 
         #At most 2 additional jets
-        events, cutflow = additional_jets(events, cutflow)
+        events, cutflow = additional_ak4_jets(events, cutflow, cat=self.category , comparator="equal_to",number=1)
 
+        #Create Dijets
         leading_jets = events.Jet[:,0]
         subleadingjets = events.Jet[:,1]
-        dijets = events.Jet[:,0] + events.Jet[:,1] #Leading jet + Subleading jet
+        events.dijets = events.Jet[:,0] + events.Jet[:,1] #Leading jet + Subleading jet
+
+        #Note: At this stage each dijet correspond to an event
 
         #Dijet mass window
-        dijets , cutflow = dijet_mass(dijets,cutflow)
+        events, cutflow = dijet_mass(events,cutflow,window=[100.0,150.0])
 
         #Dijet pt
-        dijets, cutflow = dijet_pt(dijets,cutflow)
+        events, cutflow = dijet_pt(events,cutflow,pt=100.0)
 
         #Fill the histogram
         #MET
@@ -292,10 +288,10 @@ class Top_mu(processor.ProcessorABC):
         subleadingjets_phi_hist.fill(subleadingjets.phi)
         subleadingjets_mass_hist.fill(subleadingjets.mass)
         #ak4bjet-ak4bjet dijets
-        dijets_pt_hist.fill(dijets.pt)
-        dijets_eta_hist.fill(dijets.eta)
-        dijets_phi_hist.fill(dijets.phi)
-        dijets_mass_hist.fill(dijets.mass)
+        dijets_pt_hist.fill(events.dijets.pt)
+        dijets_eta_hist.fill(events.dijets.eta)
+        dijets_phi_hist.fill(events.dijets.phi)
+        dijets_mass_hist.fill(events.dijets.mass)
     
 
         #Prepare the output

@@ -174,15 +174,28 @@ def jet_eta(events,cutflow):
     cutflow["jet abs(eta) < 2.5"] = len(events)
     return events,cutflow
 
-def get_bjets(events):
-    #2018
-    btag_WP_medium = 0.3040 # Medium Working Point for 2018
-    btag_WP_tight = 0.7476 # Tight Working Point for 2018
+def get_bjets(events, wp="tight", era=2018):
+    if era==2018:
+        #2018
+        if wp=="loose":
+            raise KeyError
+        elif wp=="medium":
+            btag_WP_medium = 0.3040 # Medium Working Point for 2018
+        elif wp=="tight":
+            btag_WP_tight = 0.7476 # Tight Working Point for 2018
+    if era==2017:
+        #2017
+        if wp=="loose":
+            raise KeyError
+        elif wp=="medium":
+            raise KeyError
+        elif wp=="tight":
+            raise KeyError
     tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP_tight 
     return events.Jet[tight_bjets_selection]
 
-def at_least_two_bjets(events,cutflow):
-    bjets = get_bjets(events)
+def at_least_two_bjets(events,cutflow,year):
+    bjets = get_bjets(events, wp="tight",era=year)
     events = events[ak.num(bjets) >= 2] #at least 2 bjets
     cutflow["At least two bjets"] = len(events)
     return events,cutflow
@@ -199,22 +212,34 @@ def subleading_jet_pt(events,cutflow):
     cutflow["bjet2 pt > 30 GeV"] = len(events)
     return events,cutflow
 
-def additional_jets(events, cutflow , comparator="equal_to", number = 1):
+def additional_ak4_jets(events, cutflow , cat, comparator="equal_to", number = 1):
+    if cat=="boosted":
+        n_essential_ak4_jets = 0
+    elif cat=="resolved":
+        n_essential_ak4_jets = 2
     if comparator=="equal_to" :
-        events = events[ak.num(events.Jet) == number]
+        events = events[ak.num(events.Jet) == (n_essential_ak4_jets + number)]
     elif comparator=="greater_than_or_equal_to":
-        events = events[ak.num(events.Jet) >= number]
+        events = events[ak.num(events.Jet) >= (n_essential_ak4_jets + number)]
     elif comparator=="less_than_or_equal_to":
-        events = events[ak.num(events.Jet) <= number]
+        events = events[ak.num(events.Jet) <= (n_essential_ak4_jets + number)]
     cutflow[f"Additional Jets {comparator} {number}"] = len(events)
     return events,cutflow
 
-def dijet_mass(dijets,cutflow):
-    dijets = dijets[( dijets.mass > 100.0 ) & ( dijets.mass < 150.0 ) ] #Dijet mass window cut
-    cutflow["dijet mass between 100 Gev to 150 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
-    return dijets, cutflow
+def dijet_mass(events,cutflow,window):
+    """
+    Warning: Use only when number of dijets is equal to the number of events
+    """
+    window_cut = ( events.dijets.mass > window[0] ) & ( events.dijets.mass < window[1] ) #Dijet mass window cut
+    events = events[window_cut] # Allowed since no. of dijets is equal to number of events
+    cutflow["dijet mass between 100 Gev to 150 GeV"] = len(events) 
+    return events, cutflow
 
-def dijet_pt(dijets, cutflow):
-    dijets = dijets[dijets.pt > 100.0 ] #Dijet pt cut
-    cutflow["dijet pt > 100 GeV"] = len(dijets) #No of bb Dijets is equal to the number of events passed
-    return dijets, cutflow
+def dijet_pt(events,cutflow,pt):
+    """
+    Warning: Use only when number of dijets is equal to the number of events
+    """
+    pt_cut = events.dijets.pt > pt #Dijet pt cut 
+    events = events[pt_cut]
+    cutflow["dijet pt > 100 GeV"] = len(events) #No of bb Dijets is equal to the number of events passed
+    return events, cutflow
