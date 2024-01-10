@@ -363,6 +363,7 @@ if __name__=="__main__":
     
             client.upload_file("./Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
             client.upload_file("Snip.py")
+            client.upload_file("processor_Top_mu.py")
             with open("shortfileset.json") as f: #load the fileset
                 filedict = json.load(f)
         else:
@@ -377,7 +378,8 @@ if __name__=="__main__":
                     zip_files(
                         [
                             "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                            "Snip.py"
+                            "Snip.py",
+                            "processor_Top_mu.py"
                             ]
                         )
                     )
@@ -413,10 +415,10 @@ if __name__=="__main__":
     #################################
     print("stage 3")
     try :
-        output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
+        output_file = f"CR_{inputs.cat}_Top_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
         pass
     except :
-        output_file = f"SR_Resolved_Backgrounds_{inputs.keymap}.coffea"
+        output_file = f"CR_{inputs.cat}_Top_{inputs.keymap}.coffea"
     print("Saving the output to : " , output_file)
     util.save(output= Output, filename="coffea_files/"+output_file)
     print(f"File {output_file} saved.")

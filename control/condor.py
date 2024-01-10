@@ -33,19 +33,25 @@ def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers
 
     cluster = HTCondorCluster(
         cores=1,
-        memory="2 GB",
+        memory="4 GB",
         disk="1 GB",
         death_timeout = '60',
         job_extra_directives={
-            "+JobFlavour": '"tomorrow"',
+            #"+JobFlavour": '"espresso"', # 20 minutes
+            "+JobFlavour": '"microcentury"' , # 1 hour
+            #"+JobFlavour": '"longlunch"' , # 2 hours
+            #"+JobFlavour": '"workday"' , # 8 hours
+            #"+JobFlavour": '"tomorrow"' , # 1 day
+            #"+JobFlavour": '"testmatch"' , # 3 days
+            #"+JobFlavour": '"nextweek"' , # 1 week
             "log": "dask_job_output.$(PROCESS).$(CLUSTER).log",
             "output": "dask_job_output.$(PROCESS).$(CLUSTER).out",
             "error": "dask_job_output.$(PROCESS).$(CLUSTER).err",
             "should_transfer_files": "yes",
             "when_to_transfer_output": "ON_EXIT_OR_EVICT",
-            "+SingularityImage": '"/cvmfs/unpacked.cern.ch/registry.hub.docker.com/coffeateam/coffea-dask-cc7:latest"',
+            "+SingularityImage": '"/cvmfs/unpacked.cern.ch/registry.hub.docker.com/coffeateam/coffea-dask-cc7:latest-py3.10"',
             "Requirements": "HasSingularityJobStart",
-            "request_GPUs" : "1",
+            #"request_GPUs" : "1",
             "InitialDir": f'/scratch/{os.environ["USER"]}',
             "transfer_input_files": f'{_x509_path},{os.environ["EXTERNAL_BIND"]}'
         },
