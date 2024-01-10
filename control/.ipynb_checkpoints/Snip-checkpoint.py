@@ -25,7 +25,7 @@ def loose_muons(events):
     Id = events.Muon.looseId 
     return events.Muon[PFCand & RelIso & Eta & Pt & Id]
 
-def tight_muons(events, cutflow): ####
+def tight_muons(Events, cutflow): ####
     # events = Events
     # PFCand = events.Muon.isPFcand
     # RelIso = events.Muon.pfRelIso04_all < 0.15
@@ -239,22 +239,20 @@ def additional_ak4_jets(events, cutflow , cat, comparator="equal_to", number = 1
     cutflow[f"Additional Jets {comparator} {number}"] = len(events)
     return events,cutflow
 
-def dijet_mass(events,cutflow,Dijets,window):
+def dijet_mass(events,cutflow,window):
     """
     Warning: Use only when number of dijets is equal to the number of events
     """
-    window_cut = ( Dijets.mass > window[0] ) & ( Dijets.mass < window[1] ) #Dijet mass window cut
+    window_cut = ( events.dijets.mass > window[0] ) & ( events.dijets.mass < window[1] ) #Dijet mass window cut
     events = events[window_cut] # Allowed since no. of dijets is equal to number of events
-    Dijets = Dijets[window_cut]
     cutflow["dijet mass between 100 Gev to 150 GeV"] = len(events) 
-    return events, cutflow, Dijets
+    return events, cutflow
 
-def dijet_pt(events,cutflow,Dijets,pt):
+def dijet_pt(events,cutflow,pt):
     """
     Warning: Use only when number of dijets is equal to the number of events
     """
-    pt_cut = Dijets.pt > pt #Dijet pt cut 
+    pt_cut = events.dijets.pt > pt #Dijet pt cut 
     events = events[pt_cut]
-    Dijets = Dijets[pt_cut]
     cutflow["dijet pt > 100 GeV"] = len(events) #No of bb Dijets is equal to the number of events passed
-    return events, cutflow, Dijets
+    return events, cutflow

@@ -251,28 +251,34 @@ class Top_mu(processor.ProcessorABC):
         events, cutflow = jet_eta(events,cutflow)
     
         #Apply the btag and choose at least two bjet events
-        events, cutflow = at_least_two_bjets(events,cutflow)
+        events, cutflow = at_least_two_bjets(events,cutflow,year=2018)
 
         # leading bjet pt
         events, cutflow = leading_jet_pt(events,cutflow)
         #subleading bjet pt
         events, cutflow = subleading_jet_pt(events,cutflow)
 
-        #At most 2 additional jets
-        events, cutflow = additional_ak4_jets(events, cutflow, cat=self.category , comparator="equal_to",number=1)
+        if self.category == "resolved":
+            #At least 1 additional jets
+            events, cutflow = additional_ak4_jets(events, cutflow, cat=self.category , comparator="greater_than_or_equal_to",number=1)
+        elif self.category == "boosted":
+            #At most 2 additional jets
+            events, cutflow = additional_ak4_jets(events, cutflow, cat=self.category , comparator="less_than_or_equal_to",number=2)
+        else:
+            raise KeyError
 
         #Create Dijets
         leading_jets = events.Jet[:,0]
         subleadingjets = events.Jet[:,1]
-        events.dijets = events.Jet[:,0] + events.Jet[:,1] #Leading jet + Subleading jet
+        dijets = events.Jet[:,0] + events.Jet[:,1] #Leading jet + Subleading jet
 
         #Note: At this stage each dijet correspond to an event
 
         #Dijet mass window
-        events, cutflow = dijet_mass(events,cutflow,window=[100.0,150.0])
+        events, cutflow, dijets = dijet_mass(events,cutflow,dijets,window=[100.0,150.0])
 
         #Dijet pt
-        events, cutflow = dijet_pt(events,cutflow,pt=100.0)
+        events, cutflow, dijets = dijet_pt(events,cutflow,dijets,pt=100.0)
 
         #Fill the histogram
         #MET
@@ -289,10 +295,10 @@ class Top_mu(processor.ProcessorABC):
         subleadingjets_phi_hist.fill(subleadingjets.phi)
         subleadingjets_mass_hist.fill(subleadingjets.mass)
         #ak4bjet-ak4bjet dijets
-        dijets_pt_hist.fill(events.dijets.pt)
-        dijets_eta_hist.fill(events.dijets.eta)
-        dijets_phi_hist.fill(events.dijets.phi)
-        dijets_mass_hist.fill(events.dijets.mass)
+        dijets_pt_hist.fill(dijets.pt)
+        dijets_eta_hist.fill(dijets.eta)
+        dijets_phi_hist.fill(dijets.phi)
+        dijets_mass_hist.fill(dijets.mass)
     
 
         #Prepare the output
