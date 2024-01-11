@@ -143,7 +143,7 @@ def met_filter(events,cutflow):
 
 def met_selection(events,cutflow,GeV):
     #MET Selection
-    events = events[events.MET.pt > GeV ] #200 for resolved category and 250GeV for boosted category
+    events = events[events.MET.pt > GeV ] #200 for SR resolved category and 250GeV for SR boosted category
     cutflow[f"MET > {GeV} GeV"] = len(events)
     return events , cutflow
 
@@ -193,9 +193,9 @@ def get_bjets(events, wp="tight", era=2018):
         if wp=="loose":
             raise KeyError
         elif wp=="medium":
-            btag_WP_medium = 0.3040 # Medium Working Point for 2018
+            btag_WP = 0.3040 # Medium Working Point for 2018
         elif wp=="tight":
-            btag_WP_tight = 0.7476 # Tight Working Point for 2018
+            btag_WP = 0.7476 # Tight Working Point for 2018
     if era==2017:
         #2017
         if wp=="loose":
@@ -204,7 +204,7 @@ def get_bjets(events, wp="tight", era=2018):
             raise KeyError
         elif wp=="tight":
             raise KeyError
-    tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP_tight 
+    tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP 
     return events.Jet[tight_bjets_selection]
 
 def at_least_two_bjets(events,cutflow,year):
