@@ -238,11 +238,11 @@ class Top_mu(processor.ProcessorABC):
 
         #Hadronic Recoil
         #There is at least one muon(tight) in each event at this point
-        events.HET = events.MET.pt - events.Muon.pt
+        events.HET = events.MET.pt - ak.sum(events.Muon.pt, axis=1)
         if self.category == "boosted" :
-            events = events[ak.flatten(events.HET > 250.0 ) ]
+            events = events[events.HET > 250.0 ]
         elif self.category == "resolved" :
-            events = events[ak.flatten(events.HET > 200.0 )]
+            events = events[events.HET > 200.0 ]
         cutflow["Hadronic Recoil"] = len(events)
 
         #ak4Jets

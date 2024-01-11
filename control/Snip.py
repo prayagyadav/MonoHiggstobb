@@ -55,7 +55,7 @@ def tight_muons(events, cutflow): ####
     goodevents = events[one_tight_cut]
     # ha = events.Muon[final_cut]
     # singles = ha[ak.num(ha)==1] 
-    cutflow["one_tight_muon"] = len(events)
+    cutflow["one_tight_muon"] = len(goodevents)
     return goodevents , cutflow
 
 def taus(events, version = 9):
