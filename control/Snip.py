@@ -45,12 +45,18 @@ def tight_muons(events, cutflow): ####
     Eta = abs(events.Muon.eta) < 2.4
     Pt = events.Muon.pt > 30.0
     Id = events.Muon.tightId 
-    sel = PackedSelection()
-    sel.add("tight", ak.all(PFCand & RelIso & Eta & Pt & Id , axis = 1))
-    sel.add("one",ak.num(events.Muon.pt) == 1)
-    events = events[sel.all("tight","one")]
+    # sel = PackedSelection()
+    # sel.add("tight", ak.all(PFCand & RelIso & Eta & Pt & Id , axis = 1))
+    # sel.add("one",ak.num(events.Muon.pt) == 1)
+    # events = events[sel.all("tight","one")]
+    final_cut = PFCand & RelIso & Eta & Pt & Id
+    all_tight = events.Muon[final_cut]
+    one_tight_cut = ak.num(all_tight , axis=1) == 1
+    goodevents = events[one_tight_cut]
+    # ha = events.Muon[final_cut]
+    # singles = ha[ak.num(ha)==1] 
     cutflow["one_tight_muon"] = len(events)
-    return events , cutflow
+    return goodevents , cutflow
 
 def taus(events, version = 9):
     match version :
