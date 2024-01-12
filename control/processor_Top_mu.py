@@ -238,7 +238,7 @@ class Top_mu(processor.ProcessorABC):
 
         #Hadronic Recoil
         #There is at least one muon(tight) in each event at this point
-        events.HET = events.MET.pt - ak.sum(events.Muon.pt, axis=1)
+        events.HET = events.MET.pt - events.Muon.pt
         if self.category == "boosted" :
             events = events[events.HET > 250.0 ]
         elif self.category == "resolved" :
