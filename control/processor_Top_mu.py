@@ -234,21 +234,21 @@ class Top_mu(processor.ProcessorABC):
         #Object selections
             
         #Exactly one tight muon
-        events, cutflow = tight_muons(events,cutflow)
+        events, single_muons, cutflow = tight_muons(events,cutflow)
 
         #Hadronic Recoil
         #There is at least one muon(tight) in each event at this point
-        events.HET = events.MET.pt - events.Muon.pt
+        events.Recoil = events.MET.pt - ak.flatten(single_muons.pt)
         if self.category == "boosted" :
-            events = events[events.HET > 250.0 ]
+            events = events[events.Recoil > 250.0 ]
         elif self.category == "resolved" :
-            events = events[events.HET > 200.0 ]
+            events = events[events.Recoil > 200.0 ]
         cutflow["Hadronic Recoil"] = len(events)
 
         #ak4Jets
-        #Apply general pt and eta cut to jets
-        events, cutflow = jet_pt(events,cutflow)
-        events, cutflow = jet_eta(events,cutflow)
+        # #Apply general pt and eta cut to jets
+        # events, cutflow = jet_pt(events,cutflow)
+        # events, cutflow = jet_eta(events,cutflow)
     
         #Apply the btag and choose at least two bjet events
         events, cutflow = at_least_two_bjets(events,cutflow,year=2018)

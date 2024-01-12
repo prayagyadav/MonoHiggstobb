@@ -149,7 +149,9 @@ def met_filter(events,cutflow):
 
 def met_selection(events,cutflow,GeV):
     #MET Selection
-    events = events[events.MET.pt > GeV ] #200 for SR resolved category and 250GeV for SR boosted category
+    #200 for SR resolved category and 250GeV for SR boosted category
+    #50 for CR resolved Top 
+    events = events[events.MET.pt > GeV ] 
     cutflow[f"MET > {GeV} GeV"] = len(events)
     return events , cutflow
 
@@ -220,14 +222,18 @@ def at_least_two_bjets(events,cutflow,year):
     return events,cutflow
 
 def leading_jet_pt(events,cutflow):
-    ljets_cut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
-    events = events[ljets_cut]
+    ljets_ptcut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
+    ljets_etacut = abs(events.Jet[:,0].eta) < 2.5 #Leading Jet eta cut
+    events = events[ljets_ptcut]
+    events = events[ljets_etacut]
     cutflow["bjet1 pt > 50 GeV "] = len(events)
     return events,cutflow
 
 def subleading_jet_pt(events,cutflow):
-    sjets_cut = events.Jet[:,1].pt > 30.0 #Subleading Jet pt cut 
-    events = events[sjets_cut] 
+    sjets_ptcut = events.Jet[:,1].pt > 30.0 #Subleading Jet pt cut 
+    sjets_etacut = abs(events.Jet[:,0].eta) < 2.5 #Leading Jet eta cut
+    events = events[sjets_ptcut]
+    events = events[sjets_etacut] 
     cutflow["bjet2 pt > 30 GeV"] = len(events)
     return events,cutflow
 
@@ -236,6 +242,12 @@ def additional_ak4_jets(events, cutflow , cat, comparator="equal_to", number = 1
         n_essential_ak4_jets = 0
     elif cat=="resolved":
         n_essential_ak4_jets = 2
+
+    ajets_ptcut = events.Jet[:,3:].pt > 30 
+    ajets_etacut = abs(events.Jet[:,3:].eta) < 2.5
+    events = events[ajets_ptcut]
+    events = events[ajets_etacut]
+
     if comparator=="equal_to" :
         events = events[ak.num(events.Jet) == (n_essential_ak4_jets + number)]
     elif comparator=="greater_than_or_equal_to":
