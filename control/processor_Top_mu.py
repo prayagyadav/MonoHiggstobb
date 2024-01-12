@@ -254,7 +254,7 @@ class Top_mu(processor.ProcessorABC):
         events = events[ak.num(events.Jet) > 0]
     
         #Apply the btag and choose at least two bjet events
-        events, cutflow = at_least_two_bjets(events,cutflow,year=2018)
+        events, cutflow = at_least_two_bjets(events,cutflow,year=2018,Working_Point="medium")
 
         # leading bjet pt
         events, cutflow = leading_jet_pt(events,cutflow)

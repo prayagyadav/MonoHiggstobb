@@ -215,8 +215,8 @@ def get_bjets(events, wp="tight", era=2018):
     tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP 
     return events.Jet[tight_bjets_selection]
 
-def at_least_two_bjets(events,cutflow,year):
-    bjets = get_bjets(events, wp="tight",era=year)
+def at_least_two_bjets(events,cutflow,year, Working_Point):
+    bjets = get_bjets(events, wp=Working_Point,era=year)
     events = events[ak.num(bjets) >= 2] #at least 2 bjets
     cutflow["At least two bjets"] = len(events)
     return events,cutflow
@@ -244,12 +244,12 @@ def additional_ak4_jets(events, cutflow , cat, comparator="equal_to", number = 1
         n_essential_ak4_jets = 2
 
     #making sure we have at least 3 jets before moving forward
-    events = events[ak.num(events.Jet) >= 3]
+    # events = events[ak.num(events.Jet) >= 3]
 
-    ajets_ptcut = ak.all(events.Jet[:,2:].pt > 30 , axis=1)#2 corresponds to the 3rd jet 
-    events = events[ajets_ptcut]
-    ajets_etacut = ak.all(abs(events.Jet[:,2:].eta) < 2.5 ,axis=1)#2 corresponds to the 3rd jet
-    events = events[ajets_etacut]
+    # ajets_ptcut = ak.all(events.Jet[:,2:].pt > 30 , axis=1)#2 corresponds to the 3rd jet 
+    # events = events[ajets_ptcut]
+    # ajets_etacut = ak.all(abs(events.Jet[:,2:].eta) < 2.5 ,axis=1)#2 corresponds to the 3rd jet
+    # events = events[ajets_etacut]
 
     if comparator=="equal_to" :
         events = events[ak.num(events.Jet) == (n_essential_ak4_jets + number)]
