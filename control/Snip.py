@@ -243,9 +243,12 @@ def additional_ak4_jets(events, cutflow , cat, comparator="equal_to", number = 1
     elif cat=="resolved":
         n_essential_ak4_jets = 2
 
-    ajets_ptcut = events.Jet[:,3:].pt > 30 
+    #making sure we have at least 3 jets before moving forward
+    events = events[ak.num(events.Jet) >= 3]
+
+    ajets_ptcut = events.Jet[:,2:].pt > 30 #2 corresponds to the 3rd jet 
     events = events[ajets_ptcut]
-    ajets_etacut = abs(events.Jet[:,3:].eta) < 2.5
+    ajets_etacut = abs(events.Jet[:,2:].eta) < 2.5 #2 corresponds to the 3rd jet
     events = events[ajets_etacut]
 
     if comparator=="equal_to" :
