@@ -223,9 +223,9 @@ def at_least_two_bjets(events,cutflow,year):
 
 def leading_jet_pt(events,cutflow):
     ljets_ptcut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
-    events.Jet = events.Jet[ljets_ptcut]
+    events = events[ljets_ptcut]
     ljets_etacut = abs(events.Jet[:,0].eta) < 2.5 #Leading Jet eta cut
-    events.Jet = events.Jet[ljets_etacut]
+    events = events[ljets_etacut]
     cutflow["bjet1 pt > 50 GeV "] = len(events)
     return events,cutflow
 
@@ -246,9 +246,9 @@ def additional_ak4_jets(events, cutflow , cat, comparator="equal_to", number = 1
     #making sure we have at least 3 jets before moving forward
     events = events[ak.num(events.Jet) >= 3]
 
-    ajets_ptcut = events.Jet[:,2:].pt > 30 #2 corresponds to the 3rd jet 
+    ajets_ptcut = ak.all(events.Jet[:,2:].pt > 30 , axis=1)#2 corresponds to the 3rd jet 
     events = events[ajets_ptcut]
-    ajets_etacut = abs(events.Jet[:,2:].eta) < 2.5 #2 corresponds to the 3rd jet
+    ajets_etacut = ak.all(abs(events.Jet[:,2:].eta) < 2.5 ,axis=1)#2 corresponds to the 3rd jet
     events = events[ajets_etacut]
 
     if comparator=="equal_to" :
