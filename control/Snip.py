@@ -223,16 +223,16 @@ def at_least_two_bjets(events,cutflow,year):
 
 def leading_jet_pt(events,cutflow):
     ljets_ptcut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
+    events.Jet = events.Jet[ljets_ptcut]
     ljets_etacut = abs(events.Jet[:,0].eta) < 2.5 #Leading Jet eta cut
-    events = events[ljets_ptcut]
-    events = events[ljets_etacut]
+    events.Jet = events.Jet[ljets_etacut]
     cutflow["bjet1 pt > 50 GeV "] = len(events)
     return events,cutflow
 
 def subleading_jet_pt(events,cutflow):
     sjets_ptcut = events.Jet[:,1].pt > 30.0 #Subleading Jet pt cut 
-    sjets_etacut = abs(events.Jet[:,0].eta) < 2.5 #Leading Jet eta cut
     events = events[sjets_ptcut]
+    sjets_etacut = abs(events.Jet[:,0].eta) < 2.5 #Leading Jet eta cut
     events = events[sjets_etacut] 
     cutflow["bjet2 pt > 30 GeV"] = len(events)
     return events,cutflow
@@ -244,8 +244,8 @@ def additional_ak4_jets(events, cutflow , cat, comparator="equal_to", number = 1
         n_essential_ak4_jets = 2
 
     ajets_ptcut = events.Jet[:,3:].pt > 30 
-    ajets_etacut = abs(events.Jet[:,3:].eta) < 2.5
     events = events[ajets_ptcut]
+    ajets_etacut = abs(events.Jet[:,3:].eta) < 2.5
     events = events[ajets_etacut]
 
     if comparator=="equal_to" :
