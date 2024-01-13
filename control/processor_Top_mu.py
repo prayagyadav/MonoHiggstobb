@@ -240,10 +240,11 @@ class Top_mu(processor.ProcessorABC):
         #There is at least one muon(tight) in each event at this point
         events.Recoil = events.MET.pt + ak.flatten(single_muons.pt)
         if self.category == "boosted" :
-            events = events[events.Recoil > 250.0 ]
+            recoil = 250.0
         elif self.category == "resolved" :
-            events = events[events.Recoil > 200.0 ]
-        cutflow["Recoil"] = len(events)
+            recoil = 200.0
+        events = events[events.Recoil > recoil ]
+        cutflow[f"Recoil > {recoil}"] = len(events)
 
         #ak4Jets
         # #Apply general pt and eta cut to jets

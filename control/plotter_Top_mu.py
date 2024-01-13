@@ -543,7 +543,7 @@ def plotcutflow(parent):
         print(plotname , f" created at {os.getcwd()}")
 
 def accum(key):
-    os.chdir("./coffea_files/ver3/")
+    os.chdir("./coffea_files/ver4/")
     list_files = os.listdir()
     valid_list = []
     for file in list_files :
@@ -578,7 +578,7 @@ match inputs.fulldataset :
         
         
     case 0 :
-        MET_Run2018 = util.load("coffea_files/ver3/CR_Resolved_Top_MET_Run2018.coffea")
+        MET_Run2018 = util.load("coffea_files/ver4/CR_Resolved_Top_MET_Run2018.coffea")
         # ZJets_NuNu = util.load("coffea_files/SR_Resolved_Backgrounds_ZJets_NuNu.coffea")
         # TTToSemiLeptonic = util.load("coffea_files/SR_Resolved_Backgrounds_TTToSemiLeptonic.coffea")
         # WJets_LNu = util.load("coffea_files/SR_Resolved_Backgrounds_WJets_LNu.coffea")
