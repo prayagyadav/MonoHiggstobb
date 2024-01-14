@@ -279,3 +279,9 @@ def dijet_pt(events,cutflow,Dijets,pt):
     Dijets = Dijets[pt_cut]
     cutflow["dijet pt > 100 GeV"] = len(events) #No of bb Dijets is equal to the number of events passed
     return events, cutflow, Dijets
+
+# def HEM_veto(events,cutflow):
+#     metphicutup = events.MET.phi > -0.87 
+#     metphicutdown = events.MET.phi < -1.57 
+#     events = events[metphicut]
+#     return events , cutflow
