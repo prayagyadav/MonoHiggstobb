@@ -280,8 +280,11 @@ def dijet_pt(events,cutflow,Dijets,pt):
     cutflow["dijet pt > 100 GeV"] = len(events) #No of bb Dijets is equal to the number of events passed
     return events, cutflow, Dijets
 
-# def HEM_veto(events,cutflow):
-#     metphicutup = events.MET.phi > -0.87 
-#     metphicutdown = events.MET.phi < -1.57 
-#     events = events[metphicut]
-#     return events , cutflow
+def HEM_veto(events,cutflow):
+    #HEM issue
+    #Affected region = phi => [-1.57,-0.87] and eta => [-3.0,-1.3]
+    jetphicut = ak.all((events.Jet.phi < -1.57) & (events.Jet.phi > -0.87), axis=1)
+    jetetacut = ak.all((events.Jet.eta < -3.0) & (events.Jet.eta > -1.3), axis=1)
+    events = events[jetphicut & jetetacut]
+    cutflow["HEM veto"] = len(events)
+    return events , cutflow
