@@ -231,6 +231,9 @@ class Top_mu(processor.ProcessorABC):
         else :
             events, cutflow = no_taus(events,cutflow, version=9)
 
+        #HEM veto
+        events,cutflow = HEM_veto(events,cutflow)
+
         #Object selections
             
         #Exactly one tight muon

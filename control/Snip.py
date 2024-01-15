@@ -282,9 +282,10 @@ def dijet_pt(events,cutflow,Dijets,pt):
 
 def HEM_veto(events,cutflow):
     #HEM issue
-    #Affected region = phi => [-1.57,-0.87] and eta => [-3.0,-1.3]
+    #Affected region = phi => [-1.57,-0.87] and eta => [-3.0,-1.3] with run >= 319077
+    mask = (events.run >= 319077)
     jetphicut = ak.all((events.Jet.phi < -1.57) & (events.Jet.phi > -0.87), axis=1)
     jetetacut = ak.all((events.Jet.eta < -3.0) & (events.Jet.eta > -1.3), axis=1)
-    events = events[jetphicut & jetetacut]
+    events = events[mask & jetphicut & jetetacut]
     cutflow["HEM veto"] = len(events)
     return events , cutflow
