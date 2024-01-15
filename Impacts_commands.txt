@@ -1,0 +1,7 @@
+3
+List of commands:
+• text2workspace.py dataCard_*_Fancy1n_LS0FancyJFRtype_SignalInjected_2016preVFP_2016postVFP_2017_2018_False_v34p_Data.txt -o workspace_v34p_*.root
+• combineTool.py -M Impacts -d workspace_v34p_*.root -m 125 --doInitialFit --robustFit 1 --rMax 10 --rMin -10
+• combineTool.py -M Impacts -d workspace_v34p_*.root -m 125 --robustFit 1 --doFits --rMax 10 --rMin -10
+• combineTool.py -M Impacts -d workspace_v34p_*.root -m 125 -o impacts_v34p_*.json
+• plotImpacts.py -i impacts_v34p_*.json -o impacts_v34p_*
