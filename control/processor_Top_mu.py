@@ -204,7 +204,6 @@ class Top_mu(processor.ProcessorABC):
         if (self.mode).startswith("MET") :
 
             #choosing certified good events
-            #figure out how to implement condor folder transfers and fix this, in the meantime ignore for condor runs
             should_lumi = True
             if should_lumi :
                 events, cutflow = lumi(events, cutflow, lumiobject=self.lumiobject)
