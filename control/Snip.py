@@ -286,8 +286,8 @@ def HEM_veto(events,cutflow):
     mask = (events.run >= 319077)
     jetphicut = ak.all((events.Jet.phi < -1.57) & (events.Jet.phi > -0.87), axis=1)
     jetetacut = ak.all((events.Jet.eta < -3.0) & (events.Jet.eta > -1.3), axis=1)
-    HEM_region = events[mask & jetphicut & jetetacut]
-    Non_HEM_region = events[events.run < 319077]
+    HEM_region = mask & jetphicut & jetetacut
+    Non_HEM_region = events.run < 319077
     events = events[Non_HEM_region | HEM_region]
     cutflow["HEM veto"] = len(events)
     return events , cutflow
