@@ -244,15 +244,13 @@ class Top_mu(processor.ProcessorABC):
             #Hadronic Recoil
             #There is at least one muon(tight) in each event at this point
             events.Recoil = events.MET.pt + ak.flatten(single_muons.pt)
-            if self.category == "boosted" :
-                recoil = 250.0
-            elif self.category == "resolved" :
-                recoil = 200.0
-            events = events[events.Recoil > recoil ]
-            cutflow[f"Recoil > {recoil}"] = len(events)
-
-            #Recoil window cut
-            events = events[(events.Recoil > self.recoil_window[0]) & (events.Recoil < self.recoil_window[1])]
+            # if self.category == "boosted" :
+            #     recoil = 250.0
+            # elif self.category == "resolved" :
+            #     recoil = 200.0
+            windowcut = (events.Recoil > self.recoil_window[0]) & (events.Recoil < self.recoil_window[1])
+            events = events[windowcut]
+            cutflow["Recoil"] = len(events)
 
             #ak4Jets
             # #Apply general pt and eta cut to jets
