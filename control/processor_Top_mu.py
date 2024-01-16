@@ -49,7 +49,7 @@ class Top_mu(processor.ProcessorABC):
         self.cutflow = {}
         self.run_set = set({})
 
-    def process(self, events,recoil_window):
+    def process(self, events):
         # process everything according to their recoil window
         def process_by_recoil_window(self,events,recoil_window):
             dataset = events.metadata["dataset"]
@@ -250,6 +250,9 @@ class Top_mu(processor.ProcessorABC):
                 recoil = 200.0
             events = events[events.Recoil > recoil ]
             cutflow[f"Recoil > {recoil}"] = len(events)
+
+            #Recoil window cut
+            events = events[(events.Recoil > self.recoil_window[0]) & (events.Recoil < self.recoil_window[1])]
 
             #ak4Jets
             # #Apply general pt and eta cut to jets
