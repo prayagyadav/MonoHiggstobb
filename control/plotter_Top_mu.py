@@ -542,8 +542,46 @@ def plotcutflow(parent):
         fig.clear()
         print(plotname , f" created at {os.getcwd()}")
 
+def plot_CR_mass_plot(input_dict):
+    a,b,c,d,e = (
+        input_dict['Recoil:200-250']['MET_Run2018']['MET_Run2018A']['Histograms']['dijets_mass'],
+        input_dict['Recoil:250-290']['MET_Run2018']['MET_Run2018A']['Histograms']['dijets_mass'],
+        input_dict['Recoil:290-360']['MET_Run2018']['MET_Run2018A']['Histograms']['dijets_mass'],
+        input_dict['Recoil:360-420']['MET_Run2018']['MET_Run2018A']['Histograms']['dijets_mass'],
+        input_dict['Recoil:420-1000']['MET_Run2018']['MET_Run2018A']['Histograms']['dijets_mass'],
+
+    )
+
+    fig = plt.figure(figsize=(40,10))
+    fig.suptitle("2018 Resolved Top Mu Control Region")
+    gs = fig.add_gridspec(1,5,wspace=0)
+    axs = gs.subplots( sharex=True, sharey=True )
+    labels = ["Recoil: [200,250]","Recoil: [250,290]","Recoil: [290,360]","Recoil: [360-420]","Recoil: [420-1000]"]
+    for i in range(len(axs)):
+        axs[i].margins(x=0, y = 0.8)
+        axs[i].text(116,350,labels[i]) #Data label coordinates
+        axs[i].set_xlabel(" ")
+        #axs[i].set_xticks([100,110,120,130,140,150])
+    axs[0].set_ylabel("Events")
+    subhists = [a,b,c,d,e]
+    for i in range(len(subhists)):
+        hep.histplot(
+            subhists[i],
+            histtype="errorbar",
+            yerr=0,
+            xerr=1,
+            color="black",
+            edges=False,
+            ax=axs[i]
+        )
+    plt.xlabel(r"$M_{bb}$ GeV")
+    plt.yscale('log')
+    axs[0].set_xticks([110,120,130,140,150])
+    # axs[1].set_xticks([110,110,120,130,140,150])
+    plt.savefig("CR_Dijet_mass_combined.png",dpi=300)
+
 def accum(key):
-    os.chdir("./coffea_files/ver4/")
+    os.chdir("./coffea_files/ver6/")
     list_files = os.listdir()
     valid_list = []
     for file in list_files :
@@ -556,7 +594,7 @@ def accum(key):
 match inputs.fulldataset :
     case 1 :
         MET_Run2018 = accum("MET_Run2018")
-        showinfo(MET_Run2018)
+        #showinfo(MET_Run2018)
         # ZJets_NuNu = accum("ZJets_NuNu")
         # #showinfo(ZJets_NuNu)
         # TTToSemiLeptonic = accum("TTToSemiLeptonic")
@@ -578,7 +616,7 @@ match inputs.fulldataset :
         
         
     case 0 :
-        MET_Run2018 = util.load("coffea_files/ver4/CR_Resolved_Top_MET_Run2018.coffea")
+        MET_Run2018 = util.load("coffea_files/ver6/CR_Resolved_Top_MET_Run2018.coffea")
         # ZJets_NuNu = util.load("coffea_files/SR_Resolved_Backgrounds_ZJets_NuNu.coffea")
         # TTToSemiLeptonic = util.load("coffea_files/SR_Resolved_Backgrounds_TTToSemiLeptonic.coffea")
         # WJets_LNu = util.load("coffea_files/SR_Resolved_Backgrounds_WJets_LNu.coffea")
@@ -602,13 +640,14 @@ master_dict = processor.accumulate([
     # ST
     ])
 util.save(master_dict,"coffea_files/CR_full.coffea")
-showinfo(master_dict)
+#showinfo(master_dict)
 #plotall(master_dict)
-#combined_plot(master_dict)
-combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_mass")
-combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_pt")
-combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_eta")
-combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_phi")
-combined_plot_manual(master_dict,norm=False, xsec=False , property="met_pt_hist")
-combined_plot_manual(master_dict,norm=False, xsec=False , property="met_phi_hist")
-plotcutflow(master_dict)
+# #combined_plot(master_dict)
+# combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_mass")
+# combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_pt")
+# combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_eta")
+# combined_plot_manual(master_dict,norm=False, xsec=False , property="dijets_phi")
+# combined_plot_manual(master_dict,norm=False, xsec=False , property="met_pt_hist")
+# combined_plot_manual(master_dict,norm=False, xsec=False , property="met_phi_hist")
+# plotcutflow(master_dict)
+plot_CR_mass_plot(master_dict)

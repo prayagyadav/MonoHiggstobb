@@ -49,7 +49,7 @@ class Top_mu(processor.ProcessorABC):
         self.cutflow = {}
         self.run_set = set({})
 
-    def process(self, events,recoil_window):
+    def process(self, events):
         # process everything according to their recoil window
         def process_by_recoil_window(self,events,recoil_window):
             dataset = events.metadata["dataset"]
@@ -244,12 +244,13 @@ class Top_mu(processor.ProcessorABC):
             #Hadronic Recoil
             #There is at least one muon(tight) in each event at this point
             events.Recoil = events.MET.pt + ak.flatten(single_muons.pt)
-            if self.category == "boosted" :
-                recoil = 250.0
-            elif self.category == "resolved" :
-                recoil = 200.0
-            events = events[events.Recoil > recoil ]
-            cutflow[f"Recoil > {recoil}"] = len(events)
+            # if self.category == "boosted" :
+            #     recoil = 250.0
+            # elif self.category == "resolved" :
+            #     recoil = 200.0
+            windowcut = (events.Recoil > self.recoil_window[0]) & (events.Recoil < self.recoil_window[1])
+            events = events[windowcut]
+            cutflow["Recoil"] = len(events)
 
             #ak4Jets
             # #Apply general pt and eta cut to jets
