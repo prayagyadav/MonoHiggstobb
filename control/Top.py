@@ -53,7 +53,10 @@ if __name__=="__main__":
                 redirector_string = "root://xrootd-cms.infn.it//"
             elif redirector=="wisc":
                 redirector_string = "root://pubxrootd.hep.wisc.edu//"
-    
+            elif redirector=="unl":
+                redirector_string = "root://xrootd-local.unl.edu:1094//"
+            elif redirector=="kisti":
+                redirector_string = "root://cms-xrdr.sdfarm.kr:1094//xrd//"
             raw_fileset = self.handler[mode][superkey][key] 
             requested_fileset = {superkey : [redirector_string+filename for filename in raw_fileset]}
             return requested_fileset
@@ -72,6 +75,8 @@ if __name__=="__main__":
             "fnal": "root://cmsxrootd.fnal.gov//",
             "infn": "root://xrootd-cms.infn.it//",
             "wisc": "root://pubxrootd.hep.wisc.edu//",
+            "unl":  "root://xrootd-local.unl.edu:1094/",
+            "kisti": "root://cms-xrdr.sdfarm.kr:1094//xrd/",
             "hdfs": "/hdfs",
             "commonfs": "/commonfs"
     
@@ -83,9 +88,13 @@ if __name__=="__main__":
             redirector_string = redirectors["infn"]
         elif (redirector=="wisc") | (redirector==3):
             redirector_string = redirectors["wisc"]
-        elif (redirector=="hdfs") | (redirector==4):
+        elif (redirector=="unl") | (redirector==4):
+            redirector_string = redirectors["unl"]
+        elif (redirector=="kisti") | (redirector==5):
+            redirector_string = redirectors["kisti"]
+        elif (redirector=="hdfs") | (redirector==6):
             redirector_string = redirectors["hdfs"]
-        elif (redirector=="commonfs") | (redirector==5):
+        elif (redirector=="commonfs") | (redirector==7):
             redirector_string = redirectors["commonfs"]
     
         temp = dict 
@@ -121,7 +130,7 @@ if __name__=="__main__":
             ]
     
         
-        runnerfileset = buildFileset(fileset_dict[keymap],"fnal")
+        runnerfileset = buildFileset(fileset_dict[keymap],"kisti")
         flat_list={}
         flat_list[keymap] = []
     
