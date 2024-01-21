@@ -130,7 +130,7 @@ if __name__=="__main__":
             ]
     
         
-        runnerfileset = buildFileset(fileset_dict[keymap],"fnal")
+        runnerfileset = buildFileset(fileset_dict[keymap],"kisti")
         flat_list={}
         flat_list[keymap] = []
     
