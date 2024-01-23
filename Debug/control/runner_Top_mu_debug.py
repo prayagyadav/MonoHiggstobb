@@ -387,8 +387,8 @@ if __name__=="__main__":
                     zip_files(
                         [
                             "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                            "Snip.py",
-                            "processor_Top_mu.py"
+                            "Snip_debug.py",
+                            "processor_Top_mu_debug.py"
                             ]
                         )
                     )
