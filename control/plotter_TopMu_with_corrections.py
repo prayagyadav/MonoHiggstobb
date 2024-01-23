@@ -1,13 +1,22 @@
 from coffea import util,processor
 import os
+import rich
 import hist
 import numpy as np
 import matplotlib.pyplot as plt
 import mplhep as hep
 import crossSections
 
+
+def showinfo(Output):
+    for key in Output.keys():
+        rich.print(key, " :")
+        for subkey in Output[key] :
+            rich.print(subkey, " :")
+            cutflow = Output[key][subkey]["Cutflow"]
+            rich.print(cutflow)
 def accum(key):
-    path = "coffea_files/ver8/"
+    path = "coffea_files/ver9/"
     list_files = os.listdir(path)
     valid_list = []
     for file in list_files :
@@ -429,6 +438,7 @@ def plotCRcutflow(input_dict):
         #marker=[],
         label=labels,
         lw=1,
+        stack=True,
         ax=ax
         )
 
@@ -473,18 +483,30 @@ master_dict = processor.accumulate([
     ST
     ])
 
+def overall_cutflow(master_dict,dataset="MET_Run2018"):
+    temp1=[]
+    temp2=[]
+    for key in master_dict:
+        added = adder(master_dict[key])
+        cat_dict = added[dataset]["Cutflow"]
+        
+        temp1.append(cat_dict)
+    common_cuts={key: temp1[0][key] for key in temp1[0].viewkeys() & []}
+
+
+
 plot_CR(master_dict,property="dijets_mass")
-plot_CR(master_dict,property="dijets_pt")
-plot_CR(master_dict,property="dijets_eta")
-plot_CR(master_dict,property="dijets_phi")
-plot_CR(master_dict,property="met_pt_hist")
-plot_CR(master_dict,property="met_phi_hist")
-plot_CR(master_dict,property="leadingjets_pt_hist")
-plot_CR(master_dict,property="leadingjets_eta_hist")
-plot_CR(master_dict,property="leadingjets_phi_hist")
-plot_CR(master_dict,property="leadingjets_mass_hist")
-plot_CR(master_dict,property="subleadingjets_pt_hist")
-plot_CR(master_dict,property="subleadingjets_eta_hist")
-plot_CR(master_dict,property="subleadingjets_phi_hist")
-plot_CR(master_dict,property="subleadingjets_mass_hist")
+# plot_CR(master_dict,property="dijets_pt")
+# plot_CR(master_dict,property="dijets_eta")
+# plot_CR(master_dict,property="dijets_phi")
+# plot_CR(master_dict,property="met_pt_hist")
+# plot_CR(master_dict,property="met_phi_hist")
+# plot_CR(master_dict,property="leadingjets_pt_hist")
+# plot_CR(master_dict,property="leadingjets_eta_hist")
+# plot_CR(master_dict,property="leadingjets_phi_hist")
+# plot_CR(master_dict,property="leadingjets_mass_hist")
+# plot_CR(master_dict,property="subleadingjets_pt_hist")
+# plot_CR(master_dict,property="subleadingjets_eta_hist")
+# plot_CR(master_dict,property="subleadingjets_phi_hist")
+# plot_CR(master_dict,property="subleadingjets_mass_hist")
 plotCRcutflow(master_dict)
