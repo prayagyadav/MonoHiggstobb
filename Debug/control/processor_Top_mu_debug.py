@@ -262,7 +262,7 @@ class Top_mu(processor.ProcessorABC):
             events = at_least_two_jets(events) 
 
             #Find events with all the jets being at least loosely tagged bjets
-            events = all_loose_bjets(events) 
+            #events = all_loose_bjets(events) 
 
             # The first two jets (dijet) should be medium tagged bjets
             events = medium_dijets(events)
