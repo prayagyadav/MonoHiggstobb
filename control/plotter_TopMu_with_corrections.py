@@ -346,7 +346,7 @@ def plot_CR(input_dict,property="dijets_mass"):
         plt.xlabel(r"$\phi $")
     axs[0,0].legend()
     fig_name=f"CR_resolved_TopMu_{property}.png"
-    path="plots/ver8/"
+    path="plots/ver9/"
     fig.savefig(path+fig_name, dpi=240)
 
 def make_table(keys):
@@ -357,7 +357,7 @@ def make_table(keys):
     ax.axis('off')
     ax.axis('tight')
     ax.table(np.transpose([labels,keys]),loc='center')
-    path="plots/ver8/"
+    path="plots/ver9/"
     fig.savefig(path+"CR_resolved_TopMu_cutflowinfo_table.png",dpi=240)
 
 def plotCRcutflow(input_dict):
@@ -455,10 +455,10 @@ def plotCRcutflow(input_dict):
     #fig.legend(loc= (0.70,.91))
     #fig.legend(loc=1)
     plotname = f"CR_resolved_TopMu_cutflow.png"
-    path = "plots/ver8/"
+    path = "plots/ver9/"
     fig.savefig(path+plotname, dpi=240)
     #fig.clear()
-    print(plotname , f" created at {os.getcwd()}")
+    print(plotname , f" created at {os.getcwd()}/{path}")
     
 MET_Run2018 = accum("MET_Run2018")
 TTToSemiLeptonic = accum("TTToSemiLeptonic")
@@ -491,22 +491,22 @@ def overall_cutflow(master_dict,dataset="MET_Run2018"):
         cat_dict = added[dataset]["Cutflow"]
         
         temp1.append(cat_dict)
-    common_cuts={key: temp1[0][key] for key in temp1[0].viewkeys() & []}
+    common_cuts={key: temp1[0][key] for key in temp1[0].viewkeys() & ["Total events`","","","",""]}
 
 
 
 plot_CR(master_dict,property="dijets_mass")
-# plot_CR(master_dict,property="dijets_pt")
-# plot_CR(master_dict,property="dijets_eta")
-# plot_CR(master_dict,property="dijets_phi")
-# plot_CR(master_dict,property="met_pt_hist")
-# plot_CR(master_dict,property="met_phi_hist")
-# plot_CR(master_dict,property="leadingjets_pt_hist")
-# plot_CR(master_dict,property="leadingjets_eta_hist")
-# plot_CR(master_dict,property="leadingjets_phi_hist")
-# plot_CR(master_dict,property="leadingjets_mass_hist")
-# plot_CR(master_dict,property="subleadingjets_pt_hist")
-# plot_CR(master_dict,property="subleadingjets_eta_hist")
-# plot_CR(master_dict,property="subleadingjets_phi_hist")
-# plot_CR(master_dict,property="subleadingjets_mass_hist")
+plot_CR(master_dict,property="dijets_pt")
+plot_CR(master_dict,property="dijets_eta")
+plot_CR(master_dict,property="dijets_phi")
+plot_CR(master_dict,property="met_pt_hist")
+plot_CR(master_dict,property="met_phi_hist")
+plot_CR(master_dict,property="leadingjets_pt_hist")
+plot_CR(master_dict,property="leadingjets_eta_hist")
+plot_CR(master_dict,property="leadingjets_phi_hist")
+plot_CR(master_dict,property="leadingjets_mass_hist")
+plot_CR(master_dict,property="subleadingjets_pt_hist")
+plot_CR(master_dict,property="subleadingjets_eta_hist")
+plot_CR(master_dict,property="subleadingjets_phi_hist")
+plot_CR(master_dict,property="subleadingjets_mass_hist")
 plotCRcutflow(master_dict)
