@@ -16,7 +16,7 @@ def showinfo(Output):
             cutflow = Output[key][subkey]["Cutflow"]
             rich.print(cutflow)
 def accum(key):
-    path = "coffea_files/ver9/"
+    path = "coffea_files/debug/"
     list_files = os.listdir(path)
     valid_list = []
     for file in list_files :
@@ -34,11 +34,12 @@ def recoil_adder(master_dict):
         temp0.append(temp1)
     return processor.accumulate(temp0)
 
-def adder(raw_dict):
+def adder(raw_dict , onlydata = False):
     """
     Adds(accumulates) the dictionaries from subcategories using cross section in case of MCs or raw in case of data 
     """
-    raw_dict = xsec_reweight(raw_dict) #Return the same dict with cross section reweighting applied to MCs
+    if onlydata == False:
+        raw_dict = xsec_reweight(raw_dict) #Return the same dict with cross section reweighting applied to MCs
     output_dict = {}
     keys = list(raw_dict.keys())
     for key in keys :
@@ -346,7 +347,7 @@ def plot_CR(input_dict,property="dijets_mass"):
         plt.xlabel(r"$\phi $")
     axs[0,0].legend()
     fig_name=f"CR_resolved_TopMu_{property}.png"
-    path="plots/ver8/"
+    path="plots/debug/"
     fig.savefig(path+fig_name, dpi=240)
 
 def make_table(keys):
@@ -357,7 +358,7 @@ def make_table(keys):
     ax.axis('off')
     ax.axis('tight')
     ax.table(np.transpose([labels,keys]),loc='center')
-    path="plots/ver8/"
+    path="plots/debug/"
     fig.savefig(path+"CR_resolved_TopMu_cutflowinfo_table.png",dpi=240)
 
 def plotCRcutflow(input_dict):
@@ -455,32 +456,32 @@ def plotCRcutflow(input_dict):
     #fig.legend(loc= (0.70,.91))
     #fig.legend(loc=1)
     plotname = f"CR_resolved_TopMu_cutflow.png"
-    path = "plots/ver8/"
+    path = "plots/debug/"
     fig.savefig(path+plotname, dpi=240)
     #fig.clear()
     print(plotname , f" created at {os.getcwd()}")
     
 MET_Run2018 = accum("MET_Run2018")
-TTToSemiLeptonic = accum("TTToSemiLeptonic")
-ZJets_NuNu = accum("ZJets_NuNu")
-WJets_LNu = accum("WJets_LNu")
-ST = accum("ST")
-DYJets_LL = accum("DYJets_LL")
-VV = accum("VV")
-QCD = accum("QCD")
-TTTo2L2Nu = accum("TTTo2L2Nu")
-TTToHadronic = accum("TTToHadronic")
+# TTToSemiLeptonic = accum("TTToSemiLeptonic")
+# ZJets_NuNu = accum("ZJets_NuNu")
+# WJets_LNu = accum("WJets_LNu")
+# ST = accum("ST")
+# DYJets_LL = accum("DYJets_LL")
+# VV = accum("VV")
+# QCD = accum("QCD")
+# TTTo2L2Nu = accum("TTTo2L2Nu")
+# TTToHadronic = accum("TTToHadronic")
 master_dict = processor.accumulate([
     MET_Run2018,
-    ZJets_NuNu,
-    TTToSemiLeptonic,
-    WJets_LNu,
-    TTTo2L2Nu,
-    TTToHadronic,
-    DYJets_LL,
-    VV,
-    QCD,
-    ST
+    # ZJets_NuNu,
+    # TTToSemiLeptonic,
+    # WJets_LNu,
+    # TTTo2L2Nu,
+    # TTToHadronic,
+    # DYJets_LL,
+    # VV,
+    # QCD,
+    # ST
     ])
 
 def overall_cutflow(master_dict,dataset="MET_Run2018"):
@@ -489,13 +490,43 @@ def overall_cutflow(master_dict,dataset="MET_Run2018"):
     for key in master_dict:
         added = adder(master_dict[key])
         cat_dict = added[dataset]["Cutflow"]
-        
+        print(cat_dict)
+        end_slice = {key: cat_dict[key] for key in cat_dict.keys() & ["HEM veto","one_tight_muon","Recoil","At least two bjets","bjet1 pt > 50 GeV ","bjet2 pt > 30 GeV","Additional Jets greater_than_or_equal_to 1","dijet mass between 100 Gev to 150 GeV","dijet pt > 100 GeV"]}
+        temp2.append(end_slice) 
         temp1.append(cat_dict)
-    common_cuts={key: temp1[0][key] for key in temp1[0].viewkeys() & []}
+    front_slice={key: temp1[0][key] for key in temp1[0].keys() & ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus"]}
+    end_slice=processor.accumulate(temp2)
 
+    merged_dict = end_slice.copy()
 
+    for key, value in front_slice.items():
+        merged_dict[key] = value
 
-plot_CR(master_dict,property="dijets_mass")
+    return merged_dict
+
+def simpleoverallcutflow(master_dict,dataset="MET_Run2018"):
+    temp = []
+    nrecoil = 0
+    for key in master_dict:
+        nrecoil += 1
+        added = adder(master_dict[key] , onlydata=True)
+        cat_dict = added[dataset]["Cutflow"]
+        temp.append(cat_dict)
+    output_dict = processor.accumulate(temp)
+    repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
+    for key in repeated_keys :
+        output_dict[key] = output_dict[key] / nrecoil
+    #convert values in scientific notation
+    output_dict = {key : "{:e}".format(value) for key,value in output_dict.items()}
+    return output_dict
+
+def show(dict):
+    for key in dict.keys() :
+        print(key , " : ", dict[key] , " \n")
+
+show(simpleoverallcutflow(master_dict))
+
+# plot_CR(master_dict,property="dijets_mass")
 # plot_CR(master_dict,property="dijets_pt")
 # plot_CR(master_dict,property="dijets_eta")
 # plot_CR(master_dict,property="dijets_phi")
@@ -509,4 +540,4 @@ plot_CR(master_dict,property="dijets_mass")
 # plot_CR(master_dict,property="subleadingjets_eta_hist")
 # plot_CR(master_dict,property="subleadingjets_phi_hist")
 # plot_CR(master_dict,property="subleadingjets_mass_hist")
-plotCRcutflow(master_dict)
+# plotCRcutflow(master_dict)
