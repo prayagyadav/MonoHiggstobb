@@ -257,12 +257,15 @@ class Top_mu(processor.ProcessorABC):
             # #Apply general pt and eta cut to jets
             # events, cutflow = jet_pt(events,cutflow)
             # events, cutflow = jet_eta(events,cutflow)
-
-            #Making sure that at least one jet is present before moving forward
-            events = events[ak.num(events.Jet) > 0]
         
-            #Apply the btag and choose at least two bjet events
-            events, cutflow = at_least_two_bjets(events,cutflow,year=2018,Working_Point="medium")
+            #Choose events which have at least two jets
+            events = at_least_two_jets(events) 
+
+            #Find events with all the jets being at least loosely tagged bjets
+            events = all_loose_bjets(events) 
+
+            # The first two jets (dijet) should be medium tagged bjets
+            events = medium_dijets(events)
 
             # leading bjet pt
             events, cutflow = leading_jet_pt(events,cutflow)

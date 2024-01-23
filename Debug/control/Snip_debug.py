@@ -197,31 +197,70 @@ def jet_eta(events,cutflow):
     cutflow["jet abs(eta) < 2.5"] = len(events)
     return events,cutflow
 
-def get_bjets(events, wp="tight", era=2018):
-    if era==2018:
+# def get_bjets(events, wp="tight", era=2018):
+#     if era==2018:
+#         #2018
+#         if wp=="loose":
+#             raise KeyError
+#         elif wp=="medium":
+#             btag_WP = 0.3040 # Medium Working Point for 2018
+#         elif wp=="tight":
+#             btag_WP = 0.7476 # Tight Working Point for 2018
+#     if era==2017:
+#         #2017
+#         if wp=="loose":
+#             raise KeyError
+#         elif wp=="medium":
+#             raise KeyError
+#         elif wp=="tight":
+#             raise KeyError
+#     tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP 
+#     return events.Jet[tight_bjets_selection]
+
+# def at_least_two_bjets(events,cutflow,year, Working_Point):
+#     bjets = get_bjets(events, wp=Working_Point,era=year)
+#     events = events[ak.num(bjets) >= 2] #at least 2 bjets
+#     cutflow["At least two bjets"] = len(events)
+#     return events,cutflow
+
+
+def get_wp(Era,wp):
+    #https://btv-wiki.docs.cern.ch/ScaleFactors
+    if Era==2018:
         #2018
         if wp=="loose":
-            raise KeyError
+            btag_WP = 0.0490 # Loose Working Point for deepjet 2018UL
         elif wp=="medium":
-            btag_WP = 0.3040 # Medium Working Point for 2018
+            btag_WP = 0.2783 # Medium Working Point for deepjet 2018UL
         elif wp=="tight":
-            btag_WP = 0.7476 # Tight Working Point for 2018
-    if era==2017:
+            btag_WP = 0.7100 # Tight Working Point for deepjet 2018UL
+    if Era==2017:
         #2017
         if wp=="loose":
-            raise KeyError
+            btag_WP = 0.0532 # Loose Working Point for deepjet 2017
         elif wp=="medium":
-            raise KeyError
+            btag_WP = 0.3040 # Medium Working Point for deepjet 2017
         elif wp=="tight":
-            raise KeyError
-    tight_bjets_selection = events.Jet.btagDeepFlavB > btag_WP 
-    return events.Jet[tight_bjets_selection]
+            btag_WP = 0.7476 # Tight Working Point for deepjet 2017
+    return btag_WP
 
-def at_least_two_bjets(events,cutflow,year, Working_Point):
-    bjets = get_bjets(events, wp=Working_Point,era=year)
-    events = events[ak.num(bjets) >= 2] #at least 2 bjets
-    cutflow["At least two bjets"] = len(events)
-    return events,cutflow
+# dijet_wp = get_wp(Era=era,wp="medium")
+# leading_medium_bjet_selection = events.Jet[:,0].btagDeepFlavB > dijet_wp
+# subleading_medium_bjet_selection = events.Jet[:,1].btagDeepFlavB > dijet_wp
+
+def all_loose_bjets(events, era=2018):
+    overall_wp = get_wp(Era=era, wp="loose")
+    all_loose_bjets_selection = ak.all(events.Jet.btagDeepFlavB > overall_wp ,axis=1)
+    return events[all_loose_bjets_selection]
+
+def at_least_two_jets(events):
+    events = events[ak.num(events.Jet) >= 2] #at least 2 bjets
+    return events
+
+def medium_dijets(events):
+    first_jet_medium = events.Jet[:,0].btagDeepFlavB > get_wp(Era=2018,wp="medium")
+    second_jet_medium = events.Jet[:,1].btagDeepFlavB > get_wp(Era=2018,wp="medium")
+    return events[first_jet_medium & second_jet_medium]
 
 def leading_jet_pt(events,cutflow):
     ljets_ptcut = events.Jet[:,0].pt > 50.0 #Leading Jet pt cut
@@ -269,7 +308,7 @@ def dijet_mass(events,cutflow,Dijets,window):
     window_cut = ( Dijets.mass > window[0] ) & ( Dijets.mass < window[1] ) #Dijet mass window cut
     events = events[window_cut] # Allowed since no. of dijets is equal to number of events
     Dijets = Dijets[window_cut]
-    cutflow["dijet mass between 100 Gev to 150 GeV"] = len(events) 
+    cutflow[f"dijet mass between {window[0]} Gev to {window[1]} GeV"] = len(events) 
     return events, cutflow, Dijets
 
 def dijet_pt(events,cutflow,Dijets,pt):
