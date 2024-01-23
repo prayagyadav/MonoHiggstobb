@@ -1,0 +1,35 @@
+MET_Run2018B cutflow with hem veto:
+Total events  :  2.971348e+07  
+
+MET trigger  :  1.498918e+07  
+
+MET filters  :  1.370899e+07  
+
+MET > 50.0 GeV  :  1.126541e+07  
+
+no electrons  :  1.126541e+07  
+
+no photons  :  1.104660e+07  
+
+no taus  :  1.104660e+07  
+
+HEM veto  :  2.462524e+06  
+
+one_tight_muon  :  7.328000e+04  
+
+Recoil  :  3.431600e+04  
+
+At least two bjets  :  2.963000e+03  
+
+bjet1 pt > 50 GeV   :  2.888000e+03  
+
+bjet2 pt > 30 GeV  :  2.888000e+03  
+
+Additional Jets greater_than_or_equal_to 1  :  2.873000e+03  
+
+dijet mass between 100 Gev to 150 GeV  :  2.170000e+02  
+
+dijet pt > 100 GeV  :  2.150000e+02  
+
+MET_Run2018B cutflow without hem veto:
+

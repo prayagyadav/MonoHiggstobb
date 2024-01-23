@@ -234,7 +234,7 @@ class Top_mu(processor.ProcessorABC):
                 events, cutflow = no_taus(events,cutflow, version=9)
 
             #HEM veto
-            events,cutflow = HEM_veto(events,cutflow)
+            #events,cutflow = HEM_veto(events,cutflow)
 
             #Object selections
                 
