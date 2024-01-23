@@ -207,7 +207,7 @@ class Top_mu(processor.ProcessorABC):
             if (self.mode).startswith("MET") :
 
                 #choosing certified good events
-                should_lumi = True
+                should_lumi = False
                 if should_lumi :
                     events, cutflow = lumi(events, cutflow, lumiobject=self.lumiobject)
 
