@@ -1,6 +1,8 @@
 import awkward as ak
 from coffea.analysis_tools import PackedSelection
 from coffea.lumi_tools import LumiMask
+from coffea.nanoevents.methods import vector
+import numpy as np 
 
 #Define some selection functions to use in the processor
 def loose_electrons(events):
@@ -297,3 +299,12 @@ def HEM_veto(events,cutflow):
     events = events[jetphicut & jetetacut]
     cutflow["HEM veto"] = len(events)
     return events , cutflow
+
+def get_recoil(events, muons):
+    # assuming there are exactly one muon in each events(which is a tight muon)
+    flat_single_muons = ak.flatten(muons)
+    vec1 = ak.zip( {"x": flat_single_muons.pt*np.cos(flat_single_muons.phi), "y": flat_single_muons.pt*np.sin(flat_single_muons.phi), }, with_name="TwoVector", behavior=vector.behavior,)
+    vec2 = ak.zip( {"x": events.MET.pt*np.cos(events.MET.phi), "y": events.MET.pt*np.sin(events.MET.phi), }, with_name="TwoVector", behavior=vector.behavior,)
+    recoil = (vec1.add(vec2)).pt
+    #recoil is a numpy array(or a single level awkward array) with the same number of elements as events and muons
+    return recoil

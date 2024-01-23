@@ -1,6 +1,6 @@
 from coffea import processor
 import hist 
-from Snip import *
+from Snip_debug import *
 #Begin the processor definition
 class Top_mu(processor.ProcessorABC):
     """
@@ -248,7 +248,8 @@ class Top_mu(processor.ProcessorABC):
             #     recoil = 250.0
             # elif self.category == "resolved" :
             #     recoil = 200.0
-            windowcut = (events.Recoil > self.recoil_window[0]) & (events.Recoil < self.recoil_window[1])
+            Recoil = get_recoil(events,single_muons)
+            windowcut = (Recoil > self.recoil_window[0]) & (Recoil < self.recoil_window[1])
             events = events[windowcut]
             cutflow["Recoil"] = len(events)
 

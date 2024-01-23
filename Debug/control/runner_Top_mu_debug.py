@@ -7,7 +7,7 @@ if __name__=="__main__":
     import awkward as ak
     import condor
     import numba
-    from Snip import *
+    from Debug.control.Snip_debug import *
     import json
     import rich
     import numpy as np
@@ -322,13 +322,15 @@ if __name__=="__main__":
         cluster.scale(inputs.workers)
         #client.upload_file("../monoHbbtools/Load/newfileset.json")
 
-        client.upload_file(zip_files(
-            [
-                "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                "Snip.py"
-                ]
-            )
-            )
+        client.upload_file(
+                    zip_files(
+                        [
+                            "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+                            "Snip_debug.py",
+                            "processor_Top_mu_debug.py"
+                            ]
+                        )
+                    )
         #client.upload_file("Snip.py")
         with open("newfileset.json") as f: #load the fileset
             filedict = json.load(f)
@@ -370,9 +372,15 @@ if __name__=="__main__":
             # shutil.make_archive("monoHbbtools", "zip", base_dir="monoHbbtools")
             # client.upload_file("monoHbbtools.zip")
     
-            client.upload_file("./Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
-            client.upload_file("Snip.py")
-            client.upload_file("processor_Top_mu.py")
+            client.upload_file(
+                    zip_files(
+                        [
+                            "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+                            "Snip_debug.py",
+                            "processor_Top_mu_debug.py"
+                            ]
+                        )
+                    )
             with open("shortfileset.json") as f: #load the fileset
                 filedict = json.load(f)
         else:
@@ -387,8 +395,8 @@ if __name__=="__main__":
                     zip_files(
                         [
                             "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                            "Snip.py",
-                            "processor_Top_mu.py"
+                            "Snip_debug.py",
+                            "processor_Top_mu_debug.py"
                             ]
                         )
                     )
