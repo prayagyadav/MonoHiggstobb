@@ -371,8 +371,8 @@ if __name__=="__main__":
             # client.upload_file("monoHbbtools.zip")
     
             client.upload_file("./Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
-            client.upload_file("Snip.py")
-            client.upload_file("processor_Top_mu.py")
+            client.upload_file("Snip_debug.py")
+            client.upload_file("processor_Top_mu_debug.py")
             with open("shortfileset.json") as f: #load the fileset
                 filedict = json.load(f)
         else:
