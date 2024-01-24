@@ -262,15 +262,28 @@ class Top_mu(processor.ProcessorABC):
             events = at_least_two_jets(events) 
 
             #Find events with all the jets being at least loosely tagged bjets
-            #events = all_loose_bjets(events) 
+            events = all_loose_bjets(events) 
+            medium_bjets = events.Jet[events.Jet.btagDeepFlavB > get_wp(Era=2018,wp="medium")] 
+            events_medium_bjets = events[ak.num(medium_bjets) >= 2 ]
 
-            # The first two jets (dijet) should be medium tagged bjets
-            events = medium_dijets(events)
+            pt_cut = events_medium_bjets.pt > 50 
+            eta_cut = abs(events_medium_bjets.eta) < 2.5
+            events_medium_bjets = events_medium_bjets[ak.any((pt_cut & eta_cut), axis=1)]
+            cutflow["bjet1 pt > 50 GeV "] = len(events_medium_bjets)
 
-            # leading bjet pt
-            events, cutflow = leading_jet_pt(events,cutflow)
-            #subleading bjet pt
-            events, cutflow = subleading_jet_pt(events,cutflow)
+            pt_cut = events_medium_bjets.pt > 30
+            eta_cut = abs(events_medium_bjets.eta) < 2.5
+            event_with_30GeV = events_medium_bjets.Jet[events_medium_bjets.Jet > 30]
+            events_medium_bjets = events_medium_bjets[ak.num(event_with_30GeV) >= 2]
+            cutflow["bjet2 pt > 30 GeV "] = len(events_medium_bjets)
+            
+            # # The first two jets (dijet) should be medium tagged bjets
+            # events = medium_dijets(events)
+
+            # # leading bjet pt
+            # events, cutflow = leading_jet_pt(events,cutflow)
+            # #subleading bjet pt
+            # events, cutflow = subleading_jet_pt(events,cutflow)
 
             if self.category == "resolved":
                 #At least 1 additional jets
