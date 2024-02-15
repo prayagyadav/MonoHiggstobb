@@ -368,6 +368,34 @@ def HEM_veto(events,cutflow):
     cutflow["HEM veto"] = len(events)
     return events , cutflow
 
+def HEM_veto_bril(events, cutflow):
+    """
+    Developed from Shivani's implementation of HEM veto.
+    """
+    dataset = events.metadata["dataset"]
+    is_data = dataset.startswith("MET")
+    if is_data == True :
+        mask = (events.run >= 319077)
+        passes_hem = ak.all((events.Jet.phi < -1.57) | (events.Jet.phi > -0.87) | (events.Jet.eta < -3.0) | (events.Jet.eta > -1.3), axis=1)
+        HEM_region = mask & passes_hem
+        Non_HEM_region = events.run < 319077
+        events = events[Non_HEM_region | HEM_region]
+    elif is_data == False :
+        # MC should mimic the ratios of affected and unaffected events
+        fraction_of_affected = 0.647724485 #Obtained by Shivani from Brilcalc
+        fraction_of_unaffected = 1 - fraction_of_affected
+        #Create a fake run cut mask just like in data, by using this ratio
+        pass_bool_array = np.ones(round(len(events.MET.pt)*fraction_of_affected),dtype=bool) #We use events.MET.pt to be sure that no None contribution to length happens
+        block_bool_array = ~np.ones(round(len(events.MET.pt)*fraction_of_unaffected),dtype=bool)
+        fake_run_mask = np.concatenate((pass_bool_array,block_bool_array))
+        passes_hem = ak.all((events.Jet.phi < -1.57) | (events.Jet.phi > -0.87) | (events.Jet.eta < -3.0) | (events.Jet.eta > -1.3), axis=1)
+        HEM_region = fake_run_mask & passes_hem
+        Non_HEM_region = ~fake_run_mask
+        events = events[Non_HEM_region | HEM_region]
+    else :
+        raise  Exception("Function HEM_veto_bril caught an error.")
+    cutflow["HEM veto"] = len(events)
+    return events, cutflow
 def get_recoil(events, muons):
     # assuming there are exactly one muon in each events(which is a tight muon)
     flat_single_muons = ak.flatten(muons)
