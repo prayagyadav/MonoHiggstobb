@@ -7,14 +7,14 @@ if __name__=="__main__":
     import awkward as ak
     import condor
     import numba
-    from Snip_debug import *
+    from snippets import *
     import json
     import rich
     import numpy as np
     import os
     import shutil
     import logging
-    from processor_Top_mu_debug import Top_mu
+    from processor_Top import Top
 
     ##############################
     # Define the terminal inputs #
@@ -37,7 +37,7 @@ if __name__=="__main__":
             "ZJets_NuNu",
             "TTToSemiLeptonic",
             "TTTo2L2Nu",
-    	"TTToHadronic",
+            "TTToHadronic",
             "WJets_LNu",
             "DYJets_LL",
             "VV",
@@ -65,13 +65,13 @@ if __name__=="__main__":
         "--workers",
         help="Enter the number of workers to be employed for processing in local; by default 4",
         type=int ,
-        default=4 
+        default=4
         )
     parser.add_argument(
         "-f",
         "--files",
         help="Enter the number of files to be processed",
-        type=int 
+        type=int
         )
     parser.add_argument(
         "--begin",
@@ -84,14 +84,15 @@ if __name__=="__main__":
         type=int
     )
     parser.add_argument(
-        "--short",
-        help="Use the short fileset",
-        type=int
-    )
-    parser.add_argument(
         "-cat",
         help="category : resolved or boosted",
         choices=["resolved","boosted"],
+        type=str
+    )
+    parser.add_argument(
+        "-lepton",
+        help="mu or e : muon CR or electron CR to run",
+        choices=["mu","e"],
         type=str
     )
     inputs = parser.parse_args()
@@ -296,7 +297,9 @@ if __name__=="__main__":
         Output = futures_run(
             files,
             "Events",
-            processor_instance=Top_mu(category=inputs.cat,helper_objects=[lumimaskobject])
+            processor_instance=Top(category=inputs.cat,lepton=inputs.lepton,helper_objects=[lumimaskobject])
+        else:
+                client.upload_file(
         )
     
     #For dask execution
@@ -309,9 +312,9 @@ if __name__=="__main__":
 
         client.upload_file(zip_files(
             [
-                "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                "Snip_debug.py",
-                "processor_Top_mu_debug.py"
+                #"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+                "snippets.py",
+                "processor_Top.py"
                 ]
             )
             )
@@ -337,7 +340,7 @@ if __name__=="__main__":
         Output = dask_run(
             files,
             "Events",
-            processor_instance=Top_mu(category=inputs.cat,helper_objects=[lumimaskobject])
+            processor_instance=Top(category=inputs.cat,lepton=inputs.lepton,helper_objects=[lumimaskobject])
         )
     
     #For condor execution
@@ -350,24 +353,17 @@ if __name__=="__main__":
         print("Preparing to run at condor...\n")
         executor , client = condor.runCondor(workers=inputs.workers)
         print("Executor and Client Obtained")
-        if inputs.short == 1 :  
-            client.upload_file("./Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt")
-            client.upload_file("Snip_debug.py")
-            client.upload_file("processor_Top_mu_debug.py")
-            with open("shortfileset.json") as f: #load the fileset
-                filedict = json.load(f)
-        else:
-            client.upload_file(
-                    zip_files(
-                        [
-                            "Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                            "Snip_debug.py",
-                            "processor_Top_mu_debug.py"
-                            ]
-                        )
-                    )
-            with open("newfileset.json") as f: #load the fileset
-                filedict = json.load(f)
+        client.upload_file(
+            zip_files(
+                [
+                    #"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+                    "snippets.py",
+                    "processor_Top.py"
+                ]
+            )
+        )
+        with open("newfileset.json") as f: #load the fileset
+            filedict = json.load(f)
     
         files = getDataset(
             keymap=inputs.keymap,
@@ -389,7 +385,7 @@ if __name__=="__main__":
         Output = runner(
             files,
             treename="Events",
-            processor_instance=Top_mu(category=inputs.cat,helper_objects=[lumimaskobject])
+            processor_instance=Top(category=inputs.cat,lepton=inputs.lepton,helper_objects=[lumimaskobject])
         )
 
     #################################
@@ -397,10 +393,10 @@ if __name__=="__main__":
     #################################
     print("Output produced")
     try :
-        output_file = f"CR_{inputs.cat}_Top_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
+        output_file = f"CR_{inputs.cat}_Top_{inputs.lepton}_{inputs.keymap}_from_{inputs.begin}_to_{inputs.end}.coffea"
         pass
     except :
-        output_file = f"CR_{inputs.cat}_Top_{inputs.keymap}.coffea"
+        output_file = f"CR_{inputs.cat}_Top_{inputs.lepton}_{inputs.keymap}.coffea"
     print("Saving the output to : " , output_file)
     util.save(output= Output, filename="coffea_files/"+output_file)
     print(f"File {output_file} saved.")
