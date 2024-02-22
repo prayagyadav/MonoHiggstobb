@@ -38,7 +38,7 @@ class Top(processor.ProcessorABC):
         |
         |
         v
-    Make MET pt eta phi, DIJET mass etc plots - all of them plots
+    Make MET pt eta phi, DIJET mass/softdrop mass etc plots - all of them plots
     """
 
 
@@ -47,7 +47,7 @@ class Top(processor.ProcessorABC):
         if len(helper_objects) > 0 :
             self.lumiobject = helper_objects[0] 
         self.category = category
-        self,lepton = lepton
+        self.lepton = lepton
         self.cutflow = {}
         self.run_set = set({})
 
@@ -239,24 +239,24 @@ class Top(processor.ProcessorABC):
             events, cutflow = no_photons(events,cutflow)
 
             #HEM veto
-            events,cutflow = HEM_veto_bril(events,cutflow,category=self.category)
+            events,cutflow = HEM_veto_bril(events,cutflow,cat=self.category)
 
             #Object selections
             if self.lepton == "mu":
                 #Exactly one tight muon
-                events, single_muons, cutflow = tight_muons(events,cutflow)
+                events, single_muons, cutflow = single_tight_muons(events,cutflow)
             elif self.lepton == "e":
                 #Exactly one tight electron
-                events, single_electrons, cutflow = tight_electrons(events,cutflow)
+                events, single_electrons, cutflow = single_tight_electrons(events,cutflow)
 
             #MET_selection
             events, cutflow = met_selection(events,cutflow,GeV=50.0)
 
             dummy_dict = {}
             if self.lepton=="mu":
-                dummy_events, single_muons, dummy_dict = tight_muons(events,dummy_dict) # I just want to get tight muons back, so I use the same function with some dummy variables
+                dummy_events, single_muons, dummy_dict = single_tight_muons(events,dummy_dict) # I just want to get tight muons back, so I use the same function with some dummy variables
             elif self.lepton=="e":
-                dummy_events, single_electrons, dummy_dict = tight_electrons(events,dummy_dict) # I just want to get tight electrons back, so I use the same function with some dummy variables
+                dummy_events, single_electrons, dummy_dict = single_tight_electrons(events,dummy_dict) # I just want to get tight electrons back, so I use the same function with some dummy variables
             #Hadronic Recoil
             #There is at least one muon(tight) in each event at this point
             #events.Recoil = events.MET.pt + ak.flatten(single_muons.pt)
@@ -264,7 +264,10 @@ class Top(processor.ProcessorABC):
             #     recoil = 250.0
             # elif self.category == "resolved" :
             #     recoil = 200.0
-            Recoil = get_recoil(events,single_muons)
+            if self.lepton == "mu":
+                Recoil = get_recoil(events,single_muons)
+            elif self.lepton == "e":
+                Recoil = get_recoil(events,single_electrons)
             windowcut = (Recoil > self.recoil_window[0]) & (Recoil < self.recoil_window[1])
             events = events[windowcut]
             cutflow["Recoil"] = len(events)
@@ -291,7 +294,7 @@ class Top(processor.ProcessorABC):
                 dijets_pt_selection = dijets.pt > 100
                 dijets = dijets[dijets_pt_selection]
             
-                dijets_mass_window = (dijets.mass < 150) & (dijets.mass > 70)
+                dijets_mass_window = (dijets.mass < 150) & (dijets.mass > 100)
                 dijets = dijets[dijets_mass_window]
             
                 #Reobtain the leading and subleading jets after the dijet cuts
@@ -316,7 +319,7 @@ class Top(processor.ProcessorABC):
                 cutflow["pt(bb) > 100"] = len(events)
             
                 events = events[dijets_mass_window]
-                cutflow["70 < M_bb < 150"] = len(events)
+                cutflow["100 < M_bb < 150"] = len(events)
 
                 one_normal_additional_jet = ak.num(events.Jet) >= 3
                 events = events[one_normal_additional_jet]

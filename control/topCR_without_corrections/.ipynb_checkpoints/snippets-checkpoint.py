@@ -7,22 +7,18 @@ import numpy as np
 #Define some selection functions to use in the processor
 def loose_electrons(events):
     Etagap = ( events.Electron.eta < 1.4442 ) | ( events.Electron.eta > 1.566 )
-    elePassDXY = (abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dxy) < 0.05) | (abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dxy) < 0.1)
-    elePassDZ = (abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dz) < 0.1) | (abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dz) < 0.2)
     Eta = abs( events.Electron.eta ) < 2.5
     Pt = events.Electron.pt > 10.0 
     Id = events.Electron.cutBased >= 2 #meaning loose, medium or tight , ie , at least loosely an electron 
-    return events.Electron[Etagap & elePassDXY & elePassDZ & Eta & Pt & Id]
+    return events.Electron[Etagap & Eta & Pt & Id]
 
 def single_tight_electrons(events, cutflow):
-    Etagap = ( events.Electron.eta < 1.4442 ) | ( events.Electron.eta > 1.566 )
-    elePassDXY = (abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dxy) < 0.05) | (abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dxy) < 0.1)
-    elePassDZ = (abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dz) < 0.1) | (abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dz) < 0.2)
+    Etagap = ( events.Electron.eta < 1.4442 ) & ( events.Electron.eta > 1.566 )
     Eta = abs( events.Electron.eta ) < 2.5
     Pt = events.Electron.pt > 40.0 
-    Id = events.Electron.cutBased == 4 #meaning only tight electrons 
+    Id = events.Electron.cutBased == 2 #meaning only tight electrons 
 
-    final_cut = Etagap & elePassDXY & elePassDZ & Eta & Pt & Id
+    final_cut = Etagap & Eta & Pt & Id
     all_tight = events.Electron[final_cut]
     one_tight_cut = ak.num(all_tight , axis=1) == 1
     goodevents = events[one_tight_cut]

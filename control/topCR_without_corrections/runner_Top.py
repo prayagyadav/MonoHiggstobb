@@ -95,6 +95,13 @@ if __name__=="__main__":
         choices=["mu","e"],
         type=str
     )
+    parser.add_argument(
+        "--redirector",
+        help="Choose a non-default redirector, use commonfs for local run in the cmslab-workstation server",
+        choices=["fnal","infn","kisti","wisc","unl","commonfs"],
+        type=str,
+        default="fnal"
+    )
     inputs = parser.parse_args()
     
     class Loadfileset():
@@ -163,7 +170,7 @@ if __name__=="__main__":
             ]
     
         
-        runnerfileset = buildFileset(fileset_dict[keymap],"fnal")
+        runnerfileset = buildFileset(fileset_dict[keymap],inputs.redirector)
         flat_list={}
         flat_list[keymap] = []
     
@@ -298,10 +305,7 @@ if __name__=="__main__":
             files,
             "Events",
             processor_instance=Top(category=inputs.cat,lepton=inputs.lepton,helper_objects=[lumimaskobject])
-        else:
-                client.upload_file(
         )
-    
     #For dask execution
     elif inputs.executor == "dask" :
         print("WARNING: This feature is still in development!\nAttemping to run nevertheless ...")
