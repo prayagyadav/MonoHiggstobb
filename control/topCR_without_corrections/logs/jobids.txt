@@ -15,3 +15,15 @@ WJets_LNu_301_to_350 submitted with job id 34726
 WJets_LNu_351_to_400 submitted with job id 35022
 WJets_LNu_401_to_450 submitted with job id 35493
 WJets_LNu_451_to_467 submitted with job id 35742
+DYJets_LL_1_to_50 submitted with job id 61438
+DYJets_LL_51_to_100 submitted with job id 61546
+DYJets_LL_101_to_150 submitted with job id 61662
+DYJets_LL_151_to_200 submitted with job id 61776
+DYJets_LL_201_to_250 submitted with job id 66535
+DYJets_LL_251_to_300 submitted with job id 67191
+DYJets_LL_301_to_350 submitted with job id 67616
+DYJets_LL_351_to_400 submitted with job id 68052
+DYJets_LL_401_to_450 submitted with job id 68760
+DYJets_LL_451_to_500 submitted with job id 69934
+DYJets_LL_501_to_550 submitted with job id 70185
+DYJets_LL_551_to_592 submitted with job id 70519
