@@ -16,8 +16,8 @@ def loose_electrons(events):
 
 def single_tight_electrons(events, cutflow):
     Etagap = ( events.Electron.eta < 1.4442 ) | ( events.Electron.eta > 1.566 )
-    elePassDXY = (abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dxy) < 0.05) | (abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dxy) < 0.1)
-    elePassDZ = (abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dz) < 0.1) | (abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dz) < 0.2)
+    elePassDXY = ((abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dxy) < 0.05)) | ((abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dxy) < 0.1))
+    elePassDZ = ((abs(events.Electron.eta) < 1.479) & (abs(events.Electron.dz) < 0.1)) | ((abs(events.Electron.eta) > 1.479) & (abs(events.Electron.dz) < 0.2))
     Eta = abs( events.Electron.eta ) < 2.5
     Pt = events.Electron.pt > 40.0 
     Id = events.Electron.cutBased == 4 #meaning only tight electrons 

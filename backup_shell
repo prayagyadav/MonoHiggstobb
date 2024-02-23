@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+grep -v '^include' /etc/condor/config.d/00hep_wisc.config > .condor_config
+
+EXTERNAL_BIND=${PWD} singularity exec -B ${PWD}:/srv -B /etc/condor -B /scratch -B /afs -B /hdfs --pwd /srv /scratch/bsahu/backup_coffea_images/coffea-dask-cc7_latest-py3.10.sif /bin/bash --rcfile /srv/.bashrc 

@@ -32,15 +32,15 @@ def runCondor(cores=1, memory="2 GB", disk="1 GB", death_timeout = '60', workers
     _x509_path = move_X509()
 
     cluster = HTCondorCluster(
-        cores=1,
-        memory="4 GB",
-        disk="1 GB",
-        death_timeout = '60',
+        cores=cores,
+        memory=memory,
+        disk=disk,
+        death_timeout = death_timeout,
         job_extra_directives={
             #"+JobFlavour": '"espresso"', # 20 minutes
             #"+JobFlavour": '"microcentury"' , # 1 hour
-            #"+JobFlavour": '"longlunch"' , # 2 hours
-            "+JobFlavour": '"workday"' , # 8 hours
+            "+JobFlavour": '"longlunch"' , # 2 hours
+            #"+JobFlavour": '"workday"' , # 8 hours
             #"+JobFlavour": '"tomorrow"' , # 1 day
             #"+JobFlavour": '"testmatch"' , # 3 days
             #"+JobFlavour": '"nextweek"' , # 1 week

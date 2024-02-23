@@ -281,14 +281,15 @@ if __name__=="__main__":
         cutflow["lumimask"] = len(events)
         return events , cutflow
         
-    def zip_files(list_of_files):
-        os.makedirs("temp_folder")
-        for file in list_of_files :
-            shutil.copy(file,"temp_folder")
-        archive_name = "helper_files"
-        shutil.make_archive(archive_name,"zip","temp_folder")
-        shutil.rmtree("temp_folder")
-        return archive_name+".zip"
+    #def zip_files(list_of_files):
+    #    if not os.path.exists("temp_folder"):
+    #        os.makedirs("temp_folder")
+    #    for file in list_of_files :
+    #        shutil.copy(file,"temp_folder")
+    #    archive_name = "helper_files"
+    #    shutil.make_archive(archive_name,"zip","temp_folder")
+    #    shutil.rmtree("temp_folder")
+    #    return archive_name+".zip"
 
 
     #For futures execution
@@ -314,14 +315,15 @@ if __name__=="__main__":
         client = Client(cluster)
         cluster.scale(inputs.workers)
 
-        client.upload_file(zip_files(
-            [
-                #"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                "snippets.py",
-                "processor_Top.py"
-                ]
-            )
-            )
+        #client.upload_file(zip_files(
+        #    [
+        #        #"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+        #        "snippets.py",
+        #        "processor_Top.py"
+        #        ]
+        #    )
+        #    )
+        client.upload_file('helper_files.zip')
 
         with open("newfileset.json") as f: #load the fileset
             filedict = json.load(f)
@@ -355,17 +357,19 @@ if __name__=="__main__":
             level=logging.WARNING,
         )
         print("Preparing to run at condor...\n")
-        executor , client = condor.runCondor(workers=inputs.workers)
+        executor , client = condor.runCondor(cores=1,memory="4 GB",disk="4 GB",workers=inputs.workers)
         print("Executor and Client Obtained")
-        client.upload_file(
-            zip_files(
-                [
-                    #"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
-                    "snippets.py",
-                    "processor_Top.py"
-                ]
-            )
-        )
+        #client.upload_file(
+        #    zip_files(
+        #        [
+        #            #"Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt",
+        #            "snippets.py",
+        #            "processor_Top.py"
+        #        ]
+        #    )
+        #)
+        client.upload_file('helper_files.zip')
+
         with open("newfileset.json") as f: #load the fileset
             filedict = json.load(f)
     
