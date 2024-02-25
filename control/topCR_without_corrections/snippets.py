@@ -133,17 +133,17 @@ def met_trigger(events,cutflow,era): ####
     trigger = PackedSelection()
     if era == 2018:
         trigger.add(
-            "noMuonEnergyInJet",
+            "noMuonEnergyInMET",
             events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight_PFHT60 |
             events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight |
             events.HLT.PFMETNoMu140_PFMHTNoMu140_IDTight 
             )
     elif era == 2017 :
         trigger.add(
-            "noMuonEnergyInJet",
+            "noMuonEnergyInMET",
             events.HLT.PFMETNoMu120_PFMHTNoMu120_IDTight
         )
-    trigger_cut = trigger.all("noMuonEnergyInJet")
+    trigger_cut = trigger.all("noMuonEnergyInMET")
     events = events[trigger_cut]
     cutflow["MET trigger"] = len(events)
     return events , cutflow
@@ -209,6 +209,7 @@ def no_electrons(events,cutflow):
     return events , cutflow
 
 def no_muons(events,cutflow):
+    #no muon veto
     events = events[ak.num( loose_muons(events) ) == 0] # no muons
     cutflow["no muons"] = len(events)
     return events , cutflow
@@ -431,6 +432,7 @@ def HEM_veto_bril(events, cutflow , cat="resolved"):
         raise  Exception("Function HEM_veto_bril caught an error.")
     cutflow["HEM veto"] = len(events)
     return events, cutflow
+
 def get_recoil(events, leptons):
     # assuming there is exactly one lepton in each event(which is a tight lepton ,e or mu, as per the input)
     flat_single_leptons= ak.flatten(leptons)
