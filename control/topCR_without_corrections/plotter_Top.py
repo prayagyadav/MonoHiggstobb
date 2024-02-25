@@ -29,7 +29,7 @@ def xsec_reweight(input_dict):
     Returns the same histogram with cross section reweighting applied to every MC histogram object and cutflow dictionary
     """
     lumi = crossSections.lumis[2018]
-    print("Integrated Luminosity(pb): ", lumi)
+    #print("Integrated Luminosity(pb): ", lumi)
 
     #load cross sections
 
@@ -104,11 +104,11 @@ def xsec_reweight(input_dict):
     }
 
     #compute weight_factor for ZJets_NuNu 
-    N_i = {}
-    ZJets_NuNu_weight_factor = {}
-    for subkey in ZJets_NuNu_xsec.keys() :
-        N_i[subkey] = input_dict["ZJets_NuNu"][subkey]["Cutflow"]["Total events"]
-        ZJets_NuNu_weight_factor[subkey] = ( lumi * ZJets_NuNu_xsec[subkey] )/N_i[subkey]
+    # N_i = {}
+    # ZJets_NuNu_weight_factor = {}
+    # for subkey in ZJets_NuNu_xsec.keys() :
+    #     N_i[subkey] = input_dict["ZJets_NuNu"][subkey]["Cutflow"]["Total events"]
+    #     ZJets_NuNu_weight_factor[subkey] = ( lumi * ZJets_NuNu_xsec[subkey] )/N_i[subkey]
 
     #compute weight_factor for TTToSemiLeptonic
     N_i = {}
@@ -138,12 +138,12 @@ def xsec_reweight(input_dict):
         N_i[subkey] = input_dict["WJets_LNu"][subkey]["Cutflow"]["Total events"]
         WJets_LNu_weight_factor[subkey] = ( lumi * WJets_LNu_xsec[subkey] )/N_i[subkey]
 
-    # #compute weight_factor for DYJets_LL
-    # N_i = {}
-    # DYJets_LL_weight_factor = {}
-    # for subkey in DYJets_LL_xsec.keys() :
-    #     N_i[subkey] = input_dict["DYJets_LL"][subkey]["Cutflow"]["Total events"]
-    #     DYJets_LL_weight_factor[subkey] = ( lumi * DYJets_LL_xsec[subkey] )/N_i[subkey]
+    #compute weight_factor for DYJets_LL
+    N_i = {}
+    DYJets_LL_weight_factor = {}
+    for subkey in DYJets_LL_xsec.keys() :
+        N_i[subkey] = input_dict["DYJets_LL"][subkey]["Cutflow"]["Total events"]
+        DYJets_LL_weight_factor[subkey] = ( lumi * DYJets_LL_xsec[subkey] )/N_i[subkey]
 
     # #compute weight_factor for VV
     # N_i = {}
@@ -184,18 +184,18 @@ def xsec_reweight(input_dict):
         return MC_dict
 
     
-    input_dict["ZJets_NuNu"] = hist_xsec(input_dict["ZJets_NuNu"] , ZJets_NuNu_weight_factor)
+    # input_dict["ZJets_NuNu"] = hist_xsec(input_dict["ZJets_NuNu"] , ZJets_NuNu_weight_factor)
     input_dict["TTToSemiLeptonic"] = hist_xsec(input_dict["TTToSemiLeptonic"], TTToSemiLeptonic_weight_factor)
     # input_dict["TTTo2L2Nu"] = hist_xsec(input_dict["TTTo2L2Nu"], TTTo2L2Nu_weight_factor)
     # input_dict["TTToHadronic"] = hist_xsec(input_dict["TTToHadronic"], TTToHadronic_weight_factor)
     input_dict["WJets_LNu"] = hist_xsec(input_dict["WJets_LNu"], WJets_LNu_weight_factor)
-    # input_dict["DYJets_LL"] = hist_xsec(input_dict["DYJets_LL"], DYJets_LL_weight_factor)
+    input_dict["DYJets_LL"] = hist_xsec(input_dict["DYJets_LL"], DYJets_LL_weight_factor)
     # input_dict["VV"] = hist_xsec(input_dict["VV"], VV_weight_factor)
     # input_dict["QCD"] = hist_xsec(input_dict["QCD"], QCD_weight_factor)
     input_dict["ST"] = hist_xsec(input_dict["ST"], ST_weight_factor)
 
     return input_dict
-def simpleoverallcutflow(master_dict,dataset="MET_Run2018"):
+def simpleoverallcutflow(master_dict,dataset="MET_Run2018",lepton="mu"):
     temp = []
     nrecoil = 0
     for key in master_dict:
@@ -204,7 +204,12 @@ def simpleoverallcutflow(master_dict,dataset="MET_Run2018"):
         cat_dict = added[dataset]["Cutflow"]
         temp.append(cat_dict)
     output_dict = processor.accumulate(temp)
-    repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
+    if lepton=="mu":
+        repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
+    elif lepton=="e":
+        repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no muons","no photons","no taus","HEM veto","one_tight_electron"]
+    else :
+        raise KeyError
     #repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","one_tight_muon"]
     #repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no photons","no taus","one_tight_muon"]
     for key in repeated_keys :
@@ -215,22 +220,22 @@ def simpleoverallcutflow(master_dict,dataset="MET_Run2018"):
 def show(dict):
     for key in dict.keys() :
         print(key , " : ", dict[key] , " \n")
-def accum(key):
-    path = "coffea_files/debug/"
+def accum(lepton,key):
+    path = "coffea_files/"
     list_files = os.listdir(path)
     valid_list = []
     for file in list_files :
-        if file.startswith(f"CR_resolved_Top_{key}_from") :
+        if file.startswith(f"CR_resolved_Top_{lepton}_{key}_from") :
             valid_list.append(file)
     full = processor.accumulate([util.load(path+name) for name in valid_list])
     return full
     
-def plot_CR(input_dict,property="dijets_mass"):
+def plot_CR(input_dict,lepton,property="dijets_mass"):
     recoil_windows = list(input_dict.keys())
     labels = ["Recoil: [200,250]","Recoil: [250,290]","Recoil: [290,360]","Recoil: [360-420]","Recoil: [420-1000]"]
     
     fig = plt.figure(figsize=(40,10))
-    fig.suptitle(f"2018 Resolved Top Mu Control Region: {property}",size=50,color="#192655")
+    fig.suptitle(f"2018 Resolved Top {lepton} Control Region: {property}",size=50,color="#192655")
     gs = fig.add_gridspec(2,5,wspace=0,height_ratios=[6,1],hspace=0 )
     axs = gs.subplots(sharex='row',sharey='row' )
 
@@ -276,10 +281,10 @@ def plot_CR(input_dict,property="dijets_mass"):
         #MC histogram
         hep.histplot(
             [
-                added_dict["ZJets_NuNu"]["Histograms"][property],
+                # added_dict["ZJets_NuNu"]["Histograms"][property],
                 # added_dict["QCD"]["Histograms"][property],
                 # added_dict["VV"]["Histograms"][property],
-                # added_dict["DYJets_LL"]["Histograms"][property],
+                added_dict["DYJets_LL"]["Histograms"][property],
                 added_dict["WJets_LNu"]["Histograms"][property],
                 # added_dict["TTToHadronic"]["Histograms"][property],
                 added_dict["ST"]["Histograms"][property],
@@ -299,10 +304,10 @@ def plot_CR(input_dict,property="dijets_mass"):
                 "red"
             ],
             label=[
-                "ZJets_NuNu",
+                # "ZJets_NuNu",
                 # "QCD",
                 # "VV",
-                # "DYJets_LL",
+                "DYJets_LL",
                 "WJets_LNu",
                 # "TTToHadronic",
                 "ST",
@@ -315,16 +320,23 @@ def plot_CR(input_dict,property="dijets_mass"):
         )
 
         counts_MC = (added_dict["TTToSemiLeptonic"]["Histograms"][property].counts()+
-                     added_dict["ZJets_NuNu"]["Histograms"][property].counts()+
+                    #  added_dict["ZJets_NuNu"]["Histograms"][property].counts()+
                      added_dict["WJets_LNu"]["Histograms"][property].counts()+
-                     added_dict["ST"]["Histograms"][property].counts()
+                     added_dict["ST"]["Histograms"][property].counts()+
                      # added_dict["VV"]["Histograms"][property].counts()+
-                     # added_dict["DYJets_LL"]["Histograms"][property].counts()+
+                     added_dict["DYJets_LL"]["Histograms"][property].counts()
                      # added_dict["QCD"]["Histograms"][property].counts()+
                      # added_dict["TTTo2L2Nu"]["Histograms"][property].counts()+
                      # added_dict["TTToHadronic"]["Histograms"][property].counts()
                     )
-        ratios = (counts_data-counts_MC)/counts_MC
+        ratios = []
+        ratio = 0
+        for j in range(len(counts_MC)):
+            if counts_MC[j] == 0:
+                pass
+            else:
+                ratio = (counts_data[j]-counts_MC[j])/counts_MC[j]
+            ratios.append(ratio)
         # Relative error histogram
         hep.histplot(
             (ratios,edges),
@@ -368,8 +380,8 @@ def plot_CR(input_dict,property="dijets_mass"):
         axs[0,0].set_xlim([-3.14,3.14])
         plt.xlabel(r"$\phi $")
     axs[0,0].legend()
-    fig_name=f"CR_resolved_TopMu_{property}.png"
-    path="plots/debug/"
+    fig_name=f"CR_resolved_Top_{lepton}_{property}.png"
+    path="plots/electron/v1/"
     fig.savefig(path+fig_name, dpi=240)
     print(fig_name ," created at ",path," \n")
 
@@ -503,42 +515,42 @@ def overall_cutflow(master_dict,dataset="MET_Run2018"):
 
     return merged_dict
 ##############################################################################################################################################
-MET_Run2018 = accum("MET_Run2018")
-TTToSemiLeptonic = accum("TTToSemiLeptonic")
-ZJets_NuNu = accum("ZJets_NuNu")
-WJets_LNu = accum("WJets_LNu")
-ST = accum("ST")
-# DYJets_LL = accum("DYJets_LL")
+MET_Run2018 = accum(lepton="e",key="MET_Run2018")
+TTToSemiLeptonic = accum(lepton="e",key="TTToSemiLeptonic")
+#ZJets_NuNu = accum(lepton="e",key="ZJets_NuNu")
+WJets_LNu = accum(lepton="e",key="WJets_LNu")
+ST = accum(lepton="e",key="ST")
+DYJets_LL = accum(lepton="e",key="DYJets_LL")
 # VV = accum("VV")
 # QCD = accum("QCD")
 # TTTo2L2Nu = accum("TTTo2L2Nu")
 # TTToHadronic = accum("TTToHadronic")
 master_dict = processor.accumulate([
     MET_Run2018,
-    ZJets_NuNu,
+    #ZJets_NuNu,
     TTToSemiLeptonic,
     WJets_LNu,
     # TTTo2L2Nu,
     # TTToHadronic,
-    # DYJets_LL,
+    DYJets_LL,
     # VV,
     # QCD,
     ST
     ])
 
-show(simpleoverallcutflow(master_dict))
-plot_CR(master_dict,property="dijets_mass")
-plot_CR(master_dict,property="dijets_pt")
-plot_CR(master_dict,property="dijets_eta")
-plot_CR(master_dict,property="dijets_phi")
-plot_CR(master_dict,property="met_pt_hist")
-plot_CR(master_dict,property="met_phi_hist")
-plot_CR(master_dict,property="leadingjets_pt_hist")
-plot_CR(master_dict,property="leadingjets_eta_hist")
-plot_CR(master_dict,property="leadingjets_phi_hist")
-plot_CR(master_dict,property="leadingjets_mass_hist")
-plot_CR(master_dict,property="subleadingjets_pt_hist")
-plot_CR(master_dict,property="subleadingjets_eta_hist")
-plot_CR(master_dict,property="subleadingjets_phi_hist")
-plot_CR(master_dict,property="subleadingjets_mass_hist")
+#show(simpleoverallcutflow(master_dict))
+plot_CR(master_dict,lepton="e",property="dijets_mass")
+plot_CR(master_dict,lepton="e",property="dijets_pt")
+plot_CR(master_dict,lepton="e",property="dijets_eta")
+plot_CR(master_dict,lepton="e",property="dijets_phi")
+plot_CR(master_dict,lepton="e",property="met_pt_hist")
+plot_CR(master_dict,lepton="e",property="met_phi_hist")
+plot_CR(master_dict,lepton="e",property="leadingjets_pt_hist")
+plot_CR(master_dict,lepton="e",property="leadingjets_eta_hist")
+plot_CR(master_dict,lepton="e",property="leadingjets_phi_hist")
+plot_CR(master_dict,lepton="e",property="leadingjets_mass_hist")
+plot_CR(master_dict,lepton="e",property="subleadingjets_pt_hist")
+plot_CR(master_dict,lepton="e",property="subleadingjets_eta_hist")
+plot_CR(master_dict,lepton="e",property="subleadingjets_phi_hist")
+plot_CR(master_dict,lepton="e",property="subleadingjets_mass_hist")
 #plotCRcutflow(master_dict)
