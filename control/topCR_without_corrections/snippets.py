@@ -148,6 +148,24 @@ def met_trigger(events,cutflow,era): ####
     cutflow["MET trigger"] = len(events)
     return events , cutflow
 
+def electron_trigger(events,cutflow,era): ####
+    #MET Triggers
+    trigger = PackedSelection()
+    if era == 2018:
+        trigger.add(
+            "TightElectron",
+            events.HLT.Ele32_WPTight_Gsf
+            )
+    elif era == 2017 :
+        trigger.add(
+            "TightElectron",
+            events.HLT.Ele32_WPTight_Gsf_L1DoubleEG
+        )
+    trigger_cut = trigger.all("TightElectron")
+    events = events[trigger_cut]
+    cutflow["Electron trigger"] = len(events)
+    return events , cutflow
+
 def met_filter(events,cutflow):
     #MET Filters
     flags = PackedSelection()
