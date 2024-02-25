@@ -27,3 +27,7 @@ DYJets_LL_401_to_450 submitted with job id 68760
 DYJets_LL_451_to_500 submitted with job id 69934
 DYJets_LL_501_to_550 submitted with job id 70185
 DYJets_LL_551_to_592 submitted with job id 70519
+MET_Run2018_1_to_39 submitted with job id 1700582
+MET_Run2018_40_to_61 submitted with job id 1700609
+MET_Run2018_62_to_85 submitted with job id 1700637
+MET_Run2018_86_to_206 submitted with job id 1700665
