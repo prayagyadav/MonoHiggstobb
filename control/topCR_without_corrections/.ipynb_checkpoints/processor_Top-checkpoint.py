@@ -221,7 +221,7 @@ class Top(processor.ProcessorABC):
                     self.run_set.add(run)
 
                 #MET_Trigger
-                events, cutflow = met_trigger(events,cutflow,era=2018)
+                #events, cutflow = met_trigger(events,cutflow,era=2018)
 
                 #Electron_Trigger
                 events, cutflow = electron_trigger(events,cutflow,era=2018)
@@ -261,7 +261,7 @@ class Top(processor.ProcessorABC):
             elif self.lepton=="e":
                 dummy_events, single_electrons, dummy_dict = single_tight_electrons(events,dummy_dict) # I just want to get tight electrons back, so I use the same function with some dummy variables
             #Hadronic Recoil
-            #There is at least one muon(tight) in each event at this point
+            #There is at least one lepton(tight) in each event at this point
             #events.Recoil = events.MET.pt + ak.flatten(single_muons.pt)
             # if self.category == "boosted" :
             #     recoil = 250.0

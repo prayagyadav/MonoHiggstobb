@@ -221,7 +221,7 @@ class Top(processor.ProcessorABC):
                     self.run_set.add(run)
 
                 #MET_Trigger
-                events, cutflow = met_trigger(events,cutflow,era=2018)
+                #events, cutflow = met_trigger(events,cutflow,era=2018)
 
                 #Electron_Trigger
                 events, cutflow = electron_trigger(events,cutflow,era=2018)

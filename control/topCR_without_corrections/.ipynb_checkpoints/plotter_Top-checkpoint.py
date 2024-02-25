@@ -204,12 +204,20 @@ def simpleoverallcutflow(master_dict,dataset="MET_Run2018",lepton="mu"):
         cat_dict = added[dataset]["Cutflow"]
         temp.append(cat_dict)
     output_dict = processor.accumulate(temp)
-    if lepton=="mu":
-        repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
-    elif lepton=="e":
-        repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no muons","no photons","no taus","HEM veto","one_tight_electron"]
-    else :
-        raise KeyError
+    if dataset.startswith("MET"):
+        if lepton=="mu":
+            repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
+        elif lepton=="e":
+            repeated_keys = ["Total events","Electron trigger","MET filters","MET > 50.0 GeV","no muons","no photons","no taus","HEM veto","one_tight_electron"]
+        else :
+            raise KeyError
+    else:
+        if lepton=="mu":
+            repeated_keys = ["Total events","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
+        elif lepton=="e":
+            repeated_keys = ["Total events","MET > 50.0 GeV","no muons","no photons","no taus","HEM veto","one_tight_electron"]
+        else :
+            raise KeyError
     #repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","one_tight_muon"]
     #repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no photons","no taus","one_tight_muon"]
     for key in repeated_keys :
@@ -537,20 +545,28 @@ master_dict = processor.accumulate([
     # QCD,
     ST
     ])
-
-#show(simpleoverallcutflow(master_dict))
-plot_CR(master_dict,lepton="e",property="dijets_mass")
-plot_CR(master_dict,lepton="e",property="dijets_pt")
-plot_CR(master_dict,lepton="e",property="dijets_eta")
-plot_CR(master_dict,lepton="e",property="dijets_phi")
-plot_CR(master_dict,lepton="e",property="met_pt_hist")
-plot_CR(master_dict,lepton="e",property="met_phi_hist")
-plot_CR(master_dict,lepton="e",property="leadingjets_pt_hist")
-plot_CR(master_dict,lepton="e",property="leadingjets_eta_hist")
-plot_CR(master_dict,lepton="e",property="leadingjets_phi_hist")
-plot_CR(master_dict,lepton="e",property="leadingjets_mass_hist")
-plot_CR(master_dict,lepton="e",property="subleadingjets_pt_hist")
-plot_CR(master_dict,lepton="e",property="subleadingjets_eta_hist")
-plot_CR(master_dict,lepton="e",property="subleadingjets_phi_hist")
-plot_CR(master_dict,lepton="e",property="subleadingjets_mass_hist")
+print("MET_Run2018 cutflow:")
+show(simpleoverallcutflow(master_dict,dataset="MET_Run2018",lepton="e"))
+print("\n\nTTToSemiLeptonic cutflow:")
+show(simpleoverallcutflow(master_dict,dataset="TTToSemiLeptonic",lepton="e"))
+print("\n\nST cutflow:")
+show(simpleoverallcutflow(master_dict,dataset="ST",lepton="e"))
+print("\n\nWJets_LNu cutflow:")
+show(simpleoverallcutflow(master_dict,dataset="WJets_LNu",lepton="e"))
+print("\n\nDYJets_LL cutflow:")
+show(simpleoverallcutflow(master_dict,dataset="DYJets_LL",lepton="e"))
+# plot_CR(master_dict,lepton="e",property="dijets_mass")
+# plot_CR(master_dict,lepton="e",property="dijets_pt")
+# plot_CR(master_dict,lepton="e",property="dijets_eta")
+# plot_CR(master_dict,lepton="e",property="dijets_phi")
+# plot_CR(master_dict,lepton="e",property="met_pt_hist")
+# plot_CR(master_dict,lepton="e",property="met_phi_hist")
+# plot_CR(master_dict,lepton="e",property="leadingjets_pt_hist")
+# plot_CR(master_dict,lepton="e",property="leadingjets_eta_hist")
+# plot_CR(master_dict,lepton="e",property="leadingjets_phi_hist")
+# plot_CR(master_dict,lepton="e",property="leadingjets_mass_hist")
+# plot_CR(master_dict,lepton="e",property="subleadingjets_pt_hist")
+# plot_CR(master_dict,lepton="e",property="subleadingjets_eta_hist")
+# plot_CR(master_dict,lepton="e",property="subleadingjets_phi_hist")
+# plot_CR(master_dict,lepton="e",property="subleadingjets_mass_hist")
 #plotCRcutflow(master_dict)
