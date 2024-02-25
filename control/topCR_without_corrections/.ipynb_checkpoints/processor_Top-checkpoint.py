@@ -223,6 +223,9 @@ class Top(processor.ProcessorABC):
                 #MET_Trigger
                 events, cutflow = met_trigger(events,cutflow,era=2018)
 
+                #Electron_Trigger
+                events, cutflow = electron_trigger(events,cutflow,era=2018)
+
                 #MET_Filters
                 events, cutflow = met_filter(events,cutflow)
             
