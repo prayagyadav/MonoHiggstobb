@@ -108,6 +108,9 @@ START = MY.PassedTest =!= False \
 	  MY.IsCMSProdSlot =!= True || regexp("^group_cmspilot",ifThenElse(isUndefined(AccountingGroup),"",AccountingGroup)) \
 	)
 
+# for now, only allow test jobs to run on AlmaLinux9
+START = (MY.OpSysAndVer =!= "AlmaLinux9" || TARGET.AlmaLinux9Test =?= true) && ($(START))
+
 # The following clause was intended to prevent flockers from claiming the cluster
 # after a restart, before all the health checks required by CMS have succeeded.
 # However, it was observed to cause the following claiming protocol error
@@ -1043,7 +1046,6 @@ SLOT1_98_USER = cndrusr98
 SLOT1_99_USER = cndrusr99
 SLOT1_100_USER = cndrusr100
 
-# If BASE_CGROUP is set to empty string (BASE_CGROUP=), limits based on cgroups wlll not be imposed
 BASE_CGROUP = /system.slice/condor.service
 
 # CGROUP_MEMORY_LIMIT_POLICY
