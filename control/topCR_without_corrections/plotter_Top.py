@@ -229,7 +229,7 @@ def show(dict):
     for key in dict.keys() :
         print(key , " : ", dict[key] , " \n")
 def accum(lepton,key):
-    path = "coffea_files/"
+    path = "coffea_files/electron/v1/"
     list_files = os.listdir(path)
     valid_list = []
     for file in list_files :
