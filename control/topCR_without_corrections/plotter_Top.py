@@ -204,22 +204,16 @@ def simpleoverallcutflow(master_dict,dataset="MET_Run2018",lepton="mu"):
         cat_dict = added[dataset]["Cutflow"]
         temp.append(cat_dict)
     output_dict = processor.accumulate(temp)
-    if dataset.startswith("MET"):
-        if lepton=="mu":
-            repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
-        elif lepton=="e":
-            repeated_keys = ["Total events","Electron trigger","MET filters","MET > 50.0 GeV","no muons","no photons","no taus","HEM veto","one_tight_electron"]
-        else :
-            raise KeyError
-    else:
-        if lepton=="mu":
-            repeated_keys = ["Total events","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
-        elif lepton=="e":
-            repeated_keys = ["Total events","MET > 50.0 GeV","no muons","no photons","no taus","HEM veto","one_tight_electron"]
-        else :
-            raise KeyError
+    
+    if lepton=="mu":
+        repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","HEM veto","one_tight_muon"]
+    elif lepton=="e":
+        repeated_keys = ["Total events","Electron trigger","MET filters","MET > 50.0 GeV","no muons","no photons","no taus","HEM veto","one_tight_electron"]
+    else :
+        raise KeyError
     #repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no electrons","no photons","no taus","one_tight_muon"]
     #repeated_keys = ["Total events","MET trigger","MET filters","MET > 50.0 GeV","no photons","no taus","one_tight_muon"]
+
     for key in repeated_keys :
         output_dict[key] = output_dict[key] / nrecoil
     #convert values in scientific notation
