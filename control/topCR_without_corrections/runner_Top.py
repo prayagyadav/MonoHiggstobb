@@ -406,7 +406,7 @@ if __name__=="__main__":
     except :
         output_file = f"CR_{inputs.cat}_Top_{inputs.lepton}_{inputs.keymap}.coffea"
     print("Saving the output to : " , output_file)
-    util.save(output= Output, filename="coffea_files/electron/v1/"+output_file)
+    util.save(output= Output, filename="coffea_files/electron/v2/"+output_file)
     print(f"File {output_file} saved.")
     print("Execution completed.")
 

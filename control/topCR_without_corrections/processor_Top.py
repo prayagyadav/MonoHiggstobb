@@ -7,25 +7,19 @@ class Top(processor.ProcessorABC):
     """
     Flow of Data:
 
-    INPUT EVENTS
+    INPUT EVENTS                                                                                                             
+        |                                           
+        |                                           
+        |                                           
+        v                                           
+    MET TRIGGER                                     
+        |                                           
+        |                                           
+        |                                           
+        v                                           
+    MET FILTERS                                     
+        |                                           
         |
-        |-------------------------------------------
-        |                                           |
-        |                                           |
-        v                                           v
-        if MET_Run2018                        else if MC
-        |                                           |
-        |                                           |
-        |                                           |
-        v                                           |
-    MET TRIGGER                                     |
-        |                                           |
-        |                                           |
-        |                                           |
-        v                                           |
-    MET FILTERS                                     |
-        |                                           |
-        |<------------------------------------------
         |                                           
         v
     MET CUT
@@ -220,15 +214,14 @@ class Top(processor.ProcessorABC):
                 for run in set(events.run):
                     self.run_set.add(run)
 
-                #MET_Trigger
-                #events, cutflow = met_trigger(events,cutflow,era=2018)
+            #MET_Trigger
+            events, cutflow = met_trigger(events,cutflow,era=2018)
 
-                #Electron_Trigger
-                events, cutflow = electron_trigger(events,cutflow,era=2018)
+            #Electron_Trigger
+            events, cutflow = electron_trigger(events,cutflow,era=2018)
 
-                #MET_Filters
-                events, cutflow = met_filter(events,cutflow)
-            
+            #MET_Filters
+            events, cutflow = met_filter(events,cutflow)
 
             #vetoes
             if self.lepton == "mu":

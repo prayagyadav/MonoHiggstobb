@@ -229,7 +229,7 @@ def show(dict):
     for key in dict.keys() :
         print(key , " : ", dict[key] , " \n")
 def accum(lepton,key):
-    path = "coffea_files/electron/v1/"
+    path = "coffea_files/electron/v2/"
     list_files = os.listdir(path)
     valid_list = []
     for file in list_files :
@@ -389,7 +389,7 @@ def plot_CR(input_dict,lepton,property="dijets_mass"):
         plt.xlabel(r"$\phi $")
     axs[0,0].legend()
     fig_name=f"CR_resolved_Top_{lepton}_{property}.png"
-    path="plots/electron/v1/"
+    path="plots/electron/v2/"
     fig.savefig(path+fig_name, dpi=240)
     print(fig_name ," created at ",path," \n")
 
