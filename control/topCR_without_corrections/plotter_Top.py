@@ -545,6 +545,8 @@ master_dict = processor.accumulate([
     # QCD,
     ST
     ])
+for key in master_dict:
+    print(master_dict[key]['MET_Run2018']['MET_Run2018A']['Cutflow'])
 print("MET_Run2018 cutflow:")
 show(simpleoverallcutflow(master_dict,dataset="MET_Run2018",lepton="e"))
 print("\n\nTTToSemiLeptonic cutflow:")
